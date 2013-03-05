@@ -1,4 +1,4 @@
-CFLAGS += -std=c99 -fobjc-arc
+CFLAGS += -std=c99
 LDFLAGS += -framework Cocoa -framework QuartzCore
 PREFIX ?= /usr/local
 

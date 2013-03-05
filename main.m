@@ -17,14 +17,17 @@ int main (int argc, const char * argv[]) {
     NSString *imagePath = [NSString stringWithFormat:@"%@/%@", NSHomeDirectory(), @".unicorn.png"];
 
     NSImage *image = [[NSImage alloc] initWithContentsOfFile: imagePath];
+    /* CGImageSourceRef source; */
+    /* source = CGImageSourceCreateWithData((__bridge CFDataRef)[image TIFFRepresentation], NULL); */
+    /* CGImageRef cgimage = CGImageSourceCreateImageAtIndex(source, 0, NULL); */
 
     NSView *view = [[NSView alloc] initWithFrame:NSScreen.mainScreen.frame];
     [window setContentView: view];
 
-    CGImageSourceRef source;
 
-    source = CGImageSourceCreateWithData((__bridge CFDataRef)[image TIFFRepresentation], NULL);
-    CGImageRef cgimage = CGImageSourceCreateImageAtIndex(source, 0, NULL);
+    CGDataProviderRef source = CGDataProviderCreateWithFilename([imagePath UTF8String]);
+
+    CGImageRef cgimage = CGImageCreateWithPNGDataProvider(source, NULL, true, 0);
 
     {   // Create a path to animate a layer on. We will also draw the path.
         path = CGPathCreateMutable();
@@ -43,7 +46,7 @@ int main (int argc, const char * argv[]) {
     // This is the layer that animates along the path.
     CALayer *layer = [CALayer layer];
 
-    [layer setContents: (__bridge id)(cgimage)];
+    [layer setContents: (id)(cgimage)];
     [layer setBounds:CGRectMake(0.0, 0.0, image.size.width, image.size.height)];
     [layer setPosition:CGPointMake(-image.size.width, -image.size.height)];
 
