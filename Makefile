@@ -16,6 +16,7 @@ $(program_name): main
 
 install: $(program_name) $(image_target)
 	cp build/$(program_name) ${PREFIX}/bin
+	cp $(program_name).1 $(PREFIX)/share/man/man1/
 
 $(image_target): $(image_name)
 	cp $< $@
