@@ -8,10 +8,15 @@ const char* program_name;
 const char* short_options = "hs:v";
 const struct option long_options[] = {
     { "help",    0, NULL, 'h' },
-    { "seconds", 1, NULL, 'o' },
+    { "seconds", 1, NULL, 's' },
     { "verbose", 0, NULL, 'v' },
     { NULL,      0, NULL, 0   }   /* Required at end of array.  */
 };
+
+void invalid_image(FILE* stream) {
+    fprintf (stream, "ERROR: You must have a valid PNG image at ~/.unicorn.png\n");
+    exit(127);
+}
 
 void print_usage (FILE* stream, int exit_code) {
     fprintf (stream, "Usage:  %s [options]\n", program_name);
@@ -45,6 +50,12 @@ void animateImage (double seconds) {
 
     // Get image dimensions
     NSImage *image = [[NSImage alloc] initWithContentsOfFile: imagePath];
+
+    if(![image isValid]) {
+        invalid_image(stderr);
+        return;
+    }
+
     CGSize imageSize = image.size;
     [image dealloc];
 
