@@ -22,7 +22,7 @@ void print_usage (FILE* stream, int exit_code) {
     exit (exit_code);
 }
 
-void animateImage(double seconds) {
+void animateImage (double seconds) {
     // Objective C
     [NSApplication sharedApplication];
 
@@ -97,7 +97,6 @@ void animateImage(double seconds) {
 
 int main (int argc, char * argv[]) {
     program_name = argv[0];
-    int next_option;
 
     // Defaults
     char* s = NULL;
@@ -105,9 +104,11 @@ int main (int argc, char * argv[]) {
     double seconds = 2.0;
 
     // Parse options
+    int next_option;
+
     do {
-        next_option = getopt_long (argc, argv, short_options, long_options, NULL);
-        switch (next_option)
+        next_option = getopt_long(argc, argv, short_options, long_options, NULL);
+        switch(next_option)
         {
             case 's':
                 s = optarg;
@@ -117,18 +118,18 @@ int main (int argc, char * argv[]) {
                 verbose = 1;
                 break;
 
-            case 'h': print_usage (stdout, 0);
-            case '?': print_usage (stderr, 1);
+            case 'h': print_usage(stdout, 0);
+            case '?': print_usage(stderr, 1);
             case -1:  break;
             default:  abort();
         }
     } while (next_option != -1);
 
     // Coerce string to double
-    if(NULL != s) seconds = strtod(s, NULL);
-    if(! seconds > 0.0) seconds = 2.0;
+    if (NULL != s) seconds = strtod(s, NULL);
+    if (! seconds > 0.0) seconds = 2.0;
 
-    if(verbose) {
+    if (verbose) {
         printf("Seconds: %f\n", seconds);
     }
 
