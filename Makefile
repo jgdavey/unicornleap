@@ -1,16 +1,21 @@
+program_name := unicornleap
+
 CFLAGS += -std=c99
 LDFLAGS += -framework Cocoa -framework QuartzCore
 PREFIX ?= /usr/local
 
-.PHONY: unicornleap
+.PHONY: all clean
 
-unicornleap: main
-	mkdir -p build
-	cp main build/unicornleap
+all: $(program_name)
 
-install: unicornleap
-	cp unicorn.png ~/.unicorn.png
-	cp build/unicornleap ${PREFIX}/bin
+$(program_name): main
+	@ mkdir -p build
+	cp main build/$(program_name)
+
+install: $(program_name)
+	test -f ~/.unicorn.png || cp unicorn.png ~/.unicorn.png
+	cp build/$(program_name) ${PREFIX}/bin
 
 clean:
-	  rm -f main build/*
+	@- $(RM) main
+	@- $(RM) build/$(program_name)
