@@ -34,15 +34,18 @@ void animateImage (double seconds) {
     CGMutablePathRef path;
 
     // Set up a fullscreen, transparent window/view
-    NSWindow *window = [[NSWindow alloc] initWithContentRect: NSScreen.mainScreen.frame
+    CGRect screen = NSScreen.mainScreen.frame;
+
+    NSWindow *window = [[NSWindow alloc] initWithContentRect: screen
                                                    styleMask: NSBorderlessWindowMask
                                                      backing: NSBackingStoreBuffered
                                                        defer: NO];
     [window setBackgroundColor:[NSColor colorWithCalibratedHue:0 saturation:0 brightness:0 alpha:0.0]];
     [window setOpaque: NO];
+    [window setIgnoresMouseEvents:YES];
     [window setLevel: NSFloatingWindowLevel];
 
-    NSView *view = [[NSView alloc] initWithFrame:NSScreen.mainScreen.frame];
+    NSView *view = [[NSView alloc] initWithFrame:screen];
     [window setContentView: view];
 
     // Choose image to display
@@ -66,7 +69,7 @@ void animateImage (double seconds) {
     // Create a path to animate a layer on. We will also draw the path.
     path = CGPathCreateMutable();
     CGPoint origin = CGPointMake(-imageSize.width, -imageSize.height);
-    CGPoint destination = CGPointMake(view.frame.size.width + imageSize.width, origin.y);
+    CGPoint destination = CGPointMake(screen.size.width + imageSize.width, origin.y);
     CGFloat midpoint = (destination.x + origin.x) / 2.0;
     CGFloat peak = imageSize.height;
     CGPathMoveToPoint(path, NULL, origin.x, origin.y);
