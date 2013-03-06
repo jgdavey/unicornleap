@@ -13,8 +13,7 @@ const struct option long_options[] = {
     { NULL,      0, NULL, 0   }   /* Required at end of array.  */
 };
 
-void print_usage (FILE* stream, int exit_code)
-{
+void print_usage (FILE* stream, int exit_code) {
     fprintf (stream, "Usage:  %s [options]\n", program_name);
     fprintf (stream,
              "  -h  --help           Display this usage information.\n"
@@ -23,44 +22,7 @@ void print_usage (FILE* stream, int exit_code)
     exit (exit_code);
 }
 
-
-int main (int argc, char * argv[]) {
-    program_name = argv[0];
-    int next_option;
-
-    // Defaults
-    char* s = NULL;
-    int verbose = 0;
-    double seconds = 2.0;
-
-    // Parse options
-    do {
-        next_option = getopt_long (argc, argv, short_options, long_options, NULL);
-        switch (next_option)
-        {
-            case 's':
-                s = optarg;
-                break;
-
-            case 'v':
-                verbose = 1;
-                break;
-
-            case 'h': print_usage (stdout, 0);
-            case '?': print_usage (stderr, 1);
-            case -1:  break;
-            default:  abort();
-        }
-    } while (next_option != -1);
-
-    // Coerce string to double
-    if(NULL != s) seconds = strtod(s, NULL);
-    if(! seconds > 0.0) seconds = 2.0;
-
-    if(verbose) {
-        printf("Seconds: %f\n", seconds);
-    }
-
+void animateImage(double seconds) {
     // Objective C
     [NSApplication sharedApplication];
 
@@ -99,8 +61,8 @@ int main (int argc, char * argv[]) {
     CGPathMoveToPoint(path, NULL, origin.x, origin.y);
 
     CGPathAddCurveToPoint(path, NULL, midpoint, peak,
-                            midpoint, peak,
-                            destination.x, destination.y);
+                          midpoint, peak,
+                          destination.x, destination.y);
 
     // Create layer for image; This is the layer that animates
     CALayer *layer = [CALayer layer];
@@ -130,6 +92,46 @@ int main (int argc, char * argv[]) {
     [imagePath release];
     [view release];
     [window release];
+    return;
+}
 
+int main (int argc, char * argv[]) {
+    program_name = argv[0];
+    int next_option;
+
+    // Defaults
+    char* s = NULL;
+    int verbose = 0;
+    double seconds = 2.0;
+
+    // Parse options
+    do {
+        next_option = getopt_long (argc, argv, short_options, long_options, NULL);
+        switch (next_option)
+        {
+            case 's':
+                s = optarg;
+                break;
+
+            case 'v':
+                verbose = 1;
+                break;
+
+            case 'h': print_usage (stdout, 0);
+            case '?': print_usage (stderr, 1);
+            case -1:  break;
+            default:  abort();
+        }
+    } while (next_option != -1);
+
+    // Coerce string to double
+    if(NULL != s) seconds = strtod(s, NULL);
+    if(! seconds > 0.0) seconds = 2.0;
+
+    if(verbose) {
+        printf("Seconds: %f\n", seconds);
+    }
+
+    animateImage(seconds);
     return 0;
 }
