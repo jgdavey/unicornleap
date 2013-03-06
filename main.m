@@ -26,7 +26,6 @@ int main (int argc, const char * argv[]) {
     CGSize imageSize = image.size;
     [image dealloc];
 
-
     // Load image as CGImage
     CGDataProviderRef source = CGDataProviderCreateWithFilename([imagePath UTF8String]);
     CGImageRef cgimage = CGImageCreateWithPNGDataProvider(source, NULL, true, 0);
@@ -67,6 +66,10 @@ int main (int argc, const char * argv[]) {
 
     // Wait for animation to finish
     [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow: animation.duration]];
+
+    [imagePath release];
+    [view release];
+    [window release];
 
     return 0;
 }
