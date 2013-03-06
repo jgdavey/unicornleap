@@ -13,4 +13,4 @@ install: unicornleap
 	cp build/unicornleap ${PREFIX}/bin
 
 clean:
-	  rm -f *.o build/*
+	  rm -f main build/*
