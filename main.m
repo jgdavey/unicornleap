@@ -1,7 +1,67 @@
 #import <Cocoa/Cocoa.h>
 #import <QuartzCore/QuartzCore.h>
+#include <getopt.h>
+#include <stdio.h>
+#include <stdlib.h>
 
-int main (int argc, const char * argv[]) {
+const char* program_name;
+const char* short_options = "hs:v";
+const struct option long_options[] = {
+    { "help",    0, NULL, 'h' },
+    { "seconds", 1, NULL, 'o' },
+    { "verbose", 0, NULL, 'v' },
+    { NULL,      0, NULL, 0   }   /* Required at end of array.  */
+};
+
+void print_usage (FILE* stream, int exit_code)
+{
+    fprintf (stream, "Usage:  %s [options]\n", program_name);
+    fprintf (stream,
+             "  -h  --help           Display this usage information.\n"
+             "  -s  --seconds n      Animate for n seconds.\n"
+             "  -v  --verbose        Print verbose messages.\n");
+    exit (exit_code);
+}
+
+
+int main (int argc, char * argv[]) {
+    program_name = argv[0];
+    int next_option;
+
+    // Defaults
+    char* s = NULL;
+    int verbose = 0;
+    double seconds = 2.0;
+
+    // Parse options
+    do {
+        next_option = getopt_long (argc, argv, short_options, long_options, NULL);
+        switch (next_option)
+        {
+            case 's':
+                s = optarg;
+                break;
+
+            case 'v':
+                verbose = 1;
+                break;
+
+            case 'h': print_usage (stdout, 0);
+            case '?': print_usage (stderr, 1);
+            case -1:  break;
+            default:  abort();
+        }
+    } while (next_option != -1);
+
+    // Coerce string to double
+    if(NULL != s) seconds = strtod(s, NULL);
+    if(! seconds > 0.0) seconds = 2.0;
+
+    if(verbose) {
+        printf("Seconds: %f\n", seconds);
+    }
+
+    // Objective C
     [NSApplication sharedApplication];
 
     CGMutablePathRef path;
@@ -56,7 +116,7 @@ int main (int argc, const char * argv[]) {
     // Create the path animation, and add it oto the layer
     CAKeyframeAnimation *animation = [CAKeyframeAnimation animationWithKeyPath:@"position"];
     [animation setPath: path];
-    [animation setDuration: 2.0];
+    [animation setDuration: seconds];
     [animation setCalculationMode: kCAAnimationLinear];
     [animation setRotationMode: nil];
 
