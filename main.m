@@ -13,8 +13,8 @@ const struct option long_options[] = {
     { NULL,      0, NULL, 0   }   /* Required at end of array.  */
 };
 
-void invalid_image(FILE* stream) {
-    fprintf (stream, "ERROR: You must have a valid PNG image at ~/.unicorn.png\n");
+void invalid_image(FILE* stream, char * path) {
+    fprintf (stream, "ERROR: You must have a valid PNG image at %s\n", path);
     exit(127);
 }
 
@@ -48,14 +48,16 @@ void animateImage (double seconds) {
     NSView *view = [[NSView alloc] initWithFrame:screen];
     [window setContentView: view];
 
-    // Choose image to display
-    NSString *imagePath = [NSString stringWithFormat:@"%@/%@", NSHomeDirectory(), @".unicorn.png"];
+    // Gather image paths
+    NSString *folder = [NSHomeDirectory() stringByAppendingPathComponent:@".unicornleap"];
+    NSString *imagePath = [folder stringByAppendingPathComponent:@"unicorn.png"];
+    NSString *sparklePath = [folder stringByAppendingPathComponent:@"sparkle.png"];
 
     // Get image dimensions
     NSImage *image = [[NSImage alloc] initWithContentsOfFile: imagePath];
 
     if(![image isValid]) {
-        invalid_image(stderr);
+        invalid_image(stderr, (char *)[imagePath UTF8String]);
         return;
     }
 
@@ -108,8 +110,11 @@ void animateImage (double seconds) {
     emitter.emitterPosition = CGPointMake(-imageSize.width, -imageSize.height);
     emitter.emitterSize = CGSizeMake(imageSize.width/1.5, imageSize.height/1.5);
 
-    NSString *sparklePath = [NSString stringWithFormat:@"%@/%@", NSHomeDirectory(), @".sparkle.png"];
     CGDataProviderRef sparkleSource = CGDataProviderCreateWithFilename([sparklePath UTF8String]);
+    if(!sparkleSource) {
+        invalid_image(stderr, (char *)[sparklePath UTF8String]);
+        return;
+    }
     CGImageRef sparkleImage = CGImageCreateWithPNGDataProvider(sparkleSource, NULL, true, 0);
 
     CAEmitterCell *sparkle = [CAEmitterCell emitterCell];

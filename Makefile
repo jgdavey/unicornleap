@@ -1,6 +1,5 @@
 program_name := unicornleap
-image_name   := unicorn.png
-image_target := $(HOME)/.$(image_name)
+image_folder := $(HOME)/.$(program_name)
 
 CFLAGS += -std=c99
 LDFLAGS += -framework Cocoa -framework QuartzCore
@@ -14,12 +13,13 @@ $(program_name): main
 	@ mkdir -p build
 	cp main build/$(program_name)
 
-install: $(program_name) $(image_target)
+install: $(program_name) $(image_folder)
 	cp build/$(program_name) ${PREFIX}/bin
 	cp $(program_name).1 $(PREFIX)/share/man/man1/
 
-$(image_target): $(image_name)
-	cp $< $@
+$(image_folder):
+	mkdir -p $@
+	cp *.png $@
 
 clean:
 	@- $(RM) main
