@@ -96,12 +96,54 @@ void animateImage (double seconds) {
     [animation setCalculationMode: kCAAnimationLinear];
     [animation setRotationMode: nil];
 
+    // Create the path animation, and add it oto the layer
+    CAKeyframeAnimation *eanimation = [CAKeyframeAnimation animationWithKeyPath:@"emitterPosition"];
+    [eanimation setPath: path];
+    [eanimation setDuration: seconds];
+    [eanimation setCalculationMode: kCAAnimationLinear];
+    [eanimation setRotationMode: nil];
+
+
+    CAEmitterLayer *emitter = [[CAEmitterLayer alloc] init];
+    emitter.emitterPosition = CGPointMake(-imageSize.width, -imageSize.height);
+    emitter.emitterSize = CGSizeMake(imageSize.width/1.5, imageSize.height/1.5);
+
+    NSString *sparklePath = [NSString stringWithFormat:@"%@/%@", NSHomeDirectory(), @".sparkle.png"];
+    CGDataProviderRef sparkleSource = CGDataProviderCreateWithFilename([sparklePath UTF8String]);
+    CGImageRef sparkleImage = CGImageCreateWithPNGDataProvider(sparkleSource, NULL, true, 0);
+
+    CAEmitterCell *sparkle = [CAEmitterCell emitterCell];
+    sparkle.contents = (id)(sparkleImage);
+
+    sparkle.birthRate = 20.0;
+    sparkle.lifetime = 1.0;
+    sparkle.lifetimeRange = 0.5;
+    [sparkle setName:@"sparkle"];
+
+    sparkle.alphaSpeed = -1.2;
+
+    sparkle.velocity = 70;
+    sparkle.velocityRange = 20;
+
+    sparkle.scale = 1.0;
+    sparkle.scaleRange = 0.5;
+    sparkle.scaleSpeed = -1.8;
+    sparkle.spin = -1.0;
+    sparkle.spinRange = 2.0;
+
+    emitter.renderMode = kCAEmitterLayerAdditive;
+    emitter.emitterShape = kCAEmitterLayerCuboid;
+    emitter.emitterCells = [NSArray arrayWithObject:sparkle];
+
+    [view.layer addSublayer: emitter];
+
     [layer addAnimation:animation forKey:@"position"];
+    [emitter addAnimation:eanimation forKey:@"emitterPosition"];
 
     [window makeKeyAndOrderFront: nil];
 
     // Wait for animation to finish
-    [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow: animation.duration]];
+    [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow: animation.duration + 0.2]];
 
     [imagePath release];
     [view release];
