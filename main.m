@@ -73,7 +73,7 @@ void animateImage (double seconds) {
     CGPoint origin = CGPointMake(-imageSize.width, -imageSize.height);
     CGPoint destination = CGPointMake(screen.size.width + imageSize.width, origin.y);
     CGFloat midpoint = (destination.x + origin.x) / 2.0;
-    CGFloat peak = imageSize.height;
+    CGFloat peak = imageSize.height + 50.0;
     CGPathMoveToPoint(path, NULL, origin.x, origin.y);
 
     CGPathAddCurveToPoint(path, NULL, midpoint, peak,
