@@ -96,6 +96,16 @@ void animateLayerAlongPathForKey (CALayer *layer, CGMutablePathRef path, NSStrin
     [layer addAnimation:animation forKey:key];
 }
 
+CALayer * layerForImageWithSize(CGImageRef image, CGSize size) {
+    CALayer *layer = [CALayer layer];
+
+    [layer setContents: (id)(image)];
+    [layer setBounds:CGRectMake(0.0, 0.0, size.width, size.height)];
+    [layer setPosition:CGPointMake(-size.width, -size.height)];
+
+    return layer;
+}
+
 void animateImage () {
     // Objective C
     [NSApplication sharedApplication];
@@ -133,23 +143,9 @@ void animateImage () {
     CGSize imageSize = image.size;
     [image dealloc];
 
-    // Load image as CGImage
+    // Load images as CGImage
     CGDataProviderRef source = CGDataProviderCreateWithFilename([imagePath UTF8String]);
     CGImageRef cgimage = CGImageCreateWithPNGDataProvider(source, NULL, true, 0);
-
-    // Create a path to animate a layer on. We will also draw the path.
-    path = pathInFrameForSize(screen, imageSize);
-
-    // Create layer for image; This is the layer that animates
-    CALayer *layer = [CALayer layer];
-
-    [layer setContents: (id)(cgimage)];
-    [layer setBounds:CGRectMake(0.0, 0.0, imageSize.width, imageSize.height)];
-    [layer setPosition:CGPointMake(-imageSize.width, -imageSize.height)];
-
-    [view setWantsLayer: YES];
-
-    [view.layer addSublayer: layer];
 
     CGDataProviderRef sparkleSource = CGDataProviderCreateWithFilename([sparklePath UTF8String]);
     if(!sparkleSource) {
@@ -158,17 +154,32 @@ void animateImage () {
     }
     CGImageRef sparkleImage = CGImageCreateWithPNGDataProvider(sparkleSource, NULL, true, 0);
 
-    CAEmitterLayer *emitter = getEmitterForImageInFrame(sparkleImage, imageSize);
+    // Create a path to animate a layer on. We will also draw the path.
+    path = pathInFrameForSize(screen, imageSize);
 
-    [view.layer addSublayer: emitter];
-
-    animateLayerAlongPathForKey(layer, path, @"position");
-    animateLayerAlongPathForKey(emitter, path, @"emitterPosition");
+    CALayer *layer;
+    CAEmitterLayer *emitter;
 
     [window makeKeyAndOrderFront: nil];
 
+    double waitFor = seconds/2.5;
+
+    NSRunLoop *runLoop = [NSRunLoop currentRunLoop];
+
+    for(int i=0; i < 1; i++) {
+        layer = layerForImageWithSize(cgimage, imageSize);
+        emitter = getEmitterForImageInFrame(sparkleImage, imageSize);
+        [view setWantsLayer: YES];
+        [view.layer addSublayer: layer];
+        [view.layer addSublayer: emitter];
+
+        animateLayerAlongPathForKey(layer, path, @"position");
+        animateLayerAlongPathForKey(emitter, path, @"emitterPosition");
+        [runLoop runUntilDate:[NSDate dateWithTimeIntervalSinceNow: waitFor]];
+    }
+
     // Wait for animation to finish
-    [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow: seconds + 0.2]];
+    [runLoop runUntilDate:[NSDate dateWithTimeIntervalSinceNow: seconds - waitFor + 0.2]];
 
     [imagePath release];
     [view release];
