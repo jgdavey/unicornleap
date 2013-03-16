@@ -5,6 +5,7 @@
 #include <stdlib.h>
 
 const char* program_name;
+double seconds;
 const char* short_options = "hs:v";
 const struct option long_options[] = {
     { "help",    0, NULL, 'h' },
@@ -27,7 +28,75 @@ void print_usage (FILE* stream, int exit_code) {
     exit (exit_code);
 }
 
-void animateImage (double seconds) {
+CAEmitterLayer * getEmitterForImageInFrame (CGImageRef sparkleImage, CGSize imageSize) {
+    static float base = 0.2;
+
+    CAEmitterLayer *emitter = [[CAEmitterLayer alloc] init];
+    emitter.emitterPosition = CGPointMake(-imageSize.width, -imageSize.height);
+    emitter.emitterSize = CGSizeMake(imageSize.width/1.5, imageSize.height/1.5);
+    CAEmitterCell *sparkle = [CAEmitterCell emitterCell];
+
+    sparkle.contents = (id)(sparkleImage);
+
+    sparkle.birthRate = 20.0/seconds + 15.0;
+    sparkle.lifetime = seconds * 0.5 + base;
+    sparkle.lifetimeRange = 1.5;
+    sparkle.name = @"sparkle";
+
+    // Fade from white to purple
+    sparkle.color = CGColorCreateGenericRGB(1.0, 1.0, 1.0, 1.0);
+    sparkle.greenSpeed = -0.7;
+
+    sparkle.minificationFilter = kCAFilterNearest;
+
+    // Fade out
+    sparkle.alphaSpeed = -1.0;
+
+    // Shrink
+    sparkle.scale = 0.8;
+    sparkle.scaleRange = 0.5;
+    sparkle.scaleSpeed = sparkle.alphaSpeed - base;
+
+    // Fall away
+    sparkle.velocity = -20.0;
+    sparkle.velocityRange = 20.0;
+    sparkle.yAcceleration = -100.0;
+    sparkle.xAcceleration = -50.0;
+
+    // Spin
+    sparkle.spin = -2.0;
+    sparkle.spinRange = 4.0;
+
+    emitter.renderMode = kCAEmitterLayerAdditive;
+    emitter.emitterShape = kCAEmitterLayerCuboid;
+    emitter.emitterCells = [NSArray arrayWithObject:sparkle];
+    return emitter;
+}
+
+CGMutablePathRef pathInFrameForSize (CGRect screen, CGSize size) {
+    CGMutablePathRef path = CGPathCreateMutable();
+    CGPoint origin = CGPointMake(-size.width, -size.height);
+    CGPoint destination = CGPointMake(screen.size.width + size.width, origin.y);
+    CGFloat midpoint = (destination.x + origin.x) / 2.0;
+    CGFloat peak = size.height + 50.0;
+    CGPathMoveToPoint(path, NULL, origin.x, origin.y);
+
+    CGPathAddCurveToPoint(path, NULL, midpoint, peak,
+                          midpoint, peak,
+                          destination.x, destination.y);
+    return path;
+};
+
+void animateLayerAlongPathForKey (CALayer *layer, CGMutablePathRef path, NSString *key) {
+    CAKeyframeAnimation *animation = [CAKeyframeAnimation animationWithKeyPath:key];
+    [animation setPath: path];
+    [animation setDuration: seconds];
+    [animation setCalculationMode: kCAAnimationLinear];
+    [animation setRotationMode: nil];
+    [layer addAnimation:animation forKey:key];
+}
+
+void animateImage () {
     // Objective C
     [NSApplication sharedApplication];
 
@@ -69,16 +138,7 @@ void animateImage (double seconds) {
     CGImageRef cgimage = CGImageCreateWithPNGDataProvider(source, NULL, true, 0);
 
     // Create a path to animate a layer on. We will also draw the path.
-    path = CGPathCreateMutable();
-    CGPoint origin = CGPointMake(-imageSize.width, -imageSize.height);
-    CGPoint destination = CGPointMake(screen.size.width + imageSize.width, origin.y);
-    CGFloat midpoint = (destination.x + origin.x) / 2.0;
-    CGFloat peak = imageSize.height + 50.0;
-    CGPathMoveToPoint(path, NULL, origin.x, origin.y);
-
-    CGPathAddCurveToPoint(path, NULL, midpoint, peak,
-                          midpoint, peak,
-                          destination.x, destination.y);
+    path = pathInFrameForSize(screen, imageSize);
 
     // Create layer for image; This is the layer that animates
     CALayer *layer = [CALayer layer];
@@ -91,25 +151,6 @@ void animateImage (double seconds) {
 
     [view.layer addSublayer: layer];
 
-    // Create the path animation, and add it oto the layer
-    CAKeyframeAnimation *animation = [CAKeyframeAnimation animationWithKeyPath:@"position"];
-    [animation setPath: path];
-    [animation setDuration: seconds];
-    [animation setCalculationMode: kCAAnimationLinear];
-    [animation setRotationMode: nil];
-
-    // Create the path animation, and add it onto the layer
-    CAKeyframeAnimation *eanimation = [CAKeyframeAnimation animationWithKeyPath:@"emitterPosition"];
-    [eanimation setPath: path];
-    [eanimation setDuration: seconds];
-    [eanimation setCalculationMode: kCAAnimationLinear];
-    [eanimation setRotationMode: nil];
-
-
-    CAEmitterLayer *emitter = [[CAEmitterLayer alloc] init];
-    emitter.emitterPosition = CGPointMake(-imageSize.width, -imageSize.height);
-    emitter.emitterSize = CGSizeMake(imageSize.width/1.5, imageSize.height/1.5);
-
     CGDataProviderRef sparkleSource = CGDataProviderCreateWithFilename([sparklePath UTF8String]);
     if(!sparkleSource) {
         invalid_image(stderr, (char *)[sparklePath UTF8String]);
@@ -117,53 +158,17 @@ void animateImage (double seconds) {
     }
     CGImageRef sparkleImage = CGImageCreateWithPNGDataProvider(sparkleSource, NULL, true, 0);
 
-    CAEmitterCell *sparkle = [CAEmitterCell emitterCell];
-    sparkle.contents = (id)(sparkleImage);
-
-    float base = 0.2;
-
-    sparkle.birthRate = 20.0/seconds + 15.0;
-    sparkle.lifetime = seconds * 0.5 + base;
-    sparkle.lifetimeRange = 1.5;
-    sparkle.name = @"sparkle";
-
-    // Fade from white to purple
-    sparkle.color = CGColorCreateGenericRGB(1.0, 1.0, 1.0, 1.0);
-    sparkle.greenSpeed = -0.7;
-
-    sparkle.minificationFilter = kCAFilterNearest;
-
-    // Fade out
-    sparkle.alphaSpeed = -1.0;
-
-    // Shrink
-    sparkle.scale = 0.8;
-    sparkle.scaleRange = 0.5;
-    sparkle.scaleSpeed = sparkle.alphaSpeed - base;
-
-    // Fall away
-    sparkle.velocity = -20.0;
-    sparkle.velocityRange = 20.0;
-    sparkle.yAcceleration = -100.0;
-    sparkle.xAcceleration = -50.0;
-
-    // Spin
-    sparkle.spin = -2.0;
-    sparkle.spinRange = 4.0;
-
-    emitter.renderMode = kCAEmitterLayerAdditive;
-    emitter.emitterShape = kCAEmitterLayerCuboid;
-    emitter.emitterCells = [NSArray arrayWithObject:sparkle];
+    CAEmitterLayer *emitter = getEmitterForImageInFrame(sparkleImage, imageSize);
 
     [view.layer addSublayer: emitter];
 
-    [layer addAnimation:animation forKey:@"position"];
-    [emitter addAnimation:eanimation forKey:@"emitterPosition"];
+    animateLayerAlongPathForKey(layer, path, @"position");
+    animateLayerAlongPathForKey(emitter, path, @"emitterPosition");
 
     [window makeKeyAndOrderFront: nil];
 
     // Wait for animation to finish
-    [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow: animation.duration + base]];
+    [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow: seconds + 0.2]];
 
     [imagePath release];
     [view release];
@@ -177,7 +182,7 @@ int main (int argc, char * argv[]) {
     // Defaults
     char* s = NULL;
     int verbose = 0;
-    double seconds = 2.0;
+    double sec = 2.0;
 
     // Parse options
     int next_option;
@@ -202,13 +207,14 @@ int main (int argc, char * argv[]) {
     } while (next_option != -1);
 
     // Coerce string to double
-    if (NULL != s) seconds = strtod(s, NULL);
-    if (! seconds > 0.0) seconds = 2.0;
+    if (NULL != s) sec = strtod(s, NULL);
+    if (! sec > 0.0) sec = 2.0;
+    seconds = sec;
 
     if (verbose) {
         printf("Seconds: %f\n", seconds);
     }
 
-    animateImage(seconds);
+    animateImage();
     return 0;
 }
