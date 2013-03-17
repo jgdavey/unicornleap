@@ -6,10 +6,12 @@
 
 const char* program_name;
 double seconds;
-const char* short_options = "hs:v";
+int unicorns;
+const char* short_options = "hs:n:v";
 const struct option long_options[] = {
     { "help",    0, NULL, 'h' },
     { "seconds", 1, NULL, 's' },
+    { "number",  1, NULL, 'n' },
     { "verbose", 0, NULL, 'v' },
     { NULL,      0, NULL, 0   }   /* Required at end of array.  */
 };
@@ -23,7 +25,8 @@ void print_usage (FILE* stream, int exit_code) {
     fprintf (stream, "Usage:  %s [options]\n", program_name);
     fprintf (stream,
              "  -h  --help           Display this usage information.\n"
-             "  -s  --seconds n      Animate for n seconds.\n"
+             "  -s  --seconds n      Animate for n seconds. (default: 2.0)\n"
+             "  -n  --number i       Display i unicorns. (default: 1)\n"
              "  -v  --verbose        Print verbose messages.\n");
     exit (exit_code);
 }
@@ -166,7 +169,7 @@ void animateImage () {
 
     NSRunLoop *runLoop = [NSRunLoop currentRunLoop];
 
-    for(int i=0; i < 1; i++) {
+    for(int i=0; i < unicorns; i++) {
         layer = layerForImageWithSize(cgimage, imageSize);
         emitter = getEmitterForImageInFrame(sparkleImage, imageSize);
         [view setWantsLayer: YES];
@@ -192,7 +195,8 @@ int main (int argc, char * argv[]) {
 
     // Defaults
     char* s = NULL;
-    int verbose = 0;
+    char* n = NULL;
+    int verbose = 0, num = 1;
     double sec = 2.0;
 
     // Parse options
@@ -210,6 +214,10 @@ int main (int argc, char * argv[]) {
                 verbose = 1;
                 break;
 
+            case 'n':
+                n = optarg;
+                break;
+
             case 'h': print_usage(stdout, 0);
             case '?': print_usage(stderr, 1);
             case -1:  break;
@@ -222,8 +230,14 @@ int main (int argc, char * argv[]) {
     if (! sec > 0.0) sec = 2.0;
     seconds = sec;
 
+    // Coerce string to int
+    if (NULL != n) num = (int)strtol(n, NULL, 10);
+    if (num < 1) num = 1;
+    unicorns = num;
+
     if (verbose) {
         printf("Seconds: %f\n", seconds);
+        printf("Unicorns: %d\n", unicorns);
     }
 
     animateImage();
