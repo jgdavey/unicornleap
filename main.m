@@ -169,10 +169,11 @@ void animateImage () {
 
     NSRunLoop *runLoop = [NSRunLoop currentRunLoop];
 
+    [view setWantsLayer: YES];
+
     for(int i=0; i < unicorns; i++) {
         layer = layerForImageWithSize(cgimage, imageSize);
         emitter = getEmitterForImageInFrame(sparkleImage, imageSize);
-        [view setWantsLayer: YES];
         [view.layer addSublayer: layer];
         [view.layer addSublayer: emitter];
 
