@@ -7,11 +7,15 @@
 const char* program_name;
 double seconds;
 int unicorns;
-const char* short_options = "hs:n:v";
+NSString* unicorn_path;
+NSString* sparkle_path;
+const char* short_options = "hs:n:u:k:v";
 const struct option long_options[] = {
     { "help",    0, NULL, 'h' },
     { "seconds", 1, NULL, 's' },
     { "number",  1, NULL, 'n' },
+    { "unicorn", 1, NULL, 'u' },
+    { "sparkle", 1, NULL, 'k' },
     { "verbose", 0, NULL, 'v' },
     { NULL,      0, NULL, 0   }   /* Required at end of array.  */
 };
@@ -27,6 +31,8 @@ void print_usage (FILE* stream, int exit_code) {
              "  -h  --help           Display this usage information.\n"
              "  -s  --seconds n      Animate for n seconds. (default: 2.0)\n"
              "  -n  --number i       Display i unicorns. (default: 1)\n"
+             "  -u  --unicorn file   Filename to use for unicorn image\n"
+             "  -k  --sparkle file   Filename to use for sparkle image\n"
              "  -v  --verbose        Print verbose messages.\n");
     exit (exit_code);
 }
@@ -132,8 +138,8 @@ void animateImage () {
 
     // Gather image paths
     NSString *folder = [NSHomeDirectory() stringByAppendingPathComponent:@".unicornleap"];
-    NSString *imagePath = [folder stringByAppendingPathComponent:@"unicorn.png"];
-    NSString *sparklePath = [folder stringByAppendingPathComponent:@"sparkle.png"];
+    NSString *imagePath = [folder stringByAppendingPathComponent: unicorn_path];
+    NSString *sparklePath = [folder stringByAppendingPathComponent: sparkle_path];
 
     // Get image dimensions
     NSImage *image = [[NSImage alloc] initWithContentsOfFile: imagePath];
@@ -197,6 +203,10 @@ int main (int argc, char * argv[]) {
     // Defaults
     char* s = NULL;
     char* n = NULL;
+    char* u = NULL;
+    char* k = NULL;
+    NSString* unicorn = @"unicorn.png";
+    NSString* sparkle = @"sparkle.png";
     int verbose = 0, num = 1;
     double sec = 2.0;
 
@@ -213,6 +223,14 @@ int main (int argc, char * argv[]) {
 
             case 'v':
                 verbose = 1;
+                break;
+
+            case 'u':
+                u = optarg;
+                break;
+
+            case 'k':
+                k = optarg;
                 break;
 
             case 'n':
@@ -235,6 +253,12 @@ int main (int argc, char * argv[]) {
     if (NULL != n) num = (int)strtol(n, NULL, 10);
     if (num < 1) num = 1;
     unicorns = num;
+
+    if (NULL != u) unicorn = [NSString stringWithCString:u encoding:NSASCIIStringEncoding];
+    unicorn_path = unicorn;
+
+    if (NULL != k) sparkle = [NSString stringWithCString:k encoding:NSASCIIStringEncoding];
+    sparkle_path = sparkle;
 
     if (verbose) {
         printf("Seconds: %f\n", seconds);
