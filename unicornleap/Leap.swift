@@ -28,13 +28,13 @@ class Leap {
     floatingWindow.view.wantsLayer = true
 
     for _ in (1...command.number!) {
-      let emitter = Emitter.forImageInFrame(sparkleImage.image, imageSize: unicornImage.size, seconds: command.seconds!)
+      sparkleImage.configureEmitter(unicornImage.size, seconds: command.seconds!)
 
       floatingWindow.view.layer?.addSublayer(unicornImage.layer)
-      floatingWindow.view.layer?.addSublayer(emitter)
+      floatingWindow.view.layer?.addSublayer(sparkleImage.emitter)
 
       unicornImage.addAnimation(Double(command.seconds!))
-      sparkleImage.addAnimation(Double(command.seconds!), path: unicornImage.path, layer: emitter)
+      sparkleImage.addAnimation(Double(command.seconds!), path: unicornImage.path)
 
       runLoop.runUntilDate(NSDate(timeIntervalSinceNow: Double(waitFor)))
     }
