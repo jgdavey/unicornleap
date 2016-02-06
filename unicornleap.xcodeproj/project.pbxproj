@@ -44,7 +44,7 @@
 		FC0351BE1C62414400341BB3 /* Leap.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Leap.swift; sourceTree = "<group>"; };
 		FC0B91D71C63932900BADED4 /* FloatingWindow.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FloatingWindow.swift; sourceTree = "<group>"; };
 		FC0B91D91C63976900BADED4 /* LeapImage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LeapImage.swift; sourceTree = "<group>"; };
-		FC4656D51C5D21710069EA6F /* unicornleap */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = unicornleap; sourceTree = BUILT_PRODUCTS_DIR; };
+		FC4656D51C5D21710069EA6F /* UnicornLeap */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = UnicornLeap; sourceTree = BUILT_PRODUCTS_DIR; };
 		FC4656D81C5D21710069EA6F /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
 		FCC248CD1C654DDC00984E72 /* SparkleImage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SparkleImage.swift; sourceTree = "<group>"; };
 		FCC248D01C654E1D00984E72 /* UnicornImage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UnicornImage.swift; sourceTree = "<group>"; };
@@ -80,7 +80,7 @@
 		FC4656CC1C5D21710069EA6F = {
 			isa = PBXGroup;
 			children = (
-				FC4656D71C5D21710069EA6F /* unicornleap */,
+				FC4656D71C5D21710069EA6F /* UnicornLeap */,
 				FC0351B21C5D7B7F00341BB3 /* UnicornLeapTests */,
 				FC4656D61C5D21710069EA6F /* Products */,
 			);
@@ -89,13 +89,13 @@
 		FC4656D61C5D21710069EA6F /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				FC4656D51C5D21710069EA6F /* unicornleap */,
+				FC4656D51C5D21710069EA6F /* UnicornLeap */,
 				FC0351B11C5D7B7F00341BB3 /* UnicornLeapTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
 		};
-		FC4656D71C5D21710069EA6F /* unicornleap */ = {
+		FC4656D71C5D21710069EA6F /* UnicornLeap */ = {
 			isa = PBXGroup;
 			children = (
 				FC0351B91C5FA16000341BB3 /* Command.swift */,
@@ -106,7 +106,7 @@
 				FCC248CD1C654DDC00984E72 /* SparkleImage.swift */,
 				FCC248D01C654E1D00984E72 /* UnicornImage.swift */,
 			);
-			path = unicornleap;
+			path = UnicornLeap;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -129,9 +129,9 @@
 			productReference = FC0351B11C5D7B7F00341BB3 /* UnicornLeapTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
-		FC4656D41C5D21710069EA6F /* unicornleap */ = {
+		FC4656D41C5D21710069EA6F /* UnicornLeap */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = FC4656DC1C5D21710069EA6F /* Build configuration list for PBXNativeTarget "unicornleap" */;
+			buildConfigurationList = FC4656DC1C5D21710069EA6F /* Build configuration list for PBXNativeTarget "UnicornLeap" */;
 			buildPhases = (
 				FC4656D11C5D21710069EA6F /* Sources */,
 				FC4656D21C5D21710069EA6F /* Frameworks */,
@@ -141,9 +141,9 @@
 			);
 			dependencies = (
 			);
-			name = unicornleap;
+			name = UnicornLeap;
 			productName = unicornleap;
-			productReference = FC4656D51C5D21710069EA6F /* unicornleap */;
+			productReference = FC4656D51C5D21710069EA6F /* UnicornLeap */;
 			productType = "com.apple.product-type.tool";
 		};
 /* End PBXNativeTarget section */
@@ -176,7 +176,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				FC4656D41C5D21710069EA6F /* unicornleap */,
+				FC4656D41C5D21710069EA6F /* UnicornLeap */,
 				FC0351B01C5D7B7F00341BB3 /* UnicornLeapTests */,
 			);
 		};
@@ -362,7 +362,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		FC4656DC1C5D21710069EA6F /* Build configuration list for PBXNativeTarget "unicornleap" */ = {
+		FC4656DC1C5D21710069EA6F /* Build configuration list for PBXNativeTarget "UnicornLeap" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				FC4656DD1C5D21710069EA6F /* Debug */,
