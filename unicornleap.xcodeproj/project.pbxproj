@@ -10,6 +10,10 @@
 		FC0351BA1C5FA16000341BB3 /* Command.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC0351B91C5FA16000341BB3 /* Command.swift */; };
 		FC0351BB1C5FA16000341BB3 /* Command.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC0351B91C5FA16000341BB3 /* Command.swift */; };
 		FC0351BD1C60F05400341BB3 /* CommandTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC0351BC1C60F05400341BB3 /* CommandTests.swift */; };
+		FC0351BF1C62414400341BB3 /* Leap.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC0351BE1C62414400341BB3 /* Leap.swift */; };
+		FC0351C01C62414400341BB3 /* Leap.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC0351BE1C62414400341BB3 /* Leap.swift */; };
+		FC0351C21C62419B00341BB3 /* Emitter.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC0351C11C62419B00341BB3 /* Emitter.swift */; };
+		FC0351C31C62419B00341BB3 /* Emitter.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC0351C11C62419B00341BB3 /* Emitter.swift */; };
 		FC4656D91C5D21710069EA6F /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC4656D81C5D21710069EA6F /* main.swift */; };
 /* End PBXBuildFile section */
 
@@ -30,6 +34,8 @@
 		FC0351B51C5D7B7F00341BB3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		FC0351B91C5FA16000341BB3 /* Command.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Command.swift; sourceTree = "<group>"; };
 		FC0351BC1C60F05400341BB3 /* CommandTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CommandTests.swift; sourceTree = "<group>"; };
+		FC0351BE1C62414400341BB3 /* Leap.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Leap.swift; sourceTree = "<group>"; };
+		FC0351C11C62419B00341BB3 /* Emitter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Emitter.swift; sourceTree = "<group>"; };
 		FC4656D51C5D21710069EA6F /* unicornleap */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = unicornleap; sourceTree = BUILT_PRODUCTS_DIR; };
 		FC4656D81C5D21710069EA6F /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -82,6 +88,8 @@
 		FC4656D71C5D21710069EA6F /* unicornleap */ = {
 			isa = PBXGroup;
 			children = (
+				FC0351BE1C62414400341BB3 /* Leap.swift */,
+				FC0351C11C62419B00341BB3 /* Emitter.swift */,
 				FC4656D81C5D21710069EA6F /* main.swift */,
 				FC0351B91C5FA16000341BB3 /* Command.swift */,
 			);
@@ -176,7 +184,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FC0351C01C62414400341BB3 /* Leap.swift in Sources */,
 				FC0351BD1C60F05400341BB3 /* CommandTests.swift in Sources */,
+				FC0351C31C62419B00341BB3 /* Emitter.swift in Sources */,
 				FC0351BB1C5FA16000341BB3 /* Command.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -185,7 +195,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FC0351BF1C62414400341BB3 /* Leap.swift in Sources */,
 				FC4656D91C5D21710069EA6F /* main.swift in Sources */,
+				FC0351C21C62419B00341BB3 /* Emitter.swift in Sources */,
 				FC0351BA1C5FA16000341BB3 /* Command.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

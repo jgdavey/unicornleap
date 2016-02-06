@@ -40,4 +40,6 @@ if command.needsHelp {
 } else if command.isNotValid {
   printErrors(command)
   printUsage(1)
+} else {
+  Leap.animateImage(command)
 }
