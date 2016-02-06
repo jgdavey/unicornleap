@@ -3,7 +3,7 @@
 .\"man mdoc.samples for a complete listing of options
 .\"man mdoc for the short list of editing options
 .\"/usr/share/misc/mdoc.template
-.Dd 3/5/13
+.Dd 2/5/16
 .Dt unicornleap 1
 .Os Darwin
 .Sh NAME
@@ -11,27 +11,40 @@
 .Nd display a flying unicorn
 .Sh SYNOPSIS
 .Nm
-.Op Fl vh                \" [-vh]
+.Op Fl hv                \" [-hv]
 .Op Fl s Ar seconds      \" [-a path]
+.Op Fl n Ar number       \" [-a path]
+.Op Fl u Ar unicorn      \" [-a path]
+.Op Fl k Ar sparkle      \" [-a path]
 .Sh DESCRIPTION          \" Section Header - required - don't modify
 .Nm
 makes a unicorn fly across your screen. That's all it does.
 .Sh OPTIONS
-.Bl -tag -width "-s, --seconds n "
+.Bl -tag -width "-u, --unicorn filename "
+.It Fl h , \-help
+Display usage information.
 .It Fl s , \-seconds Ar n
-Number of seconds for the animation to last.
+Animate for n seconds.
 .br
 Defaults to
 .Ar 2.0
-.It Fl n , \-number Ar n
-Number of unicorns to display.
+.It Fl n , \-number Ar i
+Display i unicorns.
 .br
 Defaults to
 .Ar 1
-.It Fl h , \-help
-Display help
-.It Fl v
-Slightly more output
+.It Fl u , \-unicorn Ar filename
+Filename for unicorn image.
+.br
+Defaults to
+.Ar ~/.unicornleap/unicorn.png
+.It Fl s , \-sparkle Ar filename
+Filename for sparkle image.
+.br
+Defaults to
+.Ar ~/.unicornleap/sparkle.png
+.It Fl v , \-verbose
+Print verbose messages
 .El                      \" Ends the list
 .Pp
 .Sh FILES                \" File used or created by the topic of the man page
