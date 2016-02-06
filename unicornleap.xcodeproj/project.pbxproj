@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		FC0351BA1C5FA16000341BB3 /* Command.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC0351B91C5FA16000341BB3 /* Command.swift */; };
+		FC0351BB1C5FA16000341BB3 /* Command.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC0351B91C5FA16000341BB3 /* Command.swift */; };
+		FC0351BD1C60F05400341BB3 /* CommandTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC0351BC1C60F05400341BB3 /* CommandTests.swift */; };
 		FC4656D91C5D21710069EA6F /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC4656D81C5D21710069EA6F /* main.swift */; };
 /* End PBXBuildFile section */
 
@@ -23,11 +26,22 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		FC0351B11C5D7B7F00341BB3 /* unicornleap_tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = unicornleap_tests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		FC0351B51C5D7B7F00341BB3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		FC0351B91C5FA16000341BB3 /* Command.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Command.swift; sourceTree = "<group>"; };
+		FC0351BC1C60F05400341BB3 /* CommandTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CommandTests.swift; sourceTree = "<group>"; };
 		FC4656D51C5D21710069EA6F /* unicornleap */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = unicornleap; sourceTree = BUILT_PRODUCTS_DIR; };
 		FC4656D81C5D21710069EA6F /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		FC0351AE1C5D7B7F00341BB3 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		FC4656D21C5D21710069EA6F /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -38,10 +52,20 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		FC0351B21C5D7B7F00341BB3 /* unicornleap_tests */ = {
+			isa = PBXGroup;
+			children = (
+				FC0351B51C5D7B7F00341BB3 /* Info.plist */,
+				FC0351BC1C60F05400341BB3 /* CommandTests.swift */,
+			);
+			path = unicornleap_tests;
+			sourceTree = "<group>";
+		};
 		FC4656CC1C5D21710069EA6F = {
 			isa = PBXGroup;
 			children = (
 				FC4656D71C5D21710069EA6F /* unicornleap */,
+				FC0351B21C5D7B7F00341BB3 /* unicornleap_tests */,
 				FC4656D61C5D21710069EA6F /* Products */,
 			);
 			sourceTree = "<group>";
@@ -50,6 +74,7 @@
 			isa = PBXGroup;
 			children = (
 				FC4656D51C5D21710069EA6F /* unicornleap */,
+				FC0351B11C5D7B7F00341BB3 /* unicornleap_tests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -58,6 +83,7 @@
 			isa = PBXGroup;
 			children = (
 				FC4656D81C5D21710069EA6F /* main.swift */,
+				FC0351B91C5FA16000341BB3 /* Command.swift */,
 			);
 			path = unicornleap;
 			sourceTree = "<group>";
@@ -65,6 +91,23 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		FC0351B01C5D7B7F00341BB3 /* unicornleap_tests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = FC0351B61C5D7B7F00341BB3 /* Build configuration list for PBXNativeTarget "unicornleap_tests" */;
+			buildPhases = (
+				FC0351AD1C5D7B7F00341BB3 /* Sources */,
+				FC0351AE1C5D7B7F00341BB3 /* Frameworks */,
+				FC0351AF1C5D7B7F00341BB3 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = unicornleap_tests;
+			productName = unicornleap_tests;
+			productReference = FC0351B11C5D7B7F00341BB3 /* unicornleap_tests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 		FC4656D41C5D21710069EA6F /* unicornleap */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = FC4656DC1C5D21710069EA6F /* Build configuration list for PBXNativeTarget "unicornleap" */;
@@ -92,6 +135,9 @@
 				LastUpgradeCheck = 0720;
 				ORGANIZATIONNAME = "Jon Allured";
 				TargetAttributes = {
+					FC0351B01C5D7B7F00341BB3 = {
+						CreatedOnToolsVersion = 7.2;
+					};
 					FC4656D41C5D21710069EA6F = {
 						CreatedOnToolsVersion = 7.2;
 					};
@@ -110,22 +156,65 @@
 			projectRoot = "";
 			targets = (
 				FC4656D41C5D21710069EA6F /* unicornleap */,
+				FC0351B01C5D7B7F00341BB3 /* unicornleap_tests */,
 			);
 		};
 /* End PBXProject section */
 
+/* Begin PBXResourcesBuildPhase section */
+		FC0351AF1C5D7B7F00341BB3 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
+		FC0351AD1C5D7B7F00341BB3 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				FC0351BD1C60F05400341BB3 /* CommandTests.swift in Sources */,
+				FC0351BB1C5FA16000341BB3 /* Command.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		FC4656D11C5D21710069EA6F /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 				FC4656D91C5D21710069EA6F /* main.swift in Sources */,
+				FC0351BA1C5FA16000341BB3 /* Command.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin XCBuildConfiguration section */
+		FC0351B71C5D7B7F00341BB3 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				INFOPLIST_FILE = unicornleap_tests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.jonallured.unicornleap-tests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		FC0351B81C5D7B7F00341BB3 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				INFOPLIST_FILE = unicornleap_tests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.jonallured.unicornleap-tests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
 		FC4656DA1C5D21710069EA6F /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -223,6 +312,14 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		FC0351B61C5D7B7F00341BB3 /* Build configuration list for PBXNativeTarget "unicornleap_tests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				FC0351B71C5D7B7F00341BB3 /* Debug */,
+				FC0351B81C5D7B7F00341BB3 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
 		FC4656D01C5D21710069EA6F /* Build configuration list for PBXProject "unicornleap" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (

@@ -14,6 +14,8 @@ func printUsage() {
   exit(0)
 }
 
-if Process.arguments.contains("--help") || Process.arguments.contains("-h") {
+let command = Command(Process.arguments)
+
+if command.needsHelp {
   printUsage()
 }
