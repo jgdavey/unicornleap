@@ -30,13 +30,13 @@ class Leap {
     floatingWindow.view.wantsLayer = true
 
     for _ in (1...command.number!) {
-      let layer = layerForImageWithSize(unicornImage.image, size: unicornImage.size)
+      let unicornLayer = UnicornLayer(image: unicornImage.image, size: unicornImage.size)
       let emitter = Emitter.forImageInFrame(sparkleImage.image, imageSize: unicornImage.size, seconds: command.seconds!)
 
-      floatingWindow.view.layer?.addSublayer(layer)
+      floatingWindow.view.layer?.addSublayer(unicornLayer.layer)
       floatingWindow.view.layer?.addSublayer(emitter)
 
-      animateLayerAlongPathForKey(layer, path: leapPath.path, key: "position", seconds: Double(command.seconds!))
+      animateLayerAlongPathForKey(unicornLayer.layer, path: leapPath.path, key: "position", seconds: Double(command.seconds!))
       animateLayerAlongPathForKey(emitter, path: leapPath.path, key: "emitterPosition", seconds: Double(command.seconds!))
 
       runLoop.runUntilDate(NSDate(timeIntervalSinceNow: Double(waitFor)))
@@ -50,14 +50,6 @@ class Leap {
     print("invalid Image")
     //  fprintf (stream, "ERROR: You must have a valid PNG image at %s\n", path);
     exit(127)
-  }
-
-  private func layerForImageWithSize(image: CGImageRef, size: CGSize) -> CALayer {
-    let layer = CALayer()
-    layer.contents = image
-    layer.bounds = CGRect(x: 0, y: 0, width: size.width, height: size.height)
-    layer.position = CGPoint(x: -size.width, y: -size.height)
-    return layer
   }
 
   private func animateLayerAlongPathForKey(layer: CALayer, path: CGMutablePathRef, key: String, seconds: Double) {
