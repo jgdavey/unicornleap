@@ -13,69 +13,42 @@ class CommandTests: XCTestCase {
   }
 
   func testNeedsHelp() {
-    let args = ["-h"]
-    let command = Command(args)
-
-    XCTAssertTrue(command.needsHelp)
+    for flag in ["-h", "--help"] {
+      let command = Command([flag])
+      XCTAssertTrue(command.needsHelp, "for flag: '\(flag)'")
+    }
   }
 
-  func testNeedsHelpLong() {
-    let args = ["--help"]
-    let command = Command(args)
-
-    XCTAssertTrue(command.needsHelp)
+  func testHasInvalidFlags() {
+    for flag in ["-i", "--invalid"] {
+      let command = Command([flag])
+      XCTAssertTrue(command.isNotValid, "for flag: '\(flag)'")
+      XCTAssertEqual(command.invalidFlags, [flag], "for flag: '\(flag)'")
+    }
   }
 
-  func testHasInvalidShortFlag() {
-    let args = ["-i"]
-    let command = Command(args)
-
-    XCTAssertTrue(command.isNotValid)
-    XCTAssertEqual(command.invalidFlags, ["-i"])
+  func testProvidingSeconds() {
+    for flag in ["-s", "--seconds"] {
+      let command = Command([flag, "5"])
+      XCTAssertFalse(command.isNotValid, "for flag: '\(flag)'")
+      XCTAssertEqual(command.seconds, 5.0, "for flag: '\(flag)'")
+    }
   }
 
-  func testHasInvalidLongFlag() {
-    let args = ["--invalid"]
-    let command = Command(args)
-
-    XCTAssertTrue(command.isNotValid)
-    XCTAssertEqual(command.invalidFlags, ["--invalid"])
+  func testProvidingSecondsWithoutAValue() {
+    for flag in ["-s", "--seconds"] {
+      let command = Command([flag])
+      XCTAssertTrue(command.isNotValid, "for flag: '\(flag)'")
+      XCTAssertNil(command.seconds, "for flag: '\(flag)'")
+    }
   }
 
-  func testProvidingShortSeconds() {
-    let command = Command(["-s", "5"])
-    XCTAssertFalse(command.isNotValid)
-    XCTAssertEqual(command.seconds, 5.0)
-  }
-
-  func testProvidingShortSecondsWithoutAValue() {
-    let command = Command(["-s"])
-    XCTAssertTrue(command.isNotValid)
-    XCTAssertNil(command.seconds)
-  }
-
-  func testProvidingShortSecondsWithBadValue() {
-    let command = Command(["-s", "four"])
-    XCTAssertTrue(command.isNotValid)
-    XCTAssertNil(command.seconds)
-  }
-
-  func testProvidingLongSeconds() {
-    let command = Command(["--seconds", "5"])
-    XCTAssertFalse(command.isNotValid)
-    XCTAssertEqual(command.seconds, 5.0)
-  }
-
-  func testProvidingLongSecondsWithoutAValue() {
-    let command = Command(["--seconds"])
-    XCTAssertTrue(command.isNotValid)
-    XCTAssertNil(command.seconds)
-  }
-
-  func testProvidingLongSecondsWithBadValue() {
-    let command = Command(["--seconds", "four"])
-    XCTAssertTrue(command.isNotValid)
-    XCTAssertNil(command.seconds)
+  func testProvidingSecondsWithBadValue() {
+    for flag in ["-s", "--seconds"] {
+      let command = Command([flag, "four"])
+      XCTAssertTrue(command.isNotValid, "for flag: '\(flag)'")
+      XCTAssertNil(command.seconds, "for flag: '\(flag)'")
+    }
   }
 
   func testProvidingShortAndLongSeconds() {
@@ -84,40 +57,28 @@ class CommandTests: XCTestCase {
     XCTAssertEqual(command.seconds, 5)
   }
 
-  func testProvidingShortNumber() {
-    let command = Command(["-n", "5"])
-    XCTAssertFalse(command.isNotValid)
-    XCTAssertEqual(command.number, 5)
+  func testProvidingNumber() {
+    for flag in ["-n", "--number"] {
+      let command = Command([flag, "5"])
+      XCTAssertFalse(command.isNotValid, "for flag: '\(flag)'")
+      XCTAssertEqual(command.number, 5, "for flag: '\(flag)'")
+    }
   }
 
-  func testProvidingShortNumberWithoutAValue() {
-    let command = Command(["-n"])
-    XCTAssertTrue(command.isNotValid)
-    XCTAssertNil(command.number)
+  func testProvidingNumberWithoutAValue() {
+    for flag in ["-n", "--number"] {
+      let command = Command([flag])
+      XCTAssertTrue(command.isNotValid, "for flag: '\(flag)'")
+      XCTAssertNil(command.number, "for flag: '\(flag)'")
+    }
   }
 
-  func testProvidingShortNumberWithBadValue() {
-    let command = Command(["-n", "four"])
-    XCTAssertTrue(command.isNotValid)
-    XCTAssertNil(command.number)
-  }
-
-  func testProvidingLongNumber() {
-    let command = Command(["--number", "5"])
-    XCTAssertFalse(command.isNotValid)
-    XCTAssertEqual(command.number, 5)
-  }
-
-  func testProvidingLongNumberWithoutAValue() {
-    let command = Command(["--number"])
-    XCTAssertTrue(command.isNotValid)
-    XCTAssertNil(command.number)
-  }
-
-  func testProvidingLongNumberWithBadValue() {
-    let command = Command(["--number", "four"])
-    XCTAssertTrue(command.isNotValid)
-    XCTAssertNil(command.number)
+  func testProvidingNumberWithBadValue() {
+    for flag in ["-n", "--number"] {
+      let command = Command([flag, "four"])
+      XCTAssertTrue(command.isNotValid, "for flag: '\(flag)'")
+      XCTAssertNil(command.number, "for flag: '\(flag)'")
+    }
   }
 
   func testProvidingShortAndLongNumber() {
