@@ -3,12 +3,6 @@ import Foundation
 class Command {
   private var arguments = [String]()
 
-  private var hasInvalidFlags: Bool {
-    let validFlags: Set<String> = ["-h", "--help", "-s", "--seconds", "-n", "--number"]
-    let flags = Set(arguments.filter({ $0[$0.startIndex] == "-" }))
-    return flags.subtract(validFlags).count != 0
-  }
-
   private func nextArgument(index: Int) -> String? {
     let nextIndex = index.advancedBy(1)
     guard nextIndex < arguments.count else { return nil }
@@ -25,7 +19,13 @@ class Command {
   }
 
   var isNotValid: Bool {
-    return hasInvalidFlags || seconds == nil || number == nil
+    return !invalidFlags.isEmpty || seconds == nil || number == nil
+  }
+
+  var invalidFlags: [String] {
+    let validFlags: Set<String> = ["-h", "--help", "-s", "--seconds", "-n", "--number"]
+    let flags = Set(arguments.filter({ $0[$0.startIndex] == "-" }))
+    return Array(flags.subtract(validFlags))
   }
 
   var seconds: Float? {

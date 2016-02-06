@@ -19,5 +19,7 @@ let command = Command(Process.arguments)
 if command.needsHelp {
   printUsage(0)
 } else if command.isNotValid {
+  let invalidOptions = command.invalidFlags.joinWithSeparator(", ")
+  print("unicornleap - invalid options: \(invalidOptions)")
   printUsage(1)
 }
