@@ -17,6 +17,9 @@
 		FC0B91D81C63932900BADED4 /* FloatingWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC0B91D71C63932900BADED4 /* FloatingWindow.swift */; };
 		FC0B91DA1C63976900BADED4 /* LeapImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC0B91D91C63976900BADED4 /* LeapImage.swift */; };
 		FC0B91DC1C65333E00BADED4 /* LeapPath.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC0B91DB1C65333E00BADED4 /* LeapPath.swift */; };
+		FC0B91DD1C65344B00BADED4 /* LeapPath.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC0B91DB1C65333E00BADED4 /* LeapPath.swift */; };
+		FC0B91DE1C65345700BADED4 /* FloatingWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC0B91D71C63932900BADED4 /* FloatingWindow.swift */; };
+		FC0B91DF1C65345D00BADED4 /* LeapImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC0B91D91C63976900BADED4 /* LeapImage.swift */; };
 		FC4656D91C5D21710069EA6F /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC4656D81C5D21710069EA6F /* main.swift */; };
 /* End PBXBuildFile section */
 
@@ -194,8 +197,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				FC0351C01C62414400341BB3 /* Leap.swift in Sources */,
+				FC0B91DD1C65344B00BADED4 /* LeapPath.swift in Sources */,
 				FC0351BD1C60F05400341BB3 /* CommandTests.swift in Sources */,
+				FC0B91DE1C65345700BADED4 /* FloatingWindow.swift in Sources */,
 				FC0351C31C62419B00341BB3 /* Emitter.swift in Sources */,
+				FC0B91DF1C65345D00BADED4 /* LeapImage.swift in Sources */,
 				FC0351BB1C5FA16000341BB3 /* Command.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
