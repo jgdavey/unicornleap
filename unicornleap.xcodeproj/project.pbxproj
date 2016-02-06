@@ -16,6 +16,7 @@
 		FC0B91DA1C63976900BADED4 /* LeapImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC0B91D91C63976900BADED4 /* LeapImage.swift */; };
 		FC0B91DE1C65345700BADED4 /* FloatingWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC0B91D71C63932900BADED4 /* FloatingWindow.swift */; };
 		FC0B91DF1C65345D00BADED4 /* LeapImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC0B91D91C63976900BADED4 /* LeapImage.swift */; };
+		FC44700F1C6558C200A7635E /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC4656D81C5D21710069EA6F /* main.swift */; };
 		FC4656D91C5D21710069EA6F /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC4656D81C5D21710069EA6F /* main.swift */; };
 		FCC248CE1C654DDC00984E72 /* SparkleImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCC248CD1C654DDC00984E72 /* SparkleImage.swift */; };
 		FCC248CF1C654DDC00984E72 /* SparkleImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCC248CD1C654DDC00984E72 /* SparkleImage.swift */; };
@@ -198,6 +199,7 @@
 			files = (
 				FC0351C01C62414400341BB3 /* Leap.swift in Sources */,
 				FCC248D21C654E1D00984E72 /* UnicornImage.swift in Sources */,
+				FC44700F1C6558C200A7635E /* main.swift in Sources */,
 				FC0351BD1C60F05400341BB3 /* CommandTests.swift in Sources */,
 				FCC248CF1C654DDC00984E72 /* SparkleImage.swift in Sources */,
 				FC0B91DE1C65345700BADED4 /* FloatingWindow.swift in Sources */,
