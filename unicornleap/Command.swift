@@ -13,6 +13,14 @@ class Command {
     return flags.subtract(validFlags).count != 0
   }
 
+  var seconds: Float {
+    return 2.0
+  }
+
+  var number: Int {
+    return 1
+  }
+
   init(_ arguments: [String]) {
     self.arguments = arguments
   }
