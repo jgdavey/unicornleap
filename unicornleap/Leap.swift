@@ -20,7 +20,7 @@ class Leap {
 
     let floatingWindow = FloatingWindow(rect: NSScreen.mainScreen()!.frame)
 
-    let path = pathInFrameForSize(NSScreen.mainScreen()!.frame, size: unicornImage.size)
+    let leapPath = LeapPath(size: unicornImage.size)
 
     floatingWindow.window.makeKeyAndOrderFront(nil)
 
@@ -36,8 +36,8 @@ class Leap {
       floatingWindow.view.layer?.addSublayer(layer)
       floatingWindow.view.layer?.addSublayer(emitter)
 
-      animateLayerAlongPathForKey(layer, path: path, key: "position", seconds: Double(command.seconds!))
-      animateLayerAlongPathForKey(emitter, path: path, key: "emitterPosition", seconds: Double(command.seconds!))
+      animateLayerAlongPathForKey(layer, path: leapPath.path, key: "position", seconds: Double(command.seconds!))
+      animateLayerAlongPathForKey(emitter, path: leapPath.path, key: "emitterPosition", seconds: Double(command.seconds!))
 
       runLoop.runUntilDate(NSDate(timeIntervalSinceNow: Double(waitFor)))
     }
@@ -50,19 +50,6 @@ class Leap {
     print("invalid Image")
     //  fprintf (stream, "ERROR: You must have a valid PNG image at %s\n", path);
     exit(127)
-  }
-
-  private func pathInFrameForSize(screen: CGRect, size: CGSize) -> CGMutablePathRef {
-    let path = CGPathCreateMutable()
-    let origin = CGPoint(x: -size.width, y: -size.height)
-    let destination = CGPoint(x: screen.size.width + size.width, y: origin.y)
-    let midpoint = (destination.x + origin.x) / 2.0
-    let peak = size.height + 50.0
-
-    CGPathMoveToPoint(path, nil, origin.x, origin.y)
-    CGPathAddCurveToPoint(path, nil, midpoint, peak, midpoint, peak, destination.x, destination.y)
-
-    return path
   }
 
   private func layerForImageWithSize(image: CGImageRef, size: CGSize) -> CALayer {
