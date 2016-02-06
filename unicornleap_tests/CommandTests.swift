@@ -96,4 +96,26 @@ class CommandTests: XCTestCase {
     XCTAssertFalse(command.isNotValid)
     XCTAssertEqual(command.number, 5)
   }
+
+  func testProvidingUnicornFile() {
+    for flag in ["-u", "--unicorn"] {
+      let command = Command([flag, "hippo.png"])
+      XCTAssertFalse(command.isNotValid, "for flag: '\(flag)'")
+      XCTAssertEqual(command.unicornFile, "hippo.png", "for flag: '\(flag)'")
+    }
+  }
+
+  func testProvidingUnicornFileWithoutAValue() {
+    for flag in ["-u", "--unicorn"] {
+      let command = Command([flag])
+      XCTAssertTrue(command.isNotValid, "for flag: '\(flag)'")
+      XCTAssertNil(command.unicornFile, "for flag: '\(flag)'")
+    }
+  }
+
+  func testProvidingShortAndLongUnicornFile() {
+    let command = Command(["-u", "hippo.png", "--unicorn", "bat.png"])
+    XCTAssertFalse(command.isNotValid)
+    XCTAssertEqual(command.unicornFile, "hippo.png")
+  }
 }

@@ -14,7 +14,6 @@ class Command {
     return indexes.flatMap({$0}).first
   }
 
-  let unicornFile = "unicorn.png"
   let sparkleFile = "sparkle.png"
 
   var needsHelp: Bool {
@@ -26,11 +25,11 @@ class Command {
   }
 
   var isNotValid: Bool {
-    return !invalidFlags.isEmpty || seconds == nil || number == nil
+    return !invalidFlags.isEmpty || seconds == nil || number == nil || unicornFile == nil
   }
 
   var invalidFlags: [String] {
-    let validFlags: Set<String> = ["-h", "--help", "-s", "--seconds", "-n", "--number", "-v", "--verbose"]
+    let validFlags: Set<String> = ["-h", "--help", "-s", "--seconds", "-n", "--number", "-u",  "--unicorn", "-v", "--verbose"]
     let flags = Set(arguments.filter({ $0[$0.startIndex] == "-" }))
     return Array(flags.subtract(validFlags))
   }
@@ -43,6 +42,11 @@ class Command {
   var number: Int? {
     guard let index = flagIndex(["-n", "--number"]) else { return 1 }
     return nextArgument(index)?.asInt
+  }
+
+  var unicornFile: String? {
+    guard let index = flagIndex(["-u", "--unicorn"]) else { return "unicorn.png" }
+    return nextArgument(index)
   }
 
   init(_ arguments: [String]) {
