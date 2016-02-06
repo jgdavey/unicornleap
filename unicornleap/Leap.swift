@@ -1,7 +1,16 @@
 import Cocoa
 
+private func imageFromPath(path: String) -> CGImage? {
+  guard let source = CGDataProviderCreateWithFilename(path) else { return nil }
+  return CGImageCreateWithPNGDataProvider(source, nil, true, .RenderingIntentDefault)
+}
+
 class Leap {
   let command: Command
+
+  var unicornCGImage: CGImage?
+  var sparkleCGImage: CGImage?
+  var unicornSize: NSSize?
 
   class func animateImage(command: Command) {
     Leap(command).animateImage()
@@ -9,14 +18,26 @@ class Leap {
 
   init(_ command: Command) {
     self.command = command
+
+    let folder: NSString = (NSHomeDirectory() as NSString).stringByAppendingPathComponent(".unicornleap")
+
+    let unicornPath = folder.stringByAppendingPathComponent("unicorn.png")
+    let sparklePath = folder.stringByAppendingPathComponent("sparkle.png")
+
+    unicornCGImage = imageFromPath(unicornPath)
+    sparkleCGImage = imageFromPath(sparklePath)
+
+    unicornSize = NSImage(contentsOfFile: unicornPath)?.size
   }
 
   func animateImage() {
-    let unicornFilename = "unicorn.png"
-    let sparkleFilename = "sparkle.png"
-
     // I don't know what this does, but you need it
     NSApplication.sharedApplication()
+
+    guard let unicornImage = unicornCGImage else { invalidImage("unicorn.png"); return }
+    guard let sparkleImage = sparkleCGImage else { invalidImage("sparkle.png"); return }
+
+    guard let unicornSize = unicornSize else { return }
 
     let screenFrame = NSScreen.mainScreen()!.frame
     let window = NSWindow(contentRect: screenFrame, styleMask: NSBorderlessWindowMask, backing: NSBackingStoreType.Buffered, `defer`: false)
@@ -28,35 +49,7 @@ class Leap {
     let view = NSView(frame: screenFrame)
     window.contentView = view
 
-    let folder: NSString = (NSHomeDirectory() as NSString).stringByAppendingPathComponent(".unicornleap")
-    let imagePath = folder.stringByAppendingPathComponent(unicornFilename)
-    let sparklePath = folder.stringByAppendingPathComponent(sparkleFilename)
-
-    let image = NSImage(contentsOfFile: imagePath)
-
-    if !image!.valid {
-      invalidImage(imagePath)
-      // this should probably throw up to main?
-      return
-    }
-
-    let imageSize = image?.size
-
-    let source = CGDataProviderCreateWithFilename(imagePath)
-    let cgimage = CGImageCreateWithPNGDataProvider(source, nil, true, CGColorRenderingIntent.RenderingIntentDefault)
-
-    let sparkleSource = CGDataProviderCreateWithFilename(sparklePath)
-
-    // could this error checking be rolled into the other error checking?? seems redundant
-    if sparkleSource == nil {
-      invalidImage(sparklePath)
-      // this should probably throw up to main?
-      return
-    }
-
-    let sparkleImage = CGImageCreateWithPNGDataProvider(sparkleSource, nil, true, CGColorRenderingIntent.RenderingIntentDefault)
-
-    let path = pathInFrameForSize(screenFrame, size: imageSize!)
+    let path = pathInFrameForSize(screenFrame, size: unicornSize)
 
     window.makeKeyAndOrderFront(nil)
 
@@ -66,8 +59,8 @@ class Leap {
     view.wantsLayer = true
 
     for _ in (1...command.number!) {
-      let layer = layerForImageWithSize(cgimage!, size: imageSize!)
-      let emitter = Emitter.forImageInFrame(sparkleImage!, imageSize: imageSize!, seconds: command.seconds!)
+      let layer = layerForImageWithSize(unicornImage, size: unicornSize)
+      let emitter = Emitter.forImageInFrame(sparkleImage, imageSize: unicornSize, seconds: command.seconds!)
 
       view.layer?.addSublayer(layer)
       view.layer?.addSublayer(emitter)
