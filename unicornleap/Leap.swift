@@ -1,16 +1,7 @@
 import Cocoa
 
-private func imageFromPath(path: String) -> CGImage? {
-  guard let source = CGDataProviderCreateWithFilename(path) else { return nil }
-  return CGImageCreateWithPNGDataProvider(source, nil, true, .RenderingIntentDefault)
-}
-
 class Leap {
   let command: Command
-
-  var unicornCGImage: CGImage?
-  var sparkleCGImage: CGImage?
-  var unicornSize: NSSize?
 
   class func animateImage(command: Command) {
     Leap(command).animateImage()
@@ -18,30 +9,22 @@ class Leap {
 
   init(_ command: Command) {
     self.command = command
-
-    let folder: NSString = (NSHomeDirectory() as NSString).stringByAppendingPathComponent(".unicornleap")
-
-    let unicornPath = folder.stringByAppendingPathComponent("unicorn.png")
-    let sparklePath = folder.stringByAppendingPathComponent("sparkle.png")
-
-    unicornCGImage = imageFromPath(unicornPath)
-    sparkleCGImage = imageFromPath(sparklePath)
-
-    unicornSize = NSImage(contentsOfFile: unicornPath)?.size
   }
 
   func animateImage() {
     // I don't know what this does, but you need it
     NSApplication.sharedApplication()
 
-    guard let unicornImage = unicornCGImage else { invalidImage("unicorn.png"); return }
-    guard let sparkleImage = sparkleCGImage else { invalidImage("sparkle.png"); return }
+    let folder: NSString = (NSHomeDirectory() as NSString).stringByAppendingPathComponent(".unicornleap")
+    let unicornPath = folder.stringByAppendingPathComponent("unicorn.png")
+    let sparklePath = folder.stringByAppendingPathComponent("sparkle.png")
 
-    guard let unicornSize = unicornSize else { return }
+    guard let unicornImage = UnicornImage(path: unicornPath) else { invalidImage("unicorn.png"); return }
+    guard let sparkleImage = SparkleImage(path: sparklePath) else { invalidImage("sparkle.png"); return }
 
     let floatingWindow = FloatingWindow(rect: NSScreen.mainScreen()!.frame)
 
-    let path = pathInFrameForSize(NSScreen.mainScreen()!.frame, size: unicornSize)
+    let path = pathInFrameForSize(NSScreen.mainScreen()!.frame, size: unicornImage.size)
 
     floatingWindow.window.makeKeyAndOrderFront(nil)
 
@@ -51,8 +34,8 @@ class Leap {
     floatingWindow.view.wantsLayer = true
 
     for _ in (1...command.number!) {
-      let layer = layerForImageWithSize(unicornImage, size: unicornSize)
-      let emitter = Emitter.forImageInFrame(sparkleImage, imageSize: unicornSize, seconds: command.seconds!)
+      let layer = layerForImageWithSize(unicornImage.image, size: unicornImage.size)
+      let emitter = Emitter.forImageInFrame(sparkleImage.image, imageSize: unicornImage.size, seconds: command.seconds!)
 
       floatingWindow.view.layer?.addSublayer(layer)
       floatingWindow.view.layer?.addSublayer(emitter)
