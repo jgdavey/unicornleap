@@ -15,12 +15,8 @@ class Leap {
     // I don't know what this does, but you need it
     NSApplication.sharedApplication()
 
-    let folder: NSString = (NSHomeDirectory() as NSString).stringByAppendingPathComponent(".unicornleap")
-    let unicornPath = folder.stringByAppendingPathComponent("unicorn.png")
-    let sparklePath = folder.stringByAppendingPathComponent("sparkle.png")
-
-    guard let unicornImage = UnicornImage(path: unicornPath) else { invalidImage("unicorn.png"); return }
-    guard let sparkleImage = SparkleImage(path: sparklePath) else { invalidImage("sparkle.png"); return }
+    guard let unicornImage = UnicornImage(filename: "unicorn.png") else { invalidImage("unicorn.png"); return }
+    guard let sparkleImage = SparkleImage(filename: "sparkle.png") else { invalidImage("sparkle.png"); return }
 
     let floatingWindow = FloatingWindow(rect: NSScreen.mainScreen()!.frame)
 
