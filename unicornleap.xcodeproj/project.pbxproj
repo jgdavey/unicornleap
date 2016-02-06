@@ -18,8 +18,6 @@
 		FC0B91DA1C63976900BADED4 /* LeapImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC0B91D91C63976900BADED4 /* LeapImage.swift */; };
 		FC0B91DE1C65345700BADED4 /* FloatingWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC0B91D71C63932900BADED4 /* FloatingWindow.swift */; };
 		FC0B91DF1C65345D00BADED4 /* LeapImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC0B91D91C63976900BADED4 /* LeapImage.swift */; };
-		FC0B91E11C65350D00BADED4 /* UnicornLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC0B91E01C65350D00BADED4 /* UnicornLayer.swift */; };
-		FC0B91E21C65350D00BADED4 /* UnicornLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC0B91E01C65350D00BADED4 /* UnicornLayer.swift */; };
 		FC0B91E41C6537EA00BADED4 /* LeapAnimation.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC0B91E31C6537EA00BADED4 /* LeapAnimation.swift */; };
 		FC0B91E51C6537EA00BADED4 /* LeapAnimation.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC0B91E31C6537EA00BADED4 /* LeapAnimation.swift */; };
 		FC4656D91C5D21710069EA6F /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC4656D81C5D21710069EA6F /* main.swift */; };
@@ -46,7 +44,6 @@
 		FC0351C11C62419B00341BB3 /* Emitter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Emitter.swift; sourceTree = "<group>"; };
 		FC0B91D71C63932900BADED4 /* FloatingWindow.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FloatingWindow.swift; sourceTree = "<group>"; };
 		FC0B91D91C63976900BADED4 /* LeapImage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LeapImage.swift; sourceTree = "<group>"; };
-		FC0B91E01C65350D00BADED4 /* UnicornLayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UnicornLayer.swift; sourceTree = "<group>"; };
 		FC0B91E31C6537EA00BADED4 /* LeapAnimation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LeapAnimation.swift; sourceTree = "<group>"; };
 		FC4656D51C5D21710069EA6F /* unicornleap */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = unicornleap; sourceTree = BUILT_PRODUCTS_DIR; };
 		FC4656D81C5D21710069EA6F /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
@@ -101,7 +98,6 @@
 		FC4656D71C5D21710069EA6F /* unicornleap */ = {
 			isa = PBXGroup;
 			children = (
-				FC0B91E01C65350D00BADED4 /* UnicornLayer.swift */,
 				FC0B91D71C63932900BADED4 /* FloatingWindow.swift */,
 				FC0B91D91C63976900BADED4 /* LeapImage.swift */,
 				FC0351BE1C62414400341BB3 /* Leap.swift */,
@@ -200,7 +196,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				FC0B91E21C65350D00BADED4 /* UnicornLayer.swift in Sources */,
 				FC0B91E51C6537EA00BADED4 /* LeapAnimation.swift in Sources */,
 				FC0351C01C62414400341BB3 /* Leap.swift in Sources */,
 				FC0351BD1C60F05400341BB3 /* CommandTests.swift in Sources */,
@@ -215,7 +210,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				FC0B91E11C65350D00BADED4 /* UnicornLayer.swift in Sources */,
 				FC0B91E41C6537EA00BADED4 /* LeapAnimation.swift in Sources */,
 				FC0351BF1C62414400341BB3 /* Leap.swift in Sources */,
 				FC4656D91C5D21710069EA6F /* main.swift in Sources */,

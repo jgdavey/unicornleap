@@ -28,14 +28,13 @@ class Leap {
     floatingWindow.view.wantsLayer = true
 
     for _ in (1...command.number!) {
-      let unicornLayer = UnicornLayer(image: unicornImage.image, size: unicornImage.size)
       let emitter = Emitter.forImageInFrame(sparkleImage.image, imageSize: unicornImage.size, seconds: command.seconds!)
 
-      floatingWindow.view.layer?.addSublayer(unicornLayer.layer)
+      floatingWindow.view.layer?.addSublayer(unicornImage.layer)
       floatingWindow.view.layer?.addSublayer(emitter)
 
       let unicornAnimation = LeapAnimation(path: unicornImage.path, key: "position", seconds: Double(command.seconds!))
-      unicornLayer.layer.addAnimation(unicornAnimation.animation, forKey: "position")
+      unicornImage.layer.addAnimation(unicornAnimation.animation, forKey: "position")
 
       let sparkleAnimation = LeapAnimation(path: unicornImage.path, key: "emitterPosition", seconds: Double(command.seconds!))
       emitter.addAnimation(sparkleAnimation.animation, forKey: "emitterPosition")
