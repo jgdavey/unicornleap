@@ -1,15 +1,15 @@
-Unicornleap
-===========
+# Unicornleap
 
 A reimplementaion of KevinLiddle/unicornleap using CoreAnimation.
 
-Installation
-------------
+## Installation
 
 ### "Automatic" installation
 
-    make
-    make install
+```
+make
+make install
+```
 
 The default installation prefix is /usr/local. You can change it with
 the PREFIX env variable.
@@ -21,7 +21,8 @@ the PREFIX env variable.
 3.  Create 2 images at `~/.unicornleap/unicorn.png` and `~/.unicornleap/sparkle.png`
 
 
-Usage
------
+## Usage
 
-    unicornleap
+```
+unicornleap
+```
