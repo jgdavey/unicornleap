@@ -1,26 +1,19 @@
-program_name := unicornleap
-image_folder := $(HOME)/.$(program_name)
-
-CFLAGS += -std=c99
-LDFLAGS += -framework Cocoa -framework QuartzCore
+program_name=unicornleap
+executable_name=$(program_name).bin
+image_folder=$(HOME)/.$(program_name)
+build_folder=build
 PREFIX ?= /usr/local
 
 .PHONY: all clean
 
-all: $(program_name)
+all:
+	xcodebuild CONFIGURATION_BUILD_DIR=$(build_folder) PRODUCT_NAME=$(executable_name)
 
-$(program_name): unicornleap
-	@ mkdir -p build
-	cp unicornleap build/$(program_name)
-
-install: $(program_name) $(image_folder)
-	cp build/$(program_name) ${PREFIX}/bin
+install:
+	mkdir -p $(image_folder)
+	cp images/*.png $(image_folder)
+	cp $(build_folder)/$(executable_name) $(PREFIX)/bin
 	cp $(program_name).1 $(PREFIX)/share/man/man1/
 
-$(image_folder):
-	mkdir -p $@
-	cp images/*.png $@
-
 clean:
-	@- $(RM) unicornleap
-	@- $(RM) build/$(program_name)
+	rm -rf build
