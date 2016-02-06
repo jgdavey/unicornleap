@@ -3,6 +3,7 @@ import Cocoa
 class LeapImage {
   let filename: String
   var image: CGImage!
+  var animationKeyPath = "position"
 
   var imagePath: String {
     return "\(NSHomeDirectory())/.unicornleap/\(filename)"
@@ -15,6 +16,16 @@ class LeapImage {
       else { return nil }
 
     self.image = image
+  }
+
+  func addAnimation(seconds: Double, path: CGMutablePath, layer: CALayer) {
+    let animation = CAKeyframeAnimation()
+    animation.keyPath = animationKeyPath
+    animation.path = path
+    animation.duration = seconds
+    animation.calculationMode = kCAAnimationLinear
+
+    layer.addAnimation(animation, forKey: animationKeyPath)
   }
 }
 
@@ -31,6 +42,10 @@ class UnicornImage: LeapImage {
 
     configurePath()
     configureLayer()
+  }
+
+  func addAnimation(seconds: Double) {
+    super.addAnimation(seconds, path: path, layer: layer)
   }
 
   private func configurePath() {
@@ -51,4 +66,9 @@ class UnicornImage: LeapImage {
   }
 }
 
-class SparkleImage: LeapImage {}
+class SparkleImage: LeapImage {
+  override init?(filename: String) {
+    super.init(filename: filename)
+    animationKeyPath = "emitterPosition"
+  }
+}
