@@ -15,8 +15,8 @@ class Leap {
     // I don't know what this does, but you need it
     NSApplication.sharedApplication()
 
-    guard let unicornImage = UnicornImage(filename: "unicorn.png") else { printImageError("unicorn.png"); return }
-    guard let sparkleImage = SparkleImage(filename: "sparkle.png") else { printImageError("sparkle.png"); return }
+    guard let unicornImage = UnicornImage(filename: command.unicornFile) else { printImageError(command.unicornFile); return }
+    guard let sparkleImage = SparkleImage(filename: command.sparkleFile) else { printImageError(command.sparkleFile); return }
 
     let floatingWindow = FloatingWindow(rect: NSScreen.mainScreen()!.frame)
 

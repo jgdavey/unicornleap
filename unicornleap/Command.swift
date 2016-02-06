@@ -14,6 +14,9 @@ class Command {
     return indexes.flatMap({$0}).first
   }
 
+  let unicornFile = "unicorn.png"
+  let sparkleFile = "sparkle.png"
+
   var needsHelp: Bool {
     return arguments.contains("-h") || arguments.contains("--help")
   }

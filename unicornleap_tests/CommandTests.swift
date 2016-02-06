@@ -8,6 +8,8 @@ class CommandTests: XCTestCase {
     XCTAssertFalse(command.isNotValid)
     XCTAssertEqual(command.seconds, 2.0)
     XCTAssertEqual(command.number, 1)
+    XCTAssertEqual(command.unicornFile, "unicorn.png")
+    XCTAssertEqual(command.sparkleFile, "sparkle.png")
   }
 
   func testNeedsHelp() {
