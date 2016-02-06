@@ -23,8 +23,7 @@ class Leap {
     window.backgroundColor = NSColor(calibratedHue: 0, saturation: 0, brightness: 0, alpha: 0)
     window.opaque = false
     window.ignoresMouseEvents = true
-    // this sucks - can we get this value another way??
-    window.level = Int(CGWindowLevelForKey(CGWindowLevelKey.FloatingWindowLevelKey))
+    window.level = Int(CGWindowLevelForKey(.FloatingWindowLevelKey))
 
     let view = NSView(frame: screenFrame)
     window.contentView = view
