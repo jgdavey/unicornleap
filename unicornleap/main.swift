@@ -33,6 +33,11 @@ func printCommandErrors(command: Command) {
   print("\(errors.joinWithSeparator("\n"))\n")
 }
 
+func printImageError(filename: String) {
+  print("unicornleap - valid PNG not found: ~/.unicornleap/\(filename)")
+  exit(127)
+}
+
 let command = Command(Process.arguments)
 
 if command.needsHelp {

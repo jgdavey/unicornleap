@@ -15,8 +15,8 @@ class Leap {
     // I don't know what this does, but you need it
     NSApplication.sharedApplication()
 
-    guard let unicornImage = UnicornImage(filename: "unicorn.png") else { invalidImage("unicorn.png"); return }
-    guard let sparkleImage = SparkleImage(filename: "sparkle.png") else { invalidImage("sparkle.png"); return }
+    guard let unicornImage = UnicornImage(filename: "unicorn.png") else { printImageError("unicorn.png"); return }
+    guard let sparkleImage = SparkleImage(filename: "sparkle.png") else { printImageError("sparkle.png"); return }
 
     let floatingWindow = FloatingWindow(rect: NSScreen.mainScreen()!.frame)
 
@@ -40,12 +40,5 @@ class Leap {
     }
 
     runLoop.runUntilDate(NSDate(timeIntervalSinceNow: (Double(command.seconds!) - waitFor + 0.2)))
-  }
-
-  private func invalidImage(path: String) {
-    // this should probably throw up to main?
-    print("invalid Image")
-    //  fprintf (stream, "ERROR: You must have a valid PNG image at %s\n", path);
-    exit(127)
   }
 }
