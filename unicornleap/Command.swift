@@ -21,12 +21,16 @@ class Command {
     return arguments.contains("-h") || arguments.contains("--help")
   }
 
+  var verboseOutput: Bool {
+    return arguments.contains("-v") || arguments.contains("--verbose")
+  }
+
   var isNotValid: Bool {
     return !invalidFlags.isEmpty || seconds == nil || number == nil
   }
 
   var invalidFlags: [String] {
-    let validFlags: Set<String> = ["-h", "--help", "-s", "--seconds", "-n", "--number"]
+    let validFlags: Set<String> = ["-h", "--help", "-s", "--seconds", "-n", "--number", "-v", "--verbose"]
     let flags = Set(arguments.filter({ $0[$0.startIndex] == "-" }))
     return Array(flags.subtract(validFlags))
   }

@@ -38,6 +38,11 @@ func printImageError(filename: String) {
   exit(127)
 }
 
+func printVerboseOutput() {
+  print("Seconds: \(command.seconds)")
+  print("Number: \(command.number)")
+}
+
 let command = Command(Process.arguments)
 
 if command.needsHelp {
@@ -46,5 +51,9 @@ if command.needsHelp {
   printCommandErrors(command)
   printUsage(1)
 } else {
+  if command.verboseOutput {
+    printVerboseOutput()
+  }
+
   Leap.animateImage(command)
 }

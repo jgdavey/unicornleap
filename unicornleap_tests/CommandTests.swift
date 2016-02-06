@@ -6,6 +6,7 @@ class CommandTests: XCTestCase {
 
     XCTAssertFalse(command.needsHelp)
     XCTAssertFalse(command.isNotValid)
+    XCTAssertFalse(command.verboseOutput)
     XCTAssertEqual(command.seconds, 2.0)
     XCTAssertEqual(command.number, 1)
     XCTAssertEqual(command.unicornFile, "unicorn.png")
@@ -16,6 +17,14 @@ class CommandTests: XCTestCase {
     for flag in ["-h", "--help"] {
       let command = Command([flag])
       XCTAssertTrue(command.needsHelp, "for flag: '\(flag)'")
+    }
+  }
+
+  func testWantsVerboseOutput() {
+    for flag in ["-v", "--verbose"] {
+      let command = Command([flag])
+      XCTAssertFalse(command.isNotValid, "for flag: '\(flag)'")
+      XCTAssertTrue(command.verboseOutput, "for flag: '\(flag)'")
     }
   }
 
