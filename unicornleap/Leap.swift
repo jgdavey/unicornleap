@@ -39,31 +39,23 @@ class Leap {
 
     guard let unicornSize = unicornSize else { return }
 
-    let screenFrame = NSScreen.mainScreen()!.frame
-    let window = NSWindow(contentRect: screenFrame, styleMask: NSBorderlessWindowMask, backing: NSBackingStoreType.Buffered, `defer`: false)
-    window.backgroundColor = NSColor(calibratedHue: 0, saturation: 0, brightness: 0, alpha: 0)
-    window.opaque = false
-    window.ignoresMouseEvents = true
-    window.level = Int(CGWindowLevelForKey(.FloatingWindowLevelKey))
+    let floatingWindow = FloatingWindow(rect: NSScreen.mainScreen()!.frame)
 
-    let view = NSView(frame: screenFrame)
-    window.contentView = view
+    let path = pathInFrameForSize(NSScreen.mainScreen()!.frame, size: unicornSize)
 
-    let path = pathInFrameForSize(screenFrame, size: unicornSize)
-
-    window.makeKeyAndOrderFront(nil)
+    floatingWindow.window.makeKeyAndOrderFront(nil)
 
     let waitFor = Double(command.seconds!/2.5)
 
     let runLoop = NSRunLoop.currentRunLoop()
-    view.wantsLayer = true
+    floatingWindow.view.wantsLayer = true
 
     for _ in (1...command.number!) {
       let layer = layerForImageWithSize(unicornImage, size: unicornSize)
       let emitter = Emitter.forImageInFrame(sparkleImage, imageSize: unicornSize, seconds: command.seconds!)
 
-      view.layer?.addSublayer(layer)
-      view.layer?.addSublayer(emitter)
+      floatingWindow.view.layer?.addSublayer(layer)
+      floatingWindow.view.layer?.addSublayer(emitter)
 
       animateLayerAlongPathForKey(layer, path: path, key: "position", seconds: Double(command.seconds!))
       animateLayerAlongPathForKey(emitter, path: path, key: "emitterPosition", seconds: Double(command.seconds!))

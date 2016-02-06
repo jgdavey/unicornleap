@@ -14,6 +14,7 @@
 		FC0351C01C62414400341BB3 /* Leap.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC0351BE1C62414400341BB3 /* Leap.swift */; };
 		FC0351C21C62419B00341BB3 /* Emitter.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC0351C11C62419B00341BB3 /* Emitter.swift */; };
 		FC0351C31C62419B00341BB3 /* Emitter.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC0351C11C62419B00341BB3 /* Emitter.swift */; };
+		FC0B91D81C63932900BADED4 /* FloatingWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC0B91D71C63932900BADED4 /* FloatingWindow.swift */; };
 		FC4656D91C5D21710069EA6F /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC4656D81C5D21710069EA6F /* main.swift */; };
 /* End PBXBuildFile section */
 
@@ -36,6 +37,7 @@
 		FC0351BC1C60F05400341BB3 /* CommandTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CommandTests.swift; sourceTree = "<group>"; };
 		FC0351BE1C62414400341BB3 /* Leap.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Leap.swift; sourceTree = "<group>"; };
 		FC0351C11C62419B00341BB3 /* Emitter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Emitter.swift; sourceTree = "<group>"; };
+		FC0B91D71C63932900BADED4 /* FloatingWindow.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FloatingWindow.swift; sourceTree = "<group>"; };
 		FC4656D51C5D21710069EA6F /* unicornleap */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = unicornleap; sourceTree = BUILT_PRODUCTS_DIR; };
 		FC4656D81C5D21710069EA6F /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -88,6 +90,7 @@
 		FC4656D71C5D21710069EA6F /* unicornleap */ = {
 			isa = PBXGroup;
 			children = (
+				FC0B91D71C63932900BADED4 /* FloatingWindow.swift */,
 				FC0351BE1C62414400341BB3 /* Leap.swift */,
 				FC0351C11C62419B00341BB3 /* Emitter.swift */,
 				FC4656D81C5D21710069EA6F /* main.swift */,
@@ -197,6 +200,7 @@
 			files = (
 				FC0351BF1C62414400341BB3 /* Leap.swift in Sources */,
 				FC4656D91C5D21710069EA6F /* main.swift in Sources */,
+				FC0B91D81C63932900BADED4 /* FloatingWindow.swift in Sources */,
 				FC0351C21C62419B00341BB3 /* Emitter.swift in Sources */,
 				FC0351BA1C5FA16000341BB3 /* Command.swift in Sources */,
 			);
@@ -331,6 +335,7 @@
 				FC0351B81C5D7B7F00341BB3 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		FC4656D01C5D21710069EA6F /* Build configuration list for PBXProject "unicornleap" */ = {
 			isa = XCConfigurationList;
