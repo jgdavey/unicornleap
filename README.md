@@ -1,6 +1,6 @@
 # Unicornleap
 
-A reimplementaion of KevinLiddle/unicornleap using CoreAnimation.
+A reimplementaion of KevinLiddle/unicornleap using CoreAnimation, now in Swift!
 
 ## Installation
 
