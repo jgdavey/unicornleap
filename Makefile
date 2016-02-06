@@ -9,9 +9,9 @@ PREFIX ?= /usr/local
 
 all: $(program_name)
 
-$(program_name): main
+$(program_name): unicornleap
 	@ mkdir -p build
-	cp main build/$(program_name)
+	cp unicornleap build/$(program_name)
 
 install: $(program_name) $(image_folder)
 	cp build/$(program_name) ${PREFIX}/bin
@@ -19,8 +19,8 @@ install: $(program_name) $(image_folder)
 
 $(image_folder):
 	mkdir -p $@
-	cp *.png $@
+	cp images/*.png $@
 
 clean:
-	@- $(RM) main
+	@- $(RM) unicornleap
 	@- $(RM) build/$(program_name)
