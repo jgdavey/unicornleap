@@ -14,7 +14,7 @@ func printUsage(exitCode: Int32) {
   exit(exitCode)
 }
 
-func printErrors(command: Command) {
+func printCommandErrors(command: Command) {
   var errors = [String]()
 
   if !command.invalidFlags.isEmpty {
@@ -38,7 +38,7 @@ let command = Command(Process.arguments)
 if command.needsHelp {
   printUsage(0)
 } else if command.isNotValid {
-  printErrors(command)
+  printCommandErrors(command)
   printUsage(1)
 } else {
   Leap.animateImage(command)
