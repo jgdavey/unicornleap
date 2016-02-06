@@ -20,8 +20,6 @@ class Leap {
 
     let floatingWindow = FloatingWindow(rect: NSScreen.mainScreen()!.frame)
 
-    let leapPath = LeapPath(size: unicornImage.size)
-
     floatingWindow.window.makeKeyAndOrderFront(nil)
 
     let waitFor = Double(command.seconds!/2.5)
@@ -36,10 +34,10 @@ class Leap {
       floatingWindow.view.layer?.addSublayer(unicornLayer.layer)
       floatingWindow.view.layer?.addSublayer(emitter)
 
-      let unicornAnimation = LeapAnimation(path: leapPath.path, key: "position", seconds: Double(command.seconds!))
+      let unicornAnimation = LeapAnimation(path: unicornImage.path, key: "position", seconds: Double(command.seconds!))
       unicornLayer.layer.addAnimation(unicornAnimation.animation, forKey: "position")
 
-      let sparkleAnimation = LeapAnimation(path: leapPath.path, key: "emitterPosition", seconds: Double(command.seconds!))
+      let sparkleAnimation = LeapAnimation(path: unicornImage.path, key: "emitterPosition", seconds: Double(command.seconds!))
       emitter.addAnimation(sparkleAnimation.animation, forKey: "emitterPosition")
 
       runLoop.runUntilDate(NSDate(timeIntervalSinceNow: Double(waitFor)))
