@@ -14,12 +14,30 @@ func printUsage(exitCode: Int32) {
   exit(exitCode)
 }
 
+func printErrors(command: Command) {
+  var errors = [String]()
+
+  if !command.invalidFlags.isEmpty {
+    let invalidOptions = command.invalidFlags.joinWithSeparator(", ")
+    errors.append("unicornleap - invalid options: \(invalidOptions)")
+  }
+
+  if command.seconds == nil {
+    errors.append("unicornleap - the seconds flag requires an argument")
+  }
+
+  if command.number == nil {
+    errors.append("unicornleap - the number flag requires an argument")
+  }
+
+  print("\(errors.joinWithSeparator("\n"))\n")
+}
+
 let command = Command(Process.arguments)
 
 if command.needsHelp {
   printUsage(0)
 } else if command.isNotValid {
-  let invalidOptions = command.invalidFlags.joinWithSeparator(", ")
-  print("unicornleap - invalid options: \(invalidOptions)")
+  printErrors(command)
   printUsage(1)
 }
