@@ -37,7 +37,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		FC0351B11C5D7B7F00341BB3 /* unicornleap_tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = unicornleap_tests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		FC0351B11C5D7B7F00341BB3 /* UnicornLeapTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = UnicornLeapTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		FC0351B51C5D7B7F00341BB3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		FC0351B91C5FA16000341BB3 /* Command.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Command.swift; sourceTree = "<group>"; };
 		FC0351BC1C60F05400341BB3 /* CommandTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CommandTests.swift; sourceTree = "<group>"; };
@@ -68,20 +68,20 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		FC0351B21C5D7B7F00341BB3 /* unicornleap_tests */ = {
+		FC0351B21C5D7B7F00341BB3 /* UnicornLeapTests */ = {
 			isa = PBXGroup;
 			children = (
 				FC0351B51C5D7B7F00341BB3 /* Info.plist */,
 				FC0351BC1C60F05400341BB3 /* CommandTests.swift */,
 			);
-			path = unicornleap_tests;
+			path = UnicornLeapTests;
 			sourceTree = "<group>";
 		};
 		FC4656CC1C5D21710069EA6F = {
 			isa = PBXGroup;
 			children = (
 				FC4656D71C5D21710069EA6F /* unicornleap */,
-				FC0351B21C5D7B7F00341BB3 /* unicornleap_tests */,
+				FC0351B21C5D7B7F00341BB3 /* UnicornLeapTests */,
 				FC4656D61C5D21710069EA6F /* Products */,
 			);
 			sourceTree = "<group>";
@@ -90,7 +90,7 @@
 			isa = PBXGroup;
 			children = (
 				FC4656D51C5D21710069EA6F /* unicornleap */,
-				FC0351B11C5D7B7F00341BB3 /* unicornleap_tests.xctest */,
+				FC0351B11C5D7B7F00341BB3 /* UnicornLeapTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -112,9 +112,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		FC0351B01C5D7B7F00341BB3 /* unicornleap_tests */ = {
+		FC0351B01C5D7B7F00341BB3 /* UnicornLeapTests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = FC0351B61C5D7B7F00341BB3 /* Build configuration list for PBXNativeTarget "unicornleap_tests" */;
+			buildConfigurationList = FC0351B61C5D7B7F00341BB3 /* Build configuration list for PBXNativeTarget "UnicornLeapTests" */;
 			buildPhases = (
 				FC0351AD1C5D7B7F00341BB3 /* Sources */,
 				FC0351AE1C5D7B7F00341BB3 /* Frameworks */,
@@ -124,9 +124,9 @@
 			);
 			dependencies = (
 			);
-			name = unicornleap_tests;
+			name = UnicornLeapTests;
 			productName = unicornleap_tests;
-			productReference = FC0351B11C5D7B7F00341BB3 /* unicornleap_tests.xctest */;
+			productReference = FC0351B11C5D7B7F00341BB3 /* UnicornLeapTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
 		FC4656D41C5D21710069EA6F /* unicornleap */ = {
@@ -177,7 +177,7 @@
 			projectRoot = "";
 			targets = (
 				FC4656D41C5D21710069EA6F /* unicornleap */,
-				FC0351B01C5D7B7F00341BB3 /* unicornleap_tests */,
+				FC0351B01C5D7B7F00341BB3 /* UnicornLeapTests */,
 			);
 		};
 /* End PBXProject section */
@@ -229,7 +229,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				COMBINE_HIDPI_IMAGES = YES;
-				INFOPLIST_FILE = unicornleap_tests/Info.plist;
+				INFOPLIST_FILE = UnicornLeapTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.jonallured.unicornleap-tests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -240,7 +240,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				COMBINE_HIDPI_IMAGES = YES;
-				INFOPLIST_FILE = unicornleap_tests/Info.plist;
+				INFOPLIST_FILE = UnicornLeapTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.jonallured.unicornleap-tests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -344,7 +344,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		FC0351B61C5D7B7F00341BB3 /* Build configuration list for PBXNativeTarget "unicornleap_tests" */ = {
+		FC0351B61C5D7B7F00341BB3 /* Build configuration list for PBXNativeTarget "UnicornLeapTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				FC0351B71C5D7B7F00341BB3 /* Debug */,
