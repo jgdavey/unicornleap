@@ -16,6 +16,7 @@ class CommandTests: XCTestCase {
   func testNeedsHelp() {
     for flag in ["-h", "--help"] {
       let command = Command([flag])
+      XCTAssertFalse(command.isNotValid, "for flag: '\(flag)'")
       XCTAssertTrue(command.needsHelp, "for flag: '\(flag)'")
     }
   }
