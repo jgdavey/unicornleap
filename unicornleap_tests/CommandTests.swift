@@ -118,4 +118,26 @@ class CommandTests: XCTestCase {
     XCTAssertFalse(command.isNotValid)
     XCTAssertEqual(command.unicornFile, "hippo.png")
   }
+
+  func testProvidingSparkleFile() {
+    for flag in ["-k", "--sparkle"] {
+      let command = Command([flag, "poof.png"])
+      XCTAssertFalse(command.isNotValid, "for flag: '\(flag)'")
+      XCTAssertEqual(command.sparkleFile, "poof.png", "for flag: '\(flag)'")
+    }
+  }
+
+  func testProvidingSparkleFileWithoutAValue() {
+    for flag in ["-k", "--sparkle"] {
+      let command = Command([flag])
+      XCTAssertTrue(command.isNotValid, "for flag: '\(flag)'")
+      XCTAssertNil(command.sparkleFile, "for flag: '\(flag)'")
+    }
+  }
+
+  func testProvidingShortAndLongSparkleFile() {
+    let command = Command(["-k", "poof.png", "--sparkle", "blood.png"])
+    XCTAssertFalse(command.isNotValid)
+    XCTAssertEqual(command.sparkleFile, "poof.png")
+  }
 }
