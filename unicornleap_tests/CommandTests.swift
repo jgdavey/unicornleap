@@ -1,6 +1,15 @@
 import XCTest
 
 class CommandTests: XCTestCase {
+  func testDefaults() {
+    let command = Command([])
+
+    XCTAssertFalse(command.needsHelp)
+    XCTAssertFalse(command.isNotValid)
+    XCTAssertEqual(command.seconds, 2.0)
+    XCTAssertEqual(command.number, 1)
+  }
+
   func testNeedsHelp() {
     let args = ["-h"]
     let command = Command(args)
@@ -29,15 +38,6 @@ class CommandTests: XCTestCase {
 
     XCTAssertTrue(command.isNotValid)
     XCTAssertEqual(command.invalidFlags, ["--invalid"])
-  }
-
-  func testDefaults() {
-    let command = Command([])
-
-    XCTAssertFalse(command.needsHelp)
-    XCTAssertFalse(command.isNotValid)
-    XCTAssertEqual(command.seconds, 2.0)
-    XCTAssertEqual(command.number, 1)
   }
 
   func testProvidingShortSeconds() {
