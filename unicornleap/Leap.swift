@@ -36,8 +36,11 @@ class Leap {
       floatingWindow.view.layer?.addSublayer(unicornLayer.layer)
       floatingWindow.view.layer?.addSublayer(emitter)
 
-      animateLayerAlongPathForKey(unicornLayer.layer, path: leapPath.path, key: "position", seconds: Double(command.seconds!))
-      animateLayerAlongPathForKey(emitter, path: leapPath.path, key: "emitterPosition", seconds: Double(command.seconds!))
+      let unicornAnimation = LeapAnimation(path: leapPath.path, key: "position", seconds: Double(command.seconds!))
+      unicornLayer.layer.addAnimation(unicornAnimation.animation, forKey: "position")
+
+      let sparkleAnimation = LeapAnimation(path: leapPath.path, key: "emitterPosition", seconds: Double(command.seconds!))
+      emitter.addAnimation(sparkleAnimation.animation, forKey: "emitterPosition")
 
       runLoop.runUntilDate(NSDate(timeIntervalSinceNow: Double(waitFor)))
     }
@@ -50,14 +53,5 @@ class Leap {
     print("invalid Image")
     //  fprintf (stream, "ERROR: You must have a valid PNG image at %s\n", path);
     exit(127)
-  }
-
-  private func animateLayerAlongPathForKey(layer: CALayer, path: CGMutablePathRef, key: String, seconds: Double) {
-    let animation = CAKeyframeAnimation(keyPath: key)
-    animation.path = path
-    animation.duration = seconds
-    animation.calculationMode = kCAAnimationLinear
-    animation.rotationMode = nil
-    layer.addAnimation(animation, forKey: key)
   }
 }
