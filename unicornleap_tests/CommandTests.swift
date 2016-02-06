@@ -21,4 +21,18 @@ class CommandTests: XCTestCase {
 
     XCTAssertFalse(command.needsHelp)
   }
+
+  func testHasInvalidShortFlag() {
+    let args = ["-i"]
+    let command = Command(args)
+
+    XCTAssertTrue(command.isNotValid)
+  }
+
+  func testHasInvalidLongFlag() {
+    let args = ["--invalid"]
+    let command = Command(args)
+
+    XCTAssertTrue(command.isNotValid)
+  }
 }

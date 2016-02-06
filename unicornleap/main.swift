@@ -1,6 +1,6 @@
 import Cocoa
 
-func printUsage() {
+func printUsage(exitCode: Int32) {
   print(
     "Usage: unicornleap [options]\n",
     "  -h  --help           Display this usage information.\n",
@@ -11,11 +11,13 @@ func printUsage() {
     "  -v  --verbose        Print verbose messages."
   )
 
-  exit(0)
+  exit(exitCode)
 }
 
 let command = Command(Process.arguments)
 
 if command.needsHelp {
-  printUsage()
+  printUsage(0)
+} else if command.isNotValid {
+  printUsage(1)
 }
