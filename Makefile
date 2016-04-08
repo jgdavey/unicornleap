@@ -14,7 +14,7 @@ images:
 	cp images/*.png $(image_folder)
 
 install: images
-	cp $(build_folder)/$(executable_name) $(PREFIX)/bin
+	cp $(build_folder)/$(executable_name) $(PREFIX)/bin/$(program_name)
 	cp $(program_name).1 $(PREFIX)/share/man/man1/
 
 clean:
