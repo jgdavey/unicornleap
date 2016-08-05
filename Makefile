@@ -17,4 +17,4 @@ install: images
 	cp $(program_name).1 $(PREFIX)/share/man/man1/
 
 clean:
-	rm -rf build
+	rm -rf $(build_folder)
