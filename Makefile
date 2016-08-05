@@ -1,5 +1,4 @@
 program_name=unicornleap
-executable_name=$(program_name).bin
 image_folder=$(HOME)/.$(program_name)
 build_folder=build
 PREFIX ?= /usr/local
@@ -7,14 +6,14 @@ PREFIX ?= /usr/local
 .PHONY: all clean images
 
 all:
-	xcodebuild CONFIGURATION_BUILD_DIR=$(build_folder) PRODUCT_NAME=$(executable_name)
+	xcodebuild CONFIGURATION_BUILD_DIR=$(build_folder) PRODUCT_NAME=$(program_name)
 
 images:
 	mkdir -p $(image_folder)
 	cp images/*.png $(image_folder)
 
 install: images
-	cp $(build_folder)/$(executable_name) $(PREFIX)/bin/$(program_name)
+	cp $(build_folder)/$(program_name) $(PREFIX)/bin/$(program_name)
 	cp $(program_name).1 $(PREFIX)/share/man/man1/
 
 clean:
