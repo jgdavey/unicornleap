@@ -51,5 +51,5 @@ your own images:
 unicornleap -u mario.png -k coin.png
 ```
 
-The only limits are you imagination! You and your friends will just laugh and
+The only limits are your imagination! You and your friends will just laugh and
 laugh!! <3 <3 <3
