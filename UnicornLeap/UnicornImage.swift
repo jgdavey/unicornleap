@@ -15,8 +15,8 @@ class UnicornImage: LeapImage {
     configureLayer()
   }
 
-  func addAnimation(seconds: Double) {
-    super.addAnimation(seconds, path: path, layer: layer)
+  func addAnimation(seconds: Double, animationDelay: Double) {
+    super.addAnimation(seconds, path: path, layer: layer, animationDelay: animationDelay)
   }
 
   private func configurePath() {
