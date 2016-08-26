@@ -8,8 +8,8 @@ class SparkleImage: LeapImage {
     animationKeyPath = "emitterPosition"
   }
 
-  func addAnimation(seconds: Double, path: CGMutablePath) {
-    super.addAnimation(seconds, path: path, layer: emitter)
+  func addAnimation(seconds: Double, path: CGMutablePath, animationDelay: Double) {
+    super.addAnimation(seconds, path: path, layer: emitter, animationDelay: animationDelay)
   }
 
   func configureEmitter(imageSize: CGSize, seconds: Float) {

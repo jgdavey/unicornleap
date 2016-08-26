@@ -43,6 +43,22 @@ func printVerboseOutput() {
   print("Number: \(command.number)")
 }
 
+func leapThoseUnicorns() {
+  let startTime = CACurrentMediaTime()
+  for i in (0..<command.number!) {
+    CATransaction.begin()
+    CATransaction.setCompletionBlock({
+      if (i + 1 == command.number!) {
+        CFRunLoopStop(CFRunLoopGetCurrent())
+      }
+    })
+    Leap.animateImage(command, animationDelay: startTime + (Double(i) / 2.0))
+    CATransaction.commit()
+  }
+
+  CFRunLoopRun()
+}
+
 let command = Command(Process.arguments)
 
 if command.needsHelp {
@@ -54,6 +70,5 @@ if command.needsHelp {
   if command.verboseOutput {
     printVerboseOutput()
   }
-
-  Leap.animateImage(command)
+  leapThoseUnicorns()
 }

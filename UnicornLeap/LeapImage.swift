@@ -12,12 +12,13 @@ class LeapImage {
     self.image = image
   }
 
-  func addAnimation(seconds: Double, path: CGMutablePath, layer: CALayer) {
+  func addAnimation(seconds: Double, path: CGMutablePath, layer: CALayer, animationDelay: Double) {
     let animation = CAKeyframeAnimation()
     animation.keyPath = animationKeyPath
     animation.path = path
     animation.duration = seconds
     animation.calculationMode = kCAAnimationLinear
+    animation.beginTime = animationDelay
 
     layer.addAnimation(animation, forKey: animationKeyPath)
   }
