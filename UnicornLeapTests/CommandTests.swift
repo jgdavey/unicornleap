@@ -9,8 +9,8 @@ class CommandTests: XCTestCase {
     XCTAssertFalse(command.verboseOutput)
     XCTAssertEqual(command.seconds, 2.0)
     XCTAssertEqual(command.number, 1)
-    XCTAssertEqual(command.unicornFile, "unicorn.png")
-    XCTAssertEqual(command.sparkleFile, "sparkle.png")
+    XCTAssertTrue(command.unicornFile!.rangeOfString("unicorn.png") != nil)
+    XCTAssertTrue(command.sparkleFile!.rangeOfString("sparkle.png") != nil)
   }
 
   func testNeedsHelp() {

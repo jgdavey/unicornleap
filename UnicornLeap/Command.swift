@@ -14,6 +14,10 @@ class Command {
     return indexes.flatMap({$0}).first
   }
 
+  private func defaultImagePath(filename: String) -> String {
+    return "\(NSHomeDirectory())/.unicornleap/\(filename)"
+  }
+
   var needsHelp: Bool {
     return arguments.contains("-h") || arguments.contains("--help")
   }
@@ -43,12 +47,12 @@ class Command {
   }
 
   var unicornFile: String? {
-    guard let index = flagIndex(["-u", "--unicorn"]) else { return "unicorn.png" }
+    guard let index = flagIndex(["-u", "--unicorn"]) else { return defaultImagePath("unicorn.png") }
     return nextArgument(index)
   }
 
   var sparkleFile: String? {
-    guard let index = flagIndex(["-k", "--sparkle"]) else { return "sparkle.png" }
+    guard let index = flagIndex(["-k", "--sparkle"]) else { return defaultImagePath("sparkle.png") }
     return nextArgument(index)
   }
 
