@@ -45,10 +45,7 @@ Unicorns leaping across your screen is great and all, but you can also supply
 your own images:
 
 ```
-# given these two images:
-#   ~/.unicornleap/mario.png
-#   ~/.unicornleap/coin.png
-unicornleap -u mario.png -k coin.png
+unicornleap -u /path/to/mario.png -k /path/to/coin.png
 ```
 
 The only limits are your imagination! You and your friends will just laugh and

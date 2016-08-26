@@ -8,7 +8,7 @@ class UnicornImage: LeapImage {
   override init?(filename: String) {
     super.init(filename: filename)
 
-    guard let size = NSImage(contentsOfFile: imagePath)?.size else { return nil }
+    guard let size = NSImage(contentsOfFile: filename)?.size else { return nil }
     self.size = size
 
     configurePath()
