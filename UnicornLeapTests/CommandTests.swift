@@ -9,6 +9,7 @@ class CommandTests: XCTestCase {
     XCTAssertFalse(command.verboseOutput)
     XCTAssertEqual(command.seconds, 2.0)
     XCTAssertEqual(command.number, 1)
+    XCTAssertEqual(command.eccentricity, 1.0)
     XCTAssertTrue(command.unicornFile!.rangeOfString("unicorn.png") != nil)
     XCTAssertTrue(command.sparkleFile!.rangeOfString("sparkle.png") != nil)
   }
@@ -26,6 +27,14 @@ class CommandTests: XCTestCase {
       let command = Command([flag])
       XCTAssertFalse(command.isNotValid, "for flag: '\(flag)'")
       XCTAssertTrue(command.verboseOutput, "for flag: '\(flag)'")
+    }
+  }
+
+  func testWantsHerdMode() {
+    for flag in ["-H", "--herd"] {
+      let command = Command([flag])
+      XCTAssertFalse(command.isNotValid, "for flag: '\(flag)'")
+      XCTAssertTrue(command.herd, "for flag: '\(flag)'")
     }
   }
 
@@ -65,6 +74,36 @@ class CommandTests: XCTestCase {
     let command = Command(["-s", "5", "--seconds", "6"])
     XCTAssertFalse(command.isNotValid)
     XCTAssertEqual(command.seconds, 5)
+  }
+
+  func testProvidingeccentricity() {
+    for flag in ["-e", "--eccentricity"] {
+      let command = Command([flag, "5"])
+      XCTAssertFalse(command.isNotValid, "for flag: '\(flag)'")
+      XCTAssertEqual(command.eccentricity, 5.0, "for flag: '\(flag)'")
+    }
+  }
+
+  func testProvidingeccentricityWithoutAValue() {
+    for flag in ["-e", "--eccentricity"] {
+      let command = Command([flag])
+      XCTAssertTrue(command.isNotValid, "for flag: '\(flag)'")
+      XCTAssertNil(command.eccentricity, "for flag: '\(flag)'")
+    }
+  }
+
+  func testProvidingeccentricityWithBadValue() {
+    for flag in ["-e", "--eccentricity"] {
+      let command = Command([flag, "four"])
+      XCTAssertTrue(command.isNotValid, "for flag: '\(flag)'")
+      XCTAssertNil(command.eccentricity, "for flag: '\(flag)'")
+    }
+  }
+
+  func testProvidingShortAndLongeccentricity() {
+    let command = Command(["-e", "5", "--eccentricity", "6"])
+    XCTAssertFalse(command.isNotValid)
+    XCTAssertEqual(command.eccentricity, 5)
   }
 
   func testProvidingNumber() {

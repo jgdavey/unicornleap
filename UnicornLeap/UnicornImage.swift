@@ -2,14 +2,16 @@ import Cocoa
 
 class UnicornImage: LeapImage {
   var size: NSSize!
+  var eccentricity: Float!
   let path = CGPathCreateMutable()
   let layer = CALayer()
 
-  override init?(filename: String) {
+  init?(filename: String, eccentricity: Float) {
     super.init(filename: filename)
 
     guard let size = NSImage(contentsOfFile: filename)?.size else { return nil }
     self.size = size
+    self.eccentricity = eccentricity
 
     configurePath()
     configureLayer()
@@ -24,7 +26,7 @@ class UnicornImage: LeapImage {
     let origin = CGPoint(x: -size.width, y: -size.height)
     let destination = CGPoint(x: screen.size.width + size.width, y: origin.y)
     let midpoint = (destination.x + origin.x) / 2.0
-    let peak = size.height + 50.0
+    let peak = size.height + screen.size.height * CGFloat(eccentricity) / 3.0
 
     CGPathMoveToPoint(path, nil, origin.x, origin.y)
     CGPathAddCurveToPoint(path, nil, midpoint, peak, midpoint, peak, destination.x, destination.y)

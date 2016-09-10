@@ -14,10 +14,6 @@ class Command {
     return indexes.flatMap({$0}).first
   }
 
-  private func defaultImagePath(filename: String) -> String {
-    return "\(NSHomeDirectory())/.unicornleap/\(filename)"
-  }
-
   var needsHelp: Bool {
     return arguments.contains("-h") || arguments.contains("--help")
   }
@@ -26,38 +22,68 @@ class Command {
     return arguments.contains("-v") || arguments.contains("--verbose")
   }
 
+  var herd: Bool {
+    return arguments.contains("-H") || arguments.contains("--herd")
+  }
+
   var isNotValid: Bool {
-    return !invalidFlags.isEmpty || seconds == nil || number == nil || unicornFile == nil || sparkleFile == nil
+    return !invalidFlags.isEmpty || seconds == nil || number == nil || eccentricity == nil || unicornFile == nil || sparkleFile == nil
   }
 
   var invalidFlags: [String] {
-    let validFlags: Set<String> = ["-h", "--help", "-s", "--seconds", "-n", "--number", "-u",  "--unicorn", "-k", "--sparkle", "-v", "--verbose"]
+    let validFlags: Set<String> = [
+      "-h", "--help",
+      "-s", "--seconds",
+      "-n", "--number",
+      "-u", "--unicorn",
+      "-k", "--sparkle",
+      "-v", "--verbose",
+      "-e", "--eccentricity",
+      "-H", "--herd"
+    ]
     let flags = Set(arguments.filter({ $0[$0.startIndex] == "-" }))
     return Array(flags.subtract(validFlags))
   }
 
-  var seconds: Float? {
-    guard let index = flagIndex(["-s", "--seconds"]) else { return 2.0 }
+  var seconds: Float? = 2.0
+  private func parseSeconds() -> Float? {
+    guard let index = flagIndex(["-s", "--seconds"]) else { return seconds }
     return nextArgument(index)?.asFloat
   }
 
-  var number: Int? {
-    guard let index = flagIndex(["-n", "--number"]) else { return 1 }
+  var number: Int? = 1
+  private func parseNumber() -> Int? {
+    guard let index = flagIndex(["-n", "--number"]) else { return number }
     return nextArgument(index)?.asInt
   }
 
-  var unicornFile: String? {
-    guard let index = flagIndex(["-u", "--unicorn"]) else { return defaultImagePath("unicorn.png") }
+  static let defaultImageDir: String = "\(NSHomeDirectory())/.unicornleap/"
+
+  var unicornFile: String? = "\(defaultImageDir)unicorn.png"
+  private func parseUnicornFile() -> String? {
+    guard let index = flagIndex(["-u", "--unicorn"]) else { return unicornFile }
     return nextArgument(index)
   }
 
-  var sparkleFile: String? {
-    guard let index = flagIndex(["-k", "--sparkle"]) else { return defaultImagePath("sparkle.png") }
+  var sparkleFile: String? = "\(defaultImageDir)sparkle.png"
+  private func parseSparkleFile() -> String? {
+    guard let index = flagIndex(["-k", "--sparkle"]) else { return sparkleFile }
     return nextArgument(index)
+  }
+
+  var eccentricity: Float? = 1.0
+  private func parseEccentricity() -> Float? {
+    guard let index = flagIndex(["-e", "--eccentricity"]) else { return eccentricity }
+    return nextArgument(index)?.asFloat
   }
 
   init(_ arguments: [String]) {
     self.arguments = arguments
+    self.seconds = parseSeconds()
+    self.number = parseNumber()
+    self.unicornFile = parseUnicornFile()
+    self.sparkleFile = parseSparkleFile()
+    self.eccentricity = parseEccentricity()
   }
 }
 
