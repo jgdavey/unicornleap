@@ -22,7 +22,7 @@ class Leap {
 
     floatingWindow.view.wantsLayer = true
 
-    guard let unicornImage = UnicornImage(filename: command.unicornFile!) else { printImageError(command.unicornFile!); return }
+    guard let unicornImage = UnicornImage(filename: command.unicornFile!, eccentricity: command.eccentricity!) else { printImageError(command.unicornFile!); return }
     guard let sparkleImage = SparkleImage(filename: command.sparkleFile!) else { printImageError(command.sparkleFile!); return }
 
     sparkleImage.configureEmitter(unicornImage.size, seconds: command.seconds!)

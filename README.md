@@ -32,8 +32,11 @@ your screen!! Here are some other fun ones:
 # need help?
 unicornleap -h
 
-# herd mode!
+# leap a bunch
 unicornleap -n 5 -s 0.5
+
+# herd mode!
+unicornleap -H
 
 # witness the majesty
 unicornleap -s 4
