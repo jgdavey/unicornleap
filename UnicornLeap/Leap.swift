@@ -3,7 +3,7 @@ import Cocoa
 class Leap {
   let command: Command
 
-  class func animateImage(command: Command, animationDelay: Double) {
+  class func animateImage(_ command: Command, animationDelay: Double) {
     Leap(command).animateImage(animationDelay)
   }
 
@@ -11,11 +11,11 @@ class Leap {
     self.command = command
   }
 
-  func animateImage(animationDelay: Double) {
+  func animateImage(_ animationDelay: Double) {
     // I don't know what this does, but you need it
-    NSApplication.sharedApplication()
+    NSApplication.shared()
 
-    let floatingWindow = FloatingWindow(rect: NSScreen.mainScreen()!.frame)
+    let floatingWindow = FloatingWindow(rect: NSScreen.main()!.frame)
 
     floatingWindow.window.makeKeyAndOrderFront(nil)
 
