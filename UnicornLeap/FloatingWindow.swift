@@ -5,11 +5,11 @@ class FloatingWindow {
   let view: NSView
 
   init(rect: NSRect) {
-    window = NSWindow(contentRect: rect, styleMask: NSBorderlessWindowMask, backing: .Buffered, `defer`: false)
-    window.backgroundColor = NSColor.clearColor()
-    window.opaque = false
+    window = NSWindow(contentRect: rect, styleMask: NSBorderlessWindowMask, backing: .buffered, defer: false)
+    window.backgroundColor = NSColor.clear
+    window.isOpaque = false
     window.ignoresMouseEvents = true
-    window.level = Int(CGWindowLevelForKey(.FloatingWindowLevelKey))
+    window.level = Int(CGWindowLevelForKey(.floatingWindow))
 
     view = NSView(frame: rect)
     window.contentView = view

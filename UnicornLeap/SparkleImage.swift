@@ -8,11 +8,11 @@ class SparkleImage: LeapImage {
     animationKeyPath = "emitterPosition"
   }
 
-  func addAnimation(seconds: Double, path: CGMutablePath, animationDelay: Double) {
+  func addAnimation(_ seconds: Double, path: CGMutablePath, animationDelay: Double) {
     super.addAnimation(seconds, path: path, layer: emitter, animationDelay: animationDelay)
   }
 
-  func configureEmitter(imageSize: CGSize, seconds: Float) {
+  func configureEmitter(_ imageSize: CGSize, seconds: Float) {
     let base = 0.2
 
     emitter.emitterPosition = CGPoint(x: -imageSize.width, y: -imageSize.height)
@@ -24,7 +24,7 @@ class SparkleImage: LeapImage {
     sparkle.lifetime = seconds * 0.5 + Float(base)
     sparkle.lifetimeRange = 1.5
     sparkle.name = "sparkle"
-    sparkle.color = CGColorCreateGenericRGB(1.0, 1.0, 1.0, 1.0)
+    sparkle.color = CGColor(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
     sparkle.greenSpeed = -0.7
     sparkle.minificationFilter = kCAFilterNearest
     sparkle.alphaSpeed = -1.0

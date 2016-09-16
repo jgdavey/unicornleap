@@ -1,6 +1,6 @@
 import Cocoa
 
-func printUsage(exitCode: Int32) {
+func printUsage(_ exitCode: Int32) {
   print(
     "Usage: unicornleap [options]\n",
     "  -h  --help             Display usage information.\n",
@@ -15,11 +15,11 @@ func printUsage(exitCode: Int32) {
   exit(exitCode)
 }
 
-func printCommandErrors(command: Command) {
+func printCommandErrors(_ command: Command) {
   var errors = [String]()
 
   if !command.invalidFlags.isEmpty {
-    let invalidOptions = command.invalidFlags.joinWithSeparator(", ")
+    let invalidOptions = command.invalidFlags.joined(separator: ", ")
     errors.append("unicornleap - invalid options: \(invalidOptions)")
   }
 
@@ -31,10 +31,10 @@ func printCommandErrors(command: Command) {
     errors.append("unicornleap - the number flag requires an argument")
   }
 
-  print("\(errors.joinWithSeparator("\n"))\n")
+  print("\(errors.joined(separator: "\n"))\n")
 }
 
-func printImageError(filename: String) {
+func printImageError(_ filename: String) {
   print("unicornleap - valid PNG not found: ~/.unicornleap/\(filename)")
   exit(127)
 }
@@ -44,7 +44,7 @@ func printVerboseOutput() {
   print("Number: \(command.number)")
 }
 
-func leapManyUnicorns(n: Int, setupFunc: () -> () = {}) {
+func leapManyUnicorns(_ n: Int, setupFunc: () -> () = {}) {
   let startTime = CACurrentMediaTime()
 
   for i in (0..<n) {
@@ -71,7 +71,7 @@ func herdThoseUnicorns() {
   leapManyUnicorns(30, setupFunc: setupFunc)
 }
 
-let command = Command(Process.arguments)
+let command = Command(CommandLine.arguments)
 
 if command.needsHelp {
   printUsage(0)

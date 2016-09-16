@@ -1,16 +1,16 @@
 import Foundation
 
 class Command {
-  private var arguments = [String]()
+  fileprivate var arguments = [String]()
 
-  private func nextArgument(index: Int) -> String? {
-    let nextIndex = index.advancedBy(1)
+  fileprivate func nextArgument(_ index: Int) -> String? {
+    let nextIndex = index.advanced(by: 1)
     guard nextIndex < arguments.count else { return nil }
     return arguments[nextIndex]
   }
 
-  private func flagIndex(flags: [String]) -> Int? {
-    let indexes = flags.map { arguments.indexOf($0) }
+  fileprivate func flagIndex(_ flags: [String]) -> Int? {
+    let indexes = flags.map { arguments.index(of: $0) }
     return indexes.flatMap({$0}).first
   }
 
@@ -42,17 +42,17 @@ class Command {
       "-H", "--herd"
     ]
     let flags = Set(arguments.filter({ $0[$0.startIndex] == "-" }))
-    return Array(flags.subtract(validFlags))
+    return Array(flags.subtracting(validFlags))
   }
 
   var seconds: Float? = 2.0
-  private func parseSeconds() -> Float? {
+  fileprivate func parseSeconds() -> Float? {
     guard let index = flagIndex(["-s", "--seconds"]) else { return seconds }
     return nextArgument(index)?.asFloat
   }
 
   var number: Int? = 1
-  private func parseNumber() -> Int? {
+  fileprivate func parseNumber() -> Int? {
     guard let index = flagIndex(["-n", "--number"]) else { return number }
     return nextArgument(index)?.asInt
   }
@@ -60,19 +60,19 @@ class Command {
   static let defaultImageDir: String = "\(NSHomeDirectory())/.unicornleap/"
 
   var unicornFile: String? = "\(defaultImageDir)unicorn.png"
-  private func parseUnicornFile() -> String? {
+  fileprivate func parseUnicornFile() -> String? {
     guard let index = flagIndex(["-u", "--unicorn"]) else { return unicornFile }
     return nextArgument(index)
   }
 
   var sparkleFile: String? = "\(defaultImageDir)sparkle.png"
-  private func parseSparkleFile() -> String? {
+  fileprivate func parseSparkleFile() -> String? {
     guard let index = flagIndex(["-k", "--sparkle"]) else { return sparkleFile }
     return nextArgument(index)
   }
 
   var eccentricity: Float? = 1.0
-  private func parseEccentricity() -> Float? {
+  fileprivate func parseEccentricity() -> Float? {
     guard let index = flagIndex(["-e", "--eccentricity"]) else { return eccentricity }
     return nextArgument(index)?.asFloat
   }
