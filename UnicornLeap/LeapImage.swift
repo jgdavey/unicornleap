@@ -1,30 +1,25 @@
 import Cocoa
 
 class LeapImage {
-  let filename: String
   var image: CGImage!
   var animationKeyPath = "position"
 
-  var imagePath: String {
-    return "\(NSHomeDirectory())/.unicornleap/\(filename)"
-  }
-
   init?(filename: String) {
-    self.filename = filename
-    guard let source = CGDataProviderCreateWithFilename(imagePath),
-      image = CGImageCreateWithPNGDataProvider(source, nil, true, .RenderingIntentDefault)
+    guard let source = CGDataProvider(filename: filename),
+      let image = CGImage(pngDataProviderSource: source, decode: nil, shouldInterpolate: true, intent: .defaultIntent)
       else { return nil }
 
     self.image = image
   }
 
-  func addAnimation(seconds: Double, path: CGMutablePath, layer: CALayer) {
+  func addAnimation(_ seconds: Double, path: CGMutablePath, layer: CALayer, animationDelay: Double) {
     let animation = CAKeyframeAnimation()
     animation.keyPath = animationKeyPath
     animation.path = path
     animation.duration = seconds
     animation.calculationMode = kCAAnimationLinear
+    animation.beginTime = animationDelay
 
-    layer.addAnimation(animation, forKey: animationKeyPath)
+    layer.add(animation, forKey: animationKeyPath)
   }
 }

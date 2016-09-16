@@ -1,7 +1,7 @@
 # Unicornleap
 
 A reimplementaion of KevinLiddle/unicornleap using CoreAnimation, now in Swift!
-Requires OS X 10.9 or greater.
+Requires OS X 10.11 or greater with XCode 8.
 
 ## Installation
 
@@ -32,8 +32,11 @@ your screen!! Here are some other fun ones:
 # need help?
 unicornleap -h
 
-# herd mode!
+# leap a bunch
 unicornleap -n 5 -s 0.5
+
+# herd mode!
+unicornleap -H
 
 # witness the majesty
 unicornleap -s 4
@@ -45,10 +48,7 @@ Unicorns leaping across your screen is great and all, but you can also supply
 your own images:
 
 ```
-# given these two images:
-#   ~/.unicornleap/mario.png
-#   ~/.unicornleap/coin.png
-unicornleap -u mario.png -k coin.png
+unicornleap -u /path/to/mario.png -k /path/to/coin.png
 ```
 
 The only limits are your imagination! You and your friends will just laugh and

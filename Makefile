@@ -8,6 +8,9 @@ PREFIX ?= /usr/local
 all:
 	xcodebuild CONFIGURATION_BUILD_DIR=$(build_folder) PRODUCT_NAME=$(program_name)
 
+test:
+	xcodebuild -workspace unicornleap.xcodeproj/project.xcworkspace/ -scheme UnicornLeapTests test
+
 images:
 	mkdir -p $(image_folder)
 	cp images/*.png $(image_folder)
