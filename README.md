@@ -1,7 +1,9 @@
 # Unicornleap
 
 A reimplementaion of KevinLiddle/unicornleap using CoreAnimation, now in Swift!
-Requires OS X 10.9 or greater.
+
+Versions in the 1.x branch require OS X 10.9 or greater.
+Versions in the 2.x branch require OS X 10.11 or greater.
 
 ## Installation
 
