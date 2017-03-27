@@ -6,6 +6,7 @@ func printUsage(_ exitCode: Int32) {
     "  -h  --help             Display usage information.\n",
     "  -s  --seconds n        Animate for n seconds. (default: 2.0)\n",
     "  -n  --number i         Display i unicorns. (default: 1)\n",
+    "  -H  --herd             Enables herd-mode.\n",
     "  -e  --eccentricity x   Leap the unicorns with a higher peak. (default: 1.0)\n",
     "  -u  --unicorn file     Filename for unicorn image.\n",
     "  -k  --sparkle file     Filename for sparkle image.\n",

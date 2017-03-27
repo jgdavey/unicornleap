@@ -15,7 +15,7 @@ make
 make install
 ```
 
-By default, this will install to `/user/local`, but you can change that with the
+By default, this will install to `/usr/local`, but you can change that with the
 PREFIX env variable.
 
 ### Manual installation

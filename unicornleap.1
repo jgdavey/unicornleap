@@ -11,11 +11,12 @@
 .Nd display a flying unicorn
 .Sh SYNOPSIS
 .Nm
-.Op Fl hv                \" [-hv]
-.Op Fl s Ar seconds      \" [-a path]
-.Op Fl n Ar number       \" [-a path]
-.Op Fl u Ar unicorn      \" [-a path]
-.Op Fl k Ar sparkle      \" [-a path]
+.Op Fl hHv               \" [-hHv]
+.Op Fl s Ar seconds      \" [-a seconds]
+.Op Fl e Ar eccentricity \" [-e eccentricity]
+.Op Fl n Ar number       \" [-n number]
+.Op Fl u Ar unicorn      \" [-u unicorn]
+.Op Fl k Ar sparkle      \" [-k sparkle]
 .Sh DESCRIPTION          \" Section Header - required - don't modify
 .Nm
 makes a unicorn fly across your screen. That's all it does.
@@ -33,6 +34,13 @@ Display i unicorns.
 .br
 Defaults to
 .Ar 1
+.It Fl H , \-herd
+Enables herd mode. A herd of unicorns will appear!
+.It Fl e , \-eccentricity Ar i
+Leap the unicorns with a higher peak.
+.br
+Defaults to
+.Ar 1.0
 .It Fl u , \-unicorn Ar filename
 Filename for unicorn image.
 .br
