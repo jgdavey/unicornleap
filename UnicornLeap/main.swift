@@ -68,8 +68,9 @@ func leapThoseUnicorns() {
 }
 
 func herdThoseUnicorns() {
-  let setupFunc = { command.eccentricity = Float(arc4random_uniform(30)) / 10.0 }
-  leapManyUnicorns(30, setupFunc: setupFunc)
+  let n = command.passedInNumber ? command.number! : 30
+  let setupFunc = { command.eccentricity = Float(arc4random_uniform(UInt32(n))) / 10.0 }
+  leapManyUnicorns(n, setupFunc: setupFunc)
 }
 
 let command = Command(CommandLine.arguments)

@@ -57,6 +57,12 @@ class Command {
     return nextArgument(index)?.asInt
   }
 
+  var passedInNumber: Bool = false
+  fileprivate func parsePassedInNumber() -> Bool {
+    guard flagIndex(["-n", "--number"]) != nil else { return false }
+    return true
+  }
+
   static let defaultImageDir: String = "\(NSHomeDirectory())/.unicornleap/"
 
   var unicornFile: String? = "\(defaultImageDir)unicorn.png"
@@ -81,6 +87,7 @@ class Command {
     self.arguments = arguments
     self.seconds = parseSeconds()
     self.number = parseNumber()
+    self.passedInNumber = parsePassedInNumber()
     self.unicornFile = parseUnicornFile()
     self.sparkleFile = parseSparkleFile()
     self.eccentricity = parseEccentricity()
