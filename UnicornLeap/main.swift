@@ -47,6 +47,7 @@ func printVerboseOutput() {
 
 func leapManyUnicorns(_ n: Int, setupFunc: () -> () = {}) {
   let startTime = CACurrentMediaTime()
+  let offsetFactor = Double(command.seconds! / 8.0)
 
   for i in (0..<n) {
     CATransaction.begin()
@@ -56,7 +57,7 @@ func leapManyUnicorns(_ n: Int, setupFunc: () -> () = {}) {
       }
     })
     setupFunc()
-    Leap.animateImage(command, animationDelay: startTime + Double(i) / 4.0)
+    Leap.animateImage(command, animationDelay: startTime + Double(i) * offsetFactor)
     CATransaction.commit()
   }
 
