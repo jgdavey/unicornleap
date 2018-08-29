@@ -1,7 +1,7 @@
 import Cocoa
 
 class LeapImage {
-  var image: CGImage!
+  var image: CGImage
   var animationKeyPath = "position"
 
   init?(filename: String) {

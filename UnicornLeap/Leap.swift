@@ -13,9 +13,14 @@ class Leap {
 
   func animateImage(_ animationDelay: Double) {
     // I don't know what this does, but you need it
-    NSApplication.shared()
+    _ = NSApplication.shared
 
-    let floatingWindow = FloatingWindow(rect: NSScreen.main()!.frame)
+    guard let mainScreen = NSScreen.main else {
+
+        fatalError("Error unwrapping NSScreen.main")
+    }
+
+    let floatingWindow = FloatingWindow(rect: mainScreen.frame)
 
     floatingWindow.window.makeKeyAndOrderFront(nil)
 
