@@ -22,7 +22,7 @@ class UnicornImage: LeapImage {
   }
 
   fileprivate func configurePath() {
-    let screen = NSScreen.main()!.frame
+    let screen = NSScreen.main!.frame
     let origin = CGPoint(x: -size.width, y: -size.height)
     let destination = CGPoint(x: screen.size.width + size.width, y: origin.y)
     let midpoint = (destination.x + origin.x) / 2.0

@@ -17,7 +17,7 @@ class LeapImage {
     animation.keyPath = animationKeyPath
     animation.path = path
     animation.duration = seconds
-    animation.calculationMode = kCAAnimationLinear
+    animation.calculationMode = CAAnimationCalculationMode.linear
     animation.beginTime = animationDelay
 
     layer.add(animation, forKey: animationKeyPath)

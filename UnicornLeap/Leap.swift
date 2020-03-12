@@ -13,9 +13,9 @@ class Leap {
 
   func animateImage(_ animationDelay: Double) {
     // I don't know what this does, but you need it
-    NSApplication.shared()
+    NSApplication.shared
 
-    let floatingWindow = FloatingWindow(rect: NSScreen.main()!.frame)
+    let floatingWindow = FloatingWindow(rect: NSScreen.main!.frame)
 
     floatingWindow.window.makeKeyAndOrderFront(nil)
 

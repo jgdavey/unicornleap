@@ -10,8 +10,8 @@ class Command {
   }
 
   fileprivate func flagIndex(_ flags: [String]) -> Int? {
-    let indexes = flags.map { arguments.index(of: $0) }
-    return indexes.flatMap({$0}).first
+    let indexes = flags.map { arguments.firstIndex(of: $0) }
+    return indexes.compactMap({$0}).first
   }
 
   var needsHelp: Bool {
