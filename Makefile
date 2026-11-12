@@ -6,6 +6,10 @@ PREFIX ?= /usr/local
 .PHONY: all clean images
 
 all:
+	mkdir -p $(build_folder)
+	xcrun swiftc -swift-version 5 -O -o $(build_folder)/$(program_name) UnicornLeap/*.swift
+
+xcode:
 	xcodebuild CONFIGURATION_BUILD_DIR=$(build_folder) PRODUCT_NAME=$(program_name)
 
 test:
