@@ -6,6 +6,13 @@ recorded in the git history and the `v*` tags.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Fixed
+
+- Unicorns now leap over full-screen apps and on whichever Space is active,
+  instead of only on regular desktop Spaces.
+
 ## [3.1.0] - 2026-11-14
 
 ### Added

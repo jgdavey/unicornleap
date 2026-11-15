@@ -17,8 +17,9 @@ class Leap {
 
     let floatingWindow = FloatingWindow(rect: NSScreen.main!.frame)
 
-    floatingWindow.window.makeKeyAndOrderFront(nil)
-
+    // Borderless windows can't become key, and this process is never the
+    // active app, so order the window front without activating.
+    floatingWindow.window.orderFrontRegardless()
 
     floatingWindow.view.wantsLayer = true
 

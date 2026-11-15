@@ -10,6 +10,8 @@ class FloatingWindow {
     window.isOpaque = false
     window.ignoresMouseEvents = true
     window.level = NSWindow.Level(rawValue: Int(CGWindowLevelForKey(.floatingWindow)))
+    // Show on the current Space, including over full-screen apps.
+    window.collectionBehavior = [.canJoinAllSpaces, .fullScreenAuxiliary, .stationary, .ignoresCycle]
 
     view = NSView(frame: rect)
     window.contentView = view
