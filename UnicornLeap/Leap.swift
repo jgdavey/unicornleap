@@ -12,8 +12,8 @@ class Leap {
   }
 
   func animateImage(_ animationDelay: Double) {
-    // I don't know what this does, but you need it
-    NSApplication.shared
+    // Connects to the window server; needed before creating windows.
+    _ = NSApplication.shared
 
     let floatingWindow = FloatingWindow(rect: NSScreen.main!.frame)
 

@@ -1,231 +1,219 @@
-import XCTest
+import Testing
+@testable import unicornleap
 
-class CommandTests: XCTestCase {
-  func testDefaults() {
+@Suite struct CommandTests {
+  @Test func defaults() {
     let command = Command([])
 
-    XCTAssertFalse(command.needsHelp)
-    XCTAssertFalse(command.isNotValid)
-    XCTAssertFalse(command.verboseOutput)
-    XCTAssertEqual(command.seconds, 2.0)
-    XCTAssertEqual(command.number, 1)
-    XCTAssertEqual(command.eccentricity, 1.0)
-    XCTAssertTrue(command.unicornFile!.range(of: "unicorn.png") != nil)
-    XCTAssertTrue(command.sparkleFile!.range(of: "sparkle.png") != nil)
+    #expect(!command.needsHelp)
+    #expect(!command.isNotValid)
+    #expect(!command.verboseOutput)
+    #expect(command.seconds == 2.0)
+    #expect(command.number == 1)
+    #expect(command.eccentricity == 1.0)
+    #expect(command.unicornFile?.hasSuffix("unicorn.png") == true)
+    #expect(command.sparkleFile?.hasSuffix("sparkle.png") == true)
   }
 
-  func testNeedsHelp() {
-    for flag in ["-h", "--help"] {
-      let command = Command([flag])
-      XCTAssertFalse(command.isNotValid, "for flag: '\(flag)'")
-      XCTAssertTrue(command.needsHelp, "for flag: '\(flag)'")
-    }
+  @Test(arguments: ["-h", "--help"])
+  func needsHelp(flag: String) {
+    let command = Command([flag])
+    #expect(!command.isNotValid)
+    #expect(command.needsHelp)
   }
 
-  func testWantsVerboseOutput() {
-    for flag in ["-v", "--verbose"] {
-      let command = Command([flag])
-      XCTAssertFalse(command.isNotValid, "for flag: '\(flag)'")
-      XCTAssertTrue(command.verboseOutput, "for flag: '\(flag)'")
-    }
+  @Test(arguments: ["-v", "--verbose"])
+  func wantsVerboseOutput(flag: String) {
+    let command = Command([flag])
+    #expect(!command.isNotValid)
+    #expect(command.verboseOutput)
   }
 
-  func testWantsHerdMode() {
-    for flag in ["-H", "--herd"] {
-      let command = Command([flag])
-      XCTAssertFalse(command.isNotValid, "for flag: '\(flag)'")
-      XCTAssertTrue(command.herd, "for flag: '\(flag)'")
-    }
+  @Test(arguments: ["-H", "--herd"])
+  func wantsHerdMode(flag: String) {
+    let command = Command([flag])
+    #expect(!command.isNotValid)
+    #expect(command.herd)
   }
 
-  func testHasInvalidFlags() {
-    for flag in ["-i", "--invalid"] {
-      let command = Command([flag])
-      XCTAssertTrue(command.isNotValid, "for flag: '\(flag)'")
-      XCTAssertEqual(command.invalidFlags, [flag], "for flag: '\(flag)'")
-    }
+  @Test(arguments: ["-i", "--invalid"])
+  func hasInvalidFlags(flag: String) {
+    let command = Command([flag])
+    #expect(command.isNotValid)
+    #expect(command.invalidFlags == [flag])
   }
 
-  func testProvidingSeconds() {
-    for flag in ["-s", "--seconds"] {
-      let command = Command([flag, "5"])
-      XCTAssertFalse(command.isNotValid, "for flag: '\(flag)'")
-      XCTAssertEqual(command.seconds, 5.0, "for flag: '\(flag)'")
-    }
+  // MARK: seconds
+
+  @Test(arguments: ["-s", "--seconds"])
+  func providingSeconds(flag: String) {
+    let command = Command([flag, "5"])
+    #expect(!command.isNotValid)
+    #expect(command.seconds == 5.0)
   }
 
-  func testProvidingSecondsWithoutAValue() {
-    for flag in ["-s", "--seconds"] {
-      let command = Command([flag])
-      XCTAssertTrue(command.isNotValid, "for flag: '\(flag)'")
-      XCTAssertNil(command.seconds, "for flag: '\(flag)'")
-    }
+  @Test(arguments: ["-s", "--seconds"])
+  func providingSecondsWithoutAValue(flag: String) {
+    let command = Command([flag])
+    #expect(command.isNotValid)
+    #expect(command.seconds == nil)
   }
 
-  func testProvidingSecondsWithBadValue() {
-    for flag in ["-s", "--seconds"] {
-      let command = Command([flag, "four"])
-      XCTAssertTrue(command.isNotValid, "for flag: '\(flag)'")
-      XCTAssertNil(command.seconds, "for flag: '\(flag)'")
-    }
+  @Test(arguments: ["-s", "--seconds"])
+  func providingSecondsWithBadValue(flag: String) {
+    let command = Command([flag, "four"])
+    #expect(command.isNotValid)
+    #expect(command.seconds == nil)
   }
 
-  func testProvidingShortAndLongSeconds() {
+  @Test func providingShortAndLongSeconds() {
     let command = Command(["-s", "5", "--seconds", "6"])
-    XCTAssertFalse(command.isNotValid)
-    XCTAssertEqual(command.seconds, 5)
+    #expect(!command.isNotValid)
+    #expect(command.seconds == 5)
   }
 
-  func testProvidingeccentricity() {
-    for flag in ["-e", "--eccentricity"] {
-      let command = Command([flag, "5"])
-      XCTAssertFalse(command.isNotValid, "for flag: '\(flag)'")
-      XCTAssertEqual(command.eccentricity, 5.0, "for flag: '\(flag)'")
-    }
+  @Test(arguments: ["0", "-1"])
+  func secondsMustBePositive(value: String) {
+    let command = Command(["-s", value])
+    #expect(command.isNotValid)
+    #expect(command.seconds == nil)
   }
 
-  func testProvidingeccentricityWithoutAValue() {
-    for flag in ["-e", "--eccentricity"] {
-      let command = Command([flag])
-      XCTAssertTrue(command.isNotValid, "for flag: '\(flag)'")
-      XCTAssertNil(command.eccentricity, "for flag: '\(flag)'")
-    }
+  // MARK: eccentricity
+
+  @Test(arguments: ["-e", "--eccentricity"])
+  func providingEccentricity(flag: String) {
+    let command = Command([flag, "5"])
+    #expect(!command.isNotValid)
+    #expect(command.eccentricity == 5.0)
   }
 
-  func testProvidingeccentricityWithBadValue() {
-    for flag in ["-e", "--eccentricity"] {
-      let command = Command([flag, "four"])
-      XCTAssertTrue(command.isNotValid, "for flag: '\(flag)'")
-      XCTAssertNil(command.eccentricity, "for flag: '\(flag)'")
-    }
+  @Test(arguments: ["-e", "--eccentricity"])
+  func providingEccentricityWithoutAValue(flag: String) {
+    let command = Command([flag])
+    #expect(command.isNotValid)
+    #expect(command.eccentricity == nil)
   }
 
-  func testProvidingShortAndLongeccentricity() {
+  @Test(arguments: ["-e", "--eccentricity"])
+  func providingEccentricityWithBadValue(flag: String) {
+    let command = Command([flag, "four"])
+    #expect(command.isNotValid)
+    #expect(command.eccentricity == nil)
+  }
+
+  @Test func providingShortAndLongEccentricity() {
     let command = Command(["-e", "5", "--eccentricity", "6"])
-    XCTAssertFalse(command.isNotValid)
-    XCTAssertEqual(command.eccentricity, 5)
+    #expect(!command.isNotValid)
+    #expect(command.eccentricity == 5)
   }
 
-  func testProvidingNumber() {
-    for flag in ["-n", "--number"] {
-      let command = Command([flag, "5"])
-      XCTAssertFalse(command.isNotValid, "for flag: '\(flag)'")
-      XCTAssertEqual(command.number, 5, "for flag: '\(flag)'")
-    }
-  }
-
-  func testProvidingNumberWithoutAValue() {
-    for flag in ["-n", "--number"] {
-      let command = Command([flag])
-      XCTAssertTrue(command.isNotValid, "for flag: '\(flag)'")
-      XCTAssertNil(command.number, "for flag: '\(flag)'")
-    }
-  }
-
-  func testProvidingNumberWithBadValue() {
-    for flag in ["-n", "--number"] {
-      let command = Command([flag, "four"])
-      XCTAssertTrue(command.isNotValid, "for flag: '\(flag)'")
-      XCTAssertNil(command.number, "for flag: '\(flag)'")
-    }
-  }
-
-  func testProvidingShortAndLongNumber() {
-    let command = Command(["-n", "5", "--number", "6"])
-    XCTAssertFalse(command.isNotValid)
-    XCTAssertEqual(command.number, 5)
-  }
-
-  func testProvidingUnicornFile() {
-    for flag in ["-u", "--unicorn"] {
-      let command = Command([flag, "hippo.png"])
-      XCTAssertFalse(command.isNotValid, "for flag: '\(flag)'")
-      XCTAssertEqual(command.unicornFile, "hippo.png", "for flag: '\(flag)'")
-    }
-  }
-
-  func testProvidingUnicornFileWithoutAValue() {
-    for flag in ["-u", "--unicorn"] {
-      let command = Command([flag])
-      XCTAssertTrue(command.isNotValid, "for flag: '\(flag)'")
-      XCTAssertNil(command.unicornFile, "for flag: '\(flag)'")
-    }
-  }
-
-  func testProvidingShortAndLongUnicornFile() {
-    let command = Command(["-u", "hippo.png", "--unicorn", "bat.png"])
-    XCTAssertFalse(command.isNotValid)
-    XCTAssertEqual(command.unicornFile, "hippo.png")
-  }
-
-  func testProvidingSparkleFile() {
-    for flag in ["-k", "--sparkle"] {
-      let command = Command([flag, "poof.png"])
-      XCTAssertFalse(command.isNotValid, "for flag: '\(flag)'")
-      XCTAssertEqual(command.sparkleFile, "poof.png", "for flag: '\(flag)'")
-    }
-  }
-
-  func testProvidingSparkleFileWithoutAValue() {
-    for flag in ["-k", "--sparkle"] {
-      let command = Command([flag])
-      XCTAssertTrue(command.isNotValid, "for flag: '\(flag)'")
-      XCTAssertNil(command.sparkleFile, "for flag: '\(flag)'")
-    }
-  }
-
-  func testProvidingShortAndLongSparkleFile() {
-    let command = Command(["-k", "poof.png", "--sparkle", "blood.png"])
-    XCTAssertFalse(command.isNotValid)
-    XCTAssertEqual(command.sparkleFile, "poof.png")
-  }
-
-  func testEmptyArgumentIsNotAFlag() {
-    let command = Command([""])
-    XCTAssertEqual(command.invalidFlags, [])
-  }
-
-  func testNegativeNumberValuesAreNotFlags() {
+  @Test func negativeNumberValuesAreNotFlags() {
     let command = Command(["-e", "-0.5"])
-    XCTAssertEqual(command.invalidFlags, [])
-    XCTAssertFalse(command.isNotValid)
-    XCTAssertEqual(command.eccentricity, -0.5)
+    #expect(command.invalidFlags == [])
+    #expect(!command.isNotValid)
+    #expect(command.eccentricity == -0.5)
   }
 
-  func testNumberMustBePositive() {
-    for value in ["0", "-1"] {
-      let command = Command(["-n", value])
-      XCTAssertTrue(command.isNotValid, "for value: '\(value)'")
-      XCTAssertNil(command.number, "for value: '\(value)'")
-    }
+  // MARK: number
+
+  @Test(arguments: ["-n", "--number"])
+  func providingNumber(flag: String) {
+    let command = Command([flag, "5"])
+    #expect(!command.isNotValid)
+    #expect(command.number == 5)
   }
 
-  func testSecondsMustBePositive() {
-    for value in ["0", "-1"] {
-      let command = Command(["-s", value])
-      XCTAssertTrue(command.isNotValid, "for value: '\(value)'")
-      XCTAssertNil(command.seconds, "for value: '\(value)'")
-    }
+  @Test(arguments: ["-n", "--number"])
+  func providingNumberWithoutAValue(flag: String) {
+    let command = Command([flag])
+    #expect(command.isNotValid)
+    #expect(command.number == nil)
   }
 
-  func testNoErrorsForValidCommand() {
-    XCTAssertEqual(Command(["-s", "3", "-n", "2"]).errors, [])
+  @Test(arguments: ["-n", "--number"])
+  func providingNumberWithBadValue(flag: String) {
+    let command = Command([flag, "four"])
+    #expect(command.isNotValid)
+    #expect(command.number == nil)
   }
 
-  func testErrorsNameEachFlagMissingAValue() {
-    let cases = [
-      "-s": "seconds", "-n": "number", "-e": "eccentricity",
-      "-u": "unicorn", "-k": "sparkle"
-    ]
-    for (flag, name) in cases {
-      let errors = Command([flag]).errors
-      XCTAssertEqual(errors.count, 1, "for flag: '\(flag)'")
-      XCTAssertTrue(errors.first?.contains("the \(name) flag") ?? false, "for flag: '\(flag)': \(errors)")
-    }
+  @Test func providingShortAndLongNumber() {
+    let command = Command(["-n", "5", "--number", "6"])
+    #expect(!command.isNotValid)
+    #expect(command.number == 5)
   }
 
-  func testErrorsListInvalidFlags() {
-    let errors = Command(["-i"]).errors
-    XCTAssertEqual(errors, ["unicornleap - invalid options: -i"])
+  @Test(arguments: ["0", "-1"])
+  func numberMustBePositive(value: String) {
+    let command = Command(["-n", value])
+    #expect(command.isNotValid)
+    #expect(command.number == nil)
+  }
+
+  // MARK: image files
+
+  @Test(arguments: ["-u", "--unicorn"])
+  func providingUnicornFile(flag: String) {
+    let command = Command([flag, "hippo.png"])
+    #expect(!command.isNotValid)
+    #expect(command.unicornFile == "hippo.png")
+  }
+
+  @Test(arguments: ["-u", "--unicorn"])
+  func providingUnicornFileWithoutAValue(flag: String) {
+    let command = Command([flag])
+    #expect(command.isNotValid)
+    #expect(command.unicornFile == nil)
+  }
+
+  @Test func providingShortAndLongUnicornFile() {
+    let command = Command(["-u", "hippo.png", "--unicorn", "bat.png"])
+    #expect(!command.isNotValid)
+    #expect(command.unicornFile == "hippo.png")
+  }
+
+  @Test(arguments: ["-k", "--sparkle"])
+  func providingSparkleFile(flag: String) {
+    let command = Command([flag, "poof.png"])
+    #expect(!command.isNotValid)
+    #expect(command.sparkleFile == "poof.png")
+  }
+
+  @Test(arguments: ["-k", "--sparkle"])
+  func providingSparkleFileWithoutAValue(flag: String) {
+    let command = Command([flag])
+    #expect(command.isNotValid)
+    #expect(command.sparkleFile == nil)
+  }
+
+  @Test func providingShortAndLongSparkleFile() {
+    let command = Command(["-k", "poof.png", "--sparkle", "blood.png"])
+    #expect(!command.isNotValid)
+    #expect(command.sparkleFile == "poof.png")
+  }
+
+  // MARK: errors
+
+  @Test func emptyArgumentIsNotAFlag() {
+    #expect(Command([""]).invalidFlags == [])
+  }
+
+  @Test func noErrorsForValidCommand() {
+    #expect(Command(["-s", "3", "-n", "2"]).errors == [])
+  }
+
+  @Test(arguments: [
+    ("-s", "seconds"), ("-n", "number"), ("-e", "eccentricity"),
+    ("-u", "unicorn"), ("-k", "sparkle"),
+  ])
+  func errorsNameEachFlagMissingAValue(flag: String, name: String) {
+    let errors = Command([flag]).errors
+    #expect(errors.count == 1)
+    #expect(errors.first?.contains("the \(name) flag") == true)
+  }
+
+  @Test func errorsListInvalidFlags() {
+    #expect(Command(["-i"]).errors == ["unicornleap - invalid options: -i"])
   }
 }

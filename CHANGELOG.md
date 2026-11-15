@@ -8,6 +8,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- The Xcode project is replaced by a SwiftPM `Package.swift`. `make test` runs
+  `swift test`, which works with only the Command Line Tools installed.
+- `make install` builds first if needed, creates the target directories, and
+  honors `DESTDIR`.
+
 ### Fixed
 
 - An empty argument (`unicornleap ""`) no longer crashes.

@@ -9,23 +9,24 @@ This file provides guidance to AI coding agents working with code in this reposi
 ## Commands
 
 ```sh
-make              # build with swiftc directly (no Xcode needed) -> build/unicornleap
+make              # build with swiftc directly -> build/unicornleap
 make universal    # x86_64 (10.11+) + arm64 (11+) universal binary, as shipped in releases
-make xcode        # build via xcodebuild instead
-make test         # run XCTest suite via xcodebuild (requires full Xcode)
+make test         # swift test (Swift Testing; Command Line Tools are enough, no Xcode)
 make images       # copy images/*.png to ~/.unicornleap/ (default image location)
-make install      # copy binary and man page under $PREFIX (default /usr/local)
+make install      # build if needed, install binary and man page under $(DESTDIR)$(PREFIX) (default /usr/local)
 make clean
+swift run unicornleap -- -n 3   # build and run via SwiftPM
 ```
 
 Run a single test:
 
 ```sh
-xcodebuild -workspace unicornleap.xcodeproj/project.xcworkspace/ -scheme UnicornLeapTests test \
-  -only-testing:UnicornLeapTests/CommandTests/testDefaults
+swift test --filter CommandTests/defaults
 ```
 
-The default images are embedded in the binary at link time (`-sectcreate __TEXT __unicorn_png|__sparkle_png`, in both the Makefile and the Xcode target's `OTHER_LDFLAGS`), so the built binary runs with no setup. `~/.unicornleap/unicorn.png` / `sparkle.png` override them if present (`make images` copies the defaults there).
+Neither Xcode nor an Xcode project is needed; `Package.swift` defines the SwiftPM package (open it in Xcode if you want the IDE). The Makefile is what builds the shipped binary; SwiftPM is for `swift test` / `swift run`. The package's platform is macOS 10.15 because Swift Testing requires it, while the Makefile builds target 10.11 (x86_64).
+
+The default images are embedded in the binary at link time (`-sectcreate __TEXT __unicorn_png|__sparkle_png`, in both the Makefile and `Package.swift`'s `linkerSettings`), so the built binary runs with no setup. `~/.unicornleap/unicorn.png` / `sparkle.png` override them if present (`make images` copies the defaults there).
 
 ## Architecture
 
@@ -38,7 +39,7 @@ The default images are embedded in the binary at link time (`-sectcreate __TEXT 
 
 ## Tests
 
-Only `Command.swift` is covered. The `UnicornLeapTests` target compiles `Command.swift` directly into the test bundle (no `@testable import`), so new source files that tests depend on must be added to that target in `project.pbxproj`. The `make` build globs `UnicornLeap/*.swift`, so it doesn't need project changes, but `make xcode` does.
+Only `Command.swift` is covered. Tests use Swift Testing (`import Testing`, `@Test`, `#expect`), not XCTest, because the Command Line Tools ship Swift Testing but not XCTest. `UnicornLeapTests` does `@testable import unicornleap` against the executable target, so new source files need no registration anywhere: SwiftPM and the Makefile both pick up everything in `UnicornLeap/`.
 
 ## Releases
 
