@@ -9,8 +9,8 @@ This file provides guidance to AI coding agents working with code in this reposi
 ## Commands
 
 ```sh
-make              # build with swiftc directly -> build/unicornleap
-make universal    # x86_64 (10.15+) + arm64 (11+) universal binary, as shipped in releases
+make              # swift build -c release, copied to build/unicornleap
+make universal    # x86_64 (10.15+) + arm64 (11+) universal binary, as shipped in releases (one swift build per --triple, then lipo)
 make test         # swift test (Swift Testing; Command Line Tools are enough, no Xcode)
 make images       # copy images/*.png to ~/.unicornleap/ (default image location)
 make install      # build if needed, install binary and man page under $(DESTDIR)$(PREFIX) (default /usr/local)
@@ -24,9 +24,9 @@ Run a single test:
 swift test --filter CommandTests/defaults
 ```
 
-Neither Xcode nor an Xcode project is needed; `Package.swift` defines the SwiftPM package (open it in Xcode if you want the IDE). The Makefile is what builds the shipped binary; SwiftPM is for `swift test` / `swift run`. Keep the x86_64 target in `make universal` in step with `platforms` in `Package.swift` (macOS 10.15, the minimum for Swift Testing).
+Neither Xcode nor an Xcode project is needed; `Package.swift` defines the SwiftPM package (open it in Xcode if you want the IDE). The Makefile builds the shipped binary through SwiftPM, so the package is the single build definition. The only dependency is swift-argument-parser, pinned in `Package.resolved` (commit it); version 1.8 needs a Swift 6 toolchain. Keep the x86_64 triple in the Makefile in step with `platforms` in `Package.swift` (macOS 10.15, the minimum for Swift Testing).
 
-The default images are embedded in the binary at link time (`-sectcreate __TEXT __unicorn_png|__sparkle_png`, in both the Makefile and `Package.swift`'s `linkerSettings`), so the built binary runs with no setup. `~/.unicornleap/unicorn.png` / `sparkle.png` override them if present (`make images` copies the defaults there).
+The default images are embedded in the binary at link time (`-sectcreate __TEXT __unicorn_png|__sparkle_png`, in `Package.swift`'s `linkerSettings`), so the built binary runs with no setup. `~/.unicornleap/unicorn.png` / `sparkle.png` override them if present (`make images` copies the defaults there).
 
 ## Architecture
 
@@ -39,7 +39,7 @@ The default images are embedded in the binary at link time (`-sectcreate __TEXT 
 
 ## Tests
 
-`CommandTests` covers the `Command.swift` parser; `UnicornImageTests` covers `PNGImage` and the leap path and layer, using PNGs generated in memory (no image files or display needed); `ExitStatusTests` runs the built `unicornleap` binary (next to the test bundle in `.build/`) as a subprocess to check stdout/stderr and exit status (errors go to stderr with exit 1; `-h`/`-V` go to stdout with exit 0); `VersionTests` checks `Version.swift` against `CHANGELOG.md`. Tests use Swift Testing (`import Testing`, `@Test`, `#expect`), not XCTest, because the Command Line Tools ship Swift Testing but not XCTest. `UnicornLeapTests` does `@testable import unicornleap` against the executable target, so new source files need no registration anywhere: SwiftPM and the Makefile both pick up everything in `UnicornLeap/`.
+`CommandTests` covers the `Command.swift` parser; `UnicornImageTests` covers `PNGImage` and the leap path and layer, using PNGs generated in memory (no image files or display needed); `ExitStatusTests` runs the built `unicornleap` binary (next to the test bundle in `.build/`) as a subprocess to check stdout/stderr and exit status (errors go to stderr with exit 1; `-h`/`-V` go to stdout with exit 0); `VersionTests` checks `Version.swift` against `CHANGELOG.md`. Tests use Swift Testing (`import Testing`, `@Test`, `#expect`), not XCTest, because the Command Line Tools ship Swift Testing but not XCTest. `UnicornLeapTests` does `@testable import unicornleap` against the executable target, so new source files need no registration anywhere: SwiftPM picks up everything in `UnicornLeap/`.
 
 ## Releases
 

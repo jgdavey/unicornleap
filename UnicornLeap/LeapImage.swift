@@ -19,7 +19,7 @@ struct PNGImage {
 
   // Reads and decodes the PNG at `path`. If `path` is the default image
   // location and no file exists there, falls back to the copy embedded in the
-  // binary at link time (`-sectcreate __TEXT <section> <png>`; see the Makefile).
+  // binary at link time (`-sectcreate __TEXT <section> <png>`; see Package.swift).
   static func load(path: String, defaultPath: String, embeddedSection: String) -> PNGImage? {
     return loadData(path: path, defaultPath: defaultPath, embeddedSection: embeddedSection)
       .flatMap { PNGImage(data: $0) }
