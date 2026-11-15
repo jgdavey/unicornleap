@@ -1,6 +1,15 @@
 import Cocoa
 
+struct StandardError: TextOutputStream {
+  mutating func write(_ string: String) {
+    FileHandle.standardError.write(Data(string.utf8))
+  }
+}
+var standardError = StandardError()
+
+// Usage goes to stdout when asked for (-h), and to stderr after an error.
 func printUsage(_ exitCode: Int32) {
+  var usage = ""
   print(
     "Usage: unicornleap [options]\n",
     "  -h  --help             Display usage information.\n",
@@ -11,19 +20,25 @@ func printUsage(_ exitCode: Int32) {
     "  -u  --unicorn file     Filename for unicorn image.\n",
     "  -k  --sparkle file     Filename for sparkle image.\n",
     "  -v  --verbose          Print verbose messages.\n",
-    "  -V  --version          Print the version and exit."
+    "  -V  --version          Print the version and exit.",
+    to: &usage
   )
 
+  if exitCode == 0 {
+    print(usage, terminator: "")
+  } else {
+    print(usage, terminator: "", to: &standardError)
+  }
   exit(exitCode)
 }
 
 func printCommandErrors(_ command: Command) {
-  print("\(command.errors.joined(separator: "\n"))\n")
+  print("\(command.errors.joined(separator: "\n"))\n", to: &standardError)
 }
 
 func printImageError(_ filename: String) {
-  print("unicornleap - valid PNG not found: \(filename)")
-  exit(127)
+  print("unicornleap - valid PNG not found: \(filename)", to: &standardError)
+  exit(1)
 }
 
 func printVerboseOutput() {

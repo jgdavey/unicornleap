@@ -30,7 +30,7 @@ The default images are embedded in the binary at link time (`-sectcreate __TEXT 
 
 ## Architecture
 
-- `main.swift` — top-level script: parses `CommandLine.arguments` into a global `command`, dispatches help / error / herd / normal mode. `leapManyUnicorns` starts one `CATransaction` per unicorn, staggering each by `seconds / 8`, and drives everything with `CFRunLoopRun()`; the completion block of the last transaction calls `CFRunLoopStop` to exit. Herd mode defaults to 30 unicorns and randomizes `command.eccentricity` before each leap (via `setupFunc`), which is why `Command` properties are mutable.
+- `main.swift` — top-level script: parses `CommandLine.arguments` into a global `command`, dispatches help / version / error / herd / normal mode. Errors and usage-after-an-error go to stderr (via `standardError`) with exit status 1. `leapManyUnicorns` starts one `CATransaction` per unicorn, staggering each by `seconds / 8`, and drives everything with `CFRunLoopRun()`; the completion block of the last transaction calls `CFRunLoopStop` to exit. Herd mode defaults to 30 unicorns and randomizes `command.eccentricity` before each leap (via `setupFunc`), which is why `Command` properties are mutable.
 - `Command.swift` — hand-rolled argument parser. Each option has a default and a `parseX()` that returns `nil` when the flag is present but its value is missing/unparseable; `isNotValid` is true if any parsed value is `nil` or an unknown `-` flag is present. When a flag appears in both short and long form, the first occurrence wins. Adding a flag means updating `validFlags`, adding a property + parser, wiring it in `init`, and updating usage text and the man page.
 - `Leap.swift` — per-unicorn setup: creates a transparent, click-through, full-screen `FloatingWindow`, loads the unicorn and sparkle images, and attaches their layers/animations.
 - `LeapImage.swift` — base class: loads PNG data into a `CGImage` (`loadData` reads the file, falling back to the embedded section via `getsectiondata` only when the path is the default) and adds a `CAKeyframeAnimation` along a path for a configurable key path.
@@ -39,7 +39,7 @@ The default images are embedded in the binary at link time (`-sectcreate __TEXT 
 
 ## Tests
 
-Only `Command.swift` is covered. Tests use Swift Testing (`import Testing`, `@Test`, `#expect`), not XCTest, because the Command Line Tools ship Swift Testing but not XCTest. `UnicornLeapTests` does `@testable import unicornleap` against the executable target, so new source files need no registration anywhere: SwiftPM and the Makefile both pick up everything in `UnicornLeap/`.
+`CommandTests` covers the `Command.swift` parser; `ExitStatusTests` runs the built `unicornleap` binary (next to the test bundle in `.build/`) as a subprocess to check stdout/stderr and exit status (errors go to stderr with exit 1; `-h`/`-V` go to stdout with exit 0); `VersionTests` checks `Version.swift` against `CHANGELOG.md`. Tests use Swift Testing (`import Testing`, `@Test`, `#expect`), not XCTest, because the Command Line Tools ship Swift Testing but not XCTest. `UnicornLeapTests` does `@testable import unicornleap` against the executable target, so new source files need no registration anywhere: SwiftPM and the Makefile both pick up everything in `UnicornLeap/`.
 
 ## Releases
 
