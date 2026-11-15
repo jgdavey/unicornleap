@@ -39,7 +39,7 @@ The default images are embedded in the binary at link time (`-sectcreate __TEXT 
 
 ## Tests
 
-`CommandTests` covers the `Command.swift` parser; `ExitStatusTests` runs the built `unicornleap` binary (next to the test bundle in `.build/`) as a subprocess to check stdout/stderr and exit status (errors go to stderr with exit 1; `-h`/`-V` go to stdout with exit 0); `VersionTests` checks `Version.swift` against `CHANGELOG.md`. Tests use Swift Testing (`import Testing`, `@Test`, `#expect`), not XCTest, because the Command Line Tools ship Swift Testing but not XCTest. `UnicornLeapTests` does `@testable import unicornleap` against the executable target, so new source files need no registration anywhere: SwiftPM and the Makefile both pick up everything in `UnicornLeap/`.
+`CommandTests` covers the `Command.swift` parser; `UnicornImageTests` covers `PNGImage` and the leap path and layer, using PNGs generated in memory (no image files or display needed); `ExitStatusTests` runs the built `unicornleap` binary (next to the test bundle in `.build/`) as a subprocess to check stdout/stderr and exit status (errors go to stderr with exit 1; `-h`/`-V` go to stdout with exit 0); `VersionTests` checks `Version.swift` against `CHANGELOG.md`. Tests use Swift Testing (`import Testing`, `@Test`, `#expect`), not XCTest, because the Command Line Tools ship Swift Testing but not XCTest. `UnicornLeapTests` does `@testable import unicornleap` against the executable target, so new source files need no registration anywhere: SwiftPM and the Makefile both pick up everything in `UnicornLeap/`.
 
 ## Releases
 
