@@ -24,7 +24,12 @@ jobs:
           if gh release view "$GITHUB_REF_NAME" >/dev/null 2>&1; then
             echo "release $GITHUB_REF_NAME already exists; leaving it as-is"
           else
-            gh release create "$GITHUB_REF_NAME" \
+            # Anything after X.Y.Z (v3.0.0.pre, v3.0.0-rc.1) is a prerelease.
+            prerelease=()
+            if [[ ! "${GITHUB_REF_NAME#v}" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+              prerelease=(--prerelease)
+            fi
+            gh release create "$GITHUB_REF_NAME" "${prerelease[@]}" \
               --draft --generate-notes --notes-file notes.md --title "$GITHUB_REF_NAME"
           fi
 
