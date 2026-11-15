@@ -26,6 +26,11 @@ class Command {
     return arguments.contains("-V") || arguments.contains("--version")
   }
 
+  var verboseLines: [String] {
+    func show<T>(_ value: T?) -> String { value.map { "\($0)" } ?? "invalid" }
+    return ["Seconds: \(show(seconds))", "Number: \(show(number))"]
+  }
+
   var herd: Bool {
     return arguments.contains("-H") || arguments.contains("--herd")
   }

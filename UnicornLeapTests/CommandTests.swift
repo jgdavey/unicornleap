@@ -29,6 +29,11 @@ import Testing
     #expect(command.verboseOutput)
   }
 
+  @Test func verboseLinesShowPlainValues() {
+    let command = Command(["-v", "-s", "3.5", "-n", "4"])
+    #expect(command.verboseLines == ["Seconds: 3.5", "Number: 4"])
+  }
+
   @Test(arguments: ["-H", "--herd"])
   func wantsHerdMode(flag: String) {
     let command = Command([flag])

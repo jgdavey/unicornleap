@@ -26,6 +26,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- `-v` prints plain values (`Seconds: 2.0`) instead of `Seconds: Optional(2.0)`.
 - An empty argument (`unicornleap ""`) no longer crashes.
 - `-n 0` no longer hangs forever; `-n` and `-s` must be positive.
 - Missing values for `-e`, `-u` and `-k` now print an error message.

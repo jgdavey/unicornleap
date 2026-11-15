@@ -42,8 +42,7 @@ func printImageError(_ filename: String) {
 }
 
 func printVerboseOutput() {
-    print("Seconds: \(String(describing: command.seconds))")
-    print("Number: \(String(describing: command.number))")
+  print(command.verboseLines.joined(separator: "\n"))
 }
 
 func leapManyUnicorns(_ n: Int, setupFunc: () -> () = {}) {
