@@ -8,10 +8,22 @@ Versions in the main branch require OS X 10.11 or greater, and need at least XCo
 
 ## Installation
 
+### With mise
+
+[mise](https://mise.jdx.dev)'s GitHub backend can install the prebuilt release
+binary directly:
+
+```
+mise use -g github:jgdavey/unicornleap
+```
+
+To install a specific version (including prereleases), add it after `@`, e.g.
+`mise use -g github:jgdavey/unicornleap@3.0.0-pre`.
+
 ### From a release
 
 Grab the universal (Intel + Apple Silicon) tarball from the
-[GitHub releases](https://github.com/jgdavey/unicornleap/releases), put the
+[GitHub releases](https://github.com/jgdavey/unicornleap/releases), unpack it,
 and put the binary on your `PATH`. The default images are built into the binary,
 so there's nothing else to set up:
 
