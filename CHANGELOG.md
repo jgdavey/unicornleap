@@ -12,6 +12,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Long options take their value after `=` too (`--seconds=3`), and flags
   can be grouped (`-Hv`).
+- Shell completions for zsh, bash and fish. `make install` installs them,
+  the release tarball includes them in `completions/`, and
+  `unicornleap --generate-completion-script <shell>` prints them. `-u` and
+  `-k` complete PNG files.
 
 ### Changed
 

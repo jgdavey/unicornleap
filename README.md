@@ -53,6 +53,24 @@ If you really want to, you can install manually:
 1. `make`
 2.  Copy the binary from `build` folder to somewhere in your path
 
+### Shell completions
+
+`make install` also installs completions for zsh, bash and fish under
+`$PREFIX/share` (e.g. `/usr/local/share/zsh/site-functions/_unicornleap`), and
+the release tarball has them in `completions/`. However you installed it,
+`unicornleap` can also print them itself:
+
+```
+# zsh: any directory on your $fpath
+unicornleap --generate-completion-script zsh > ~/.zfunc/_unicornleap
+
+# bash (needs bash-completion)
+unicornleap --generate-completion-script bash > ~/.local/share/bash-completion/completions/unicornleap
+
+# fish
+unicornleap --generate-completion-script fish > ~/.config/fish/completions/unicornleap.fish
+```
+
 ## Usage
 
 Once installed, simply run `unicornleap` and behold: a unicorn will leap across

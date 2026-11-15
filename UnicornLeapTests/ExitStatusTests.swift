@@ -35,6 +35,17 @@ private func run(_ arguments: [String]) throws -> (status: Int32, stdout: String
     #expect(result.stderr.isEmpty)
   }
 
+  // parseCommand() handles ArgumentParser's clean exits itself, so check the
+  // completion scripts still come out on stdout with status 0.
+  @Test(arguments: [("zsh", "#compdef unicornleap"), ("bash", "complete -o filenames -F"), ("fish", "complete -c 'unicornleap'")])
+  func completionScriptsGoToStdout(shell: String, marker: String) throws {
+    let result = try run(["--generate-completion-script", shell])
+    #expect(result.status == 0)
+    #expect(result.stdout.contains(marker))
+    #expect(result.stdout.contains("seconds"))
+    #expect(result.stderr.isEmpty)
+  }
+
   @Test func invalidOptionsGoToStderr() throws {
     let result = try run(["-x"])
     #expect(result.status == 1)

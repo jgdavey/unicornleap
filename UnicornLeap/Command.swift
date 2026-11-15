@@ -26,11 +26,13 @@ struct Command: ParsableCommand {
   var eccentricity: Float = 1.0
 
   @Option(name: .shortAndLong, help: ArgumentHelp(
-    "Filename for unicorn image. (default: ~/.unicornleap/unicorn.png, or the built-in unicorn)", valueName: "file"))
+    "Filename for unicorn image. (default: ~/.unicornleap/unicorn.png, or the built-in unicorn)", valueName: "file"),
+    completion: .file(extensions: ["png"]))
   var unicorn: String?
 
   @Option(name: [.customShort("k"), .long], help: ArgumentHelp(
-    "Filename for sparkle image. (default: ~/.unicornleap/sparkle.png, or the built-in sparkle)", valueName: "file"))
+    "Filename for sparkle image. (default: ~/.unicornleap/sparkle.png, or the built-in sparkle)", valueName: "file"),
+    completion: .file(extensions: ["png"]))
   var sparkle: String?
 
   @Flag(name: .shortAndLong, help: "Print verbose messages.")
