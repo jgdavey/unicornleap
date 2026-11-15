@@ -45,7 +45,20 @@ func printVerboseOutput() {
   print(command.verboseLines.joined(separator: "\n"))
 }
 
+// Connects to the window server (needed before creating windows) and returns
+// the screen to leap across, or exits if there isn't one, e.g. when run from a
+// session with no access to the display.
+func mainScreenFrame() -> NSRect {
+  _ = NSApplication.shared
+  guard let screen = NSScreen.main else {
+    print("unicornleap - no screen available to leap across", to: &standardError)
+    exit(1)
+  }
+  return screen.frame
+}
+
 func leapManyUnicorns(_ n: Int, setupFunc: () -> () = {}) {
+  let screenFrame = mainScreenFrame()
   let startTime = CACurrentMediaTime()
   let offsetFactor = Double(command.seconds! / 8.0)
 
@@ -57,7 +70,7 @@ func leapManyUnicorns(_ n: Int, setupFunc: () -> () = {}) {
       }
     })
     setupFunc()
-    Leap.animateImage(command, animationDelay: startTime + Double(i) * offsetFactor)
+    Leap.animateImage(command, screenFrame: screenFrame, animationDelay: startTime + Double(i) * offsetFactor)
     CATransaction.commit()
   }
 
