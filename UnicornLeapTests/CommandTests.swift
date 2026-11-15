@@ -60,6 +60,39 @@ import Testing
     #expect(Command(["-n", "4"]).leapCount == 4)
   }
 
+  // MARK: options
+
+  @Test func optionsHoldTheParsedValues() throws {
+    let options = try #require(Command(["-s", "3", "-n", "2", "-e", "1.5", "-u", "a.png", "-k", "b.png"]).options)
+    #expect(options.seconds == 3)
+    #expect(options.count == 2)
+    #expect(options.eccentricity == 1.5)
+    #expect(options.unicornFile == "a.png")
+    #expect(options.sparkleFile == "b.png")
+    #expect(!options.herd)
+  }
+
+  @Test func optionsAreNilWhenInvalid() {
+    #expect(Command(["-s", "0"]).options == nil)
+    #expect(Command(["-x"]).options == nil)
+  }
+
+  @Test func herdOptionsUseTheHerdNumber() throws {
+    let options = try #require(Command(["-H"]).options)
+    #expect(options.herd)
+    #expect(options.count == Command.defaultHerdNumber)
+  }
+
+  @Test func eccentricityForNextLeap() throws {
+    let normal = try #require(Command(["-e", "2.5"]).options)
+    #expect((0..<20).allSatisfy { _ in normal.eccentricityForNextLeap() == 2.5 })
+
+    let herd = try #require(Command(["-H"]).options)
+    let samples = (0..<200).map { _ in herd.eccentricityForNextLeap() }
+    #expect(samples.allSatisfy { Command.herdEccentricityRange.contains($0) })
+    #expect(Set(samples).count > 1)
+  }
+
   @Test(arguments: ["-H", "--herd"])
   func wantsHerdMode(flag: String) {
     let command = Command([flag])

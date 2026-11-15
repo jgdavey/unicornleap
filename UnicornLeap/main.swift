@@ -43,16 +43,12 @@ func printImageError(_ filename: String) -> Never {
 
 // Loads and decodes both images, or exits if either isn't a valid PNG, before
 // anything appears on screen.
-func loadImages() -> LeapImages {
-  guard let unicorn = PNGImage.load(path: command.unicornFile!, defaultPath: Command.defaultUnicornFile, embeddedSection: "__unicorn_png")
-    else { printImageError(command.unicornFile!) }
-  guard let sparkle = PNGImage.load(path: command.sparkleFile!, defaultPath: Command.defaultSparkleFile, embeddedSection: "__sparkle_png")
-    else { printImageError(command.sparkleFile!) }
+func loadImages(_ options: LeapOptions) -> LeapImages {
+  guard let unicorn = PNGImage.load(path: options.unicornFile, defaultPath: Command.defaultUnicornFile, embeddedSection: "__unicorn_png")
+    else { printImageError(options.unicornFile) }
+  guard let sparkle = PNGImage.load(path: options.sparkleFile, defaultPath: Command.defaultSparkleFile, embeddedSection: "__sparkle_png")
+    else { printImageError(options.sparkleFile) }
   return LeapImages(unicorn: unicorn, sparkle: sparkle)
-}
-
-func printVerboseOutput() {
-  print(command.verboseLines.joined(separator: "\n"))
 }
 
 // Connects to the window server (needed before creating windows) and returns
@@ -67,8 +63,8 @@ func mainScreenFrame() -> NSRect {
   return screen.frame
 }
 
-func leapManyUnicorns(_ n: Int, setupFunc: () -> () = {}) {
-  let images = loadImages()
+func leapManyUnicorns(_ options: LeapOptions) {
+  let images = loadImages(options)
   let screenFrame = mainScreenFrame()
 
   // One window for every unicorn: each leap adds its own layers to it.
@@ -80,30 +76,22 @@ func leapManyUnicorns(_ n: Int, setupFunc: () -> () = {}) {
   guard let layer = floatingWindow.view.layer else { return }
 
   let startTime = CACurrentMediaTime()
-  let offsetFactor = Double(command.seconds! / 8.0)
+  let offsetFactor = Double(options.seconds / 8.0)
 
-  for i in (0..<n) {
+  for i in (0..<options.count) {
     CATransaction.begin()
     CATransaction.setCompletionBlock({
-      if (i + 1 == n) {
+      if (i + 1 == options.count) {
         CFRunLoopStop(CFRunLoopGetCurrent())
       }
     })
-    setupFunc()
-    Leap.animateImage(command, in: layer, screenFrame: screenFrame, images: images, animationDelay: startTime + Double(i) * offsetFactor)
+    let leap = Leap(seconds: options.seconds, eccentricity: options.eccentricityForNextLeap(),
+                    screenFrame: screenFrame, images: images)
+    leap.animate(in: layer, animationDelay: startTime + Double(i) * offsetFactor)
     CATransaction.commit()
   }
 
   CFRunLoopRun()
-}
-
-func leapThoseUnicorns() {
-  leapManyUnicorns(command.leapCount!)
-}
-
-func herdThoseUnicorns() {
-  let setupFunc = { command.eccentricity = Command.randomHerdEccentricity() }
-  leapManyUnicorns(command.leapCount!, setupFunc: setupFunc)
 }
 
 let command = Command(CommandLine.arguments)
@@ -112,16 +100,12 @@ if command.needsHelp {
   printUsage(0)
 } else if command.wantsVersion {
   print("unicornleap \(version)")
-} else if command.isNotValid {
+} else if let options = command.options {
+  if command.verboseOutput {
+    print(command.verboseLines.joined(separator: "\n"))
+  }
+  leapManyUnicorns(options)
+} else {
   printCommandErrors(command)
   printUsage(1)
-} else {
-  if command.verboseOutput {
-    printVerboseOutput()
-  }
-  if command.herd {
-    herdThoseUnicorns()
-  } else {
-    leapThoseUnicorns()
-  }
 }

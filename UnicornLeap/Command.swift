@@ -1,7 +1,22 @@
 import Foundation
 
-class Command {
-  fileprivate var arguments = [String]()
+// Everything a run needs, once the arguments have parsed without errors.
+struct LeapOptions {
+  let seconds: Float
+  let count: Int
+  let eccentricity: Float
+  let unicornFile: String
+  let sparkleFile: String
+  let herd: Bool
+
+  // Herd mode gives each unicorn its own random height.
+  func eccentricityForNextLeap() -> Float {
+    return herd ? Command.randomHerdEccentricity() : eccentricity
+  }
+}
+
+struct Command {
+  private let arguments: [String]
 
   fileprivate func nextArgument(_ index: Int) -> String? {
     let nextIndex = index.advanced(by: 1)
@@ -51,6 +66,16 @@ class Command {
     return arguments.contains("-H") || arguments.contains("--herd")
   }
 
+  // The validated options, or nil if there are any errors.
+  var options: LeapOptions? {
+    guard errors.isEmpty,
+      let seconds = seconds, let count = leapCount, let eccentricity = eccentricity,
+      let unicornFile = unicornFile, let sparkleFile = sparkleFile
+      else { return nil }
+    return LeapOptions(seconds: seconds, count: count, eccentricity: eccentricity,
+                       unicornFile: unicornFile, sparkleFile: sparkleFile, herd: herd)
+  }
+
   var isNotValid: Bool {
     return !errors.isEmpty
   }
@@ -85,19 +110,19 @@ class Command {
     return Array(flags.subtracting(validFlags))
   }
 
-  var seconds: Float? = 2.0
+  private(set) var seconds: Float? = 2.0
   fileprivate func parseSeconds() -> Float? {
     guard let index = flagIndex(["-s", "--seconds"]) else { return seconds }
     return nextArgument(index)?.asFloat.flatMap { $0 > 0 ? $0 : nil }
   }
 
-  var number: Int? = 1
+  private(set) var number: Int? = 1
   fileprivate func parseNumber() -> Int? {
     guard let index = flagIndex(["-n", "--number"]) else { return number }
     return nextArgument(index)?.asInt.flatMap { $0 > 0 ? $0 : nil }
   }
 
-  var passedInNumber: Bool = false
+  private(set) var passedInNumber: Bool = false
   fileprivate func parsePassedInNumber() -> Bool {
     guard flagIndex(["-n", "--number"]) != nil else { return false }
     return true
@@ -115,13 +140,13 @@ class Command {
   static let defaultUnicornFile: String = "\(defaultImageDir)unicorn.png"
   static let defaultSparkleFile: String = "\(defaultImageDir)sparkle.png"
 
-  var unicornFile: String? = defaultUnicornFile
+  private(set) var unicornFile: String? = defaultUnicornFile
   fileprivate func parseUnicornFile() -> String? {
     guard let index = flagIndex(["-u", "--unicorn"]) else { return unicornFile }
     return nextArgument(index)
   }
 
-  var sparkleFile: String? = defaultSparkleFile
+  private(set) var sparkleFile: String? = defaultSparkleFile
   fileprivate func parseSparkleFile() -> String? {
     guard let index = flagIndex(["-k", "--sparkle"]) else { return sparkleFile }
     return nextArgument(index)
@@ -133,7 +158,7 @@ class Command {
     return Float.random(in: herdEccentricityRange)
   }
 
-  var eccentricity: Float? = 1.0
+  private(set) var eccentricity: Float? = 1.0
   fileprivate func parseEccentricity() -> Float? {
     guard let index = flagIndex(["-e", "--eccentricity"]) else { return eccentricity }
     return nextArgument(index)?.asFloat

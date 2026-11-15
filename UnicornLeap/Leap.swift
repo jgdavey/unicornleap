@@ -6,31 +6,23 @@ struct LeapImages {
   let sparkle: PNGImage
 }
 
-class Leap {
-  let command: Command
+// One unicorn and its sparkle trail.
+struct Leap {
+  let seconds: Float
+  let eccentricity: Float
   let screenFrame: NSRect
   let images: LeapImages
 
-  class func animateImage(_ command: Command, in layer: CALayer, screenFrame: NSRect, images: LeapImages, animationDelay: Double) {
-    Leap(command, screenFrame: screenFrame, images: images).animateImage(in: layer, animationDelay: animationDelay)
-  }
-
-  init(_ command: Command, screenFrame: NSRect, images: LeapImages) {
-    self.command = command
-    self.screenFrame = screenFrame
-    self.images = images
-  }
-
-  func animateImage(in layer: CALayer, animationDelay: Double) {
-    let unicornImage = UnicornImage(image: images.unicorn, eccentricity: command.eccentricity!, screenFrame: screenFrame)
+  func animate(in layer: CALayer, animationDelay: Double) {
+    let unicornImage = UnicornImage(image: images.unicorn, eccentricity: eccentricity, screenFrame: screenFrame)
     let sparkleImage = SparkleImage(image: images.sparkle)
 
-    sparkleImage.configureEmitter(unicornImage.size, seconds: command.seconds!)
+    sparkleImage.configureEmitter(unicornImage.size, seconds: seconds)
 
     layer.addSublayer(unicornImage.layer)
     layer.addSublayer(sparkleImage.emitter)
 
-    unicornImage.addAnimation(Double(command.seconds!), animationDelay: animationDelay)
-    sparkleImage.addAnimation(Double(command.seconds!), path: unicornImage.path, animationDelay: animationDelay)
+    unicornImage.addAnimation(Double(seconds), animationDelay: animationDelay)
+    sparkleImage.addAnimation(Double(seconds), path: unicornImage.path, animationDelay: animationDelay)
   }
 }
