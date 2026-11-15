@@ -12,6 +12,23 @@ class SparkleImage: LeapImage {
     super.addAnimation(seconds, path: path, layer: emitter, animationDelay: animationDelay)
   }
 
+  // Stops new sparkles; the ones already emitted carry on until they fade.
+  func stopEmitting() {
+    CATransaction.begin()
+    CATransaction.setDisableActions(true)
+    emitter.birthRate = 0
+    CATransaction.commit()
+  }
+
+  // How long a sparkle stays visible: until it dies or fades to transparent,
+  // whichever comes first.
+  var fadeOutSeconds: Double {
+    guard let sparkle = emitter.emitterCells?.first else { return 0 }
+    let longestLife = Double(sparkle.lifetime + sparkle.lifetimeRange)
+    guard sparkle.alphaSpeed < 0 else { return longestLife }
+    return min(longestLife, Double(1 / -sparkle.alphaSpeed))
+  }
+
   func configureEmitter(_ imageSize: CGSize, seconds: Float) {
     let base = 0.2
 

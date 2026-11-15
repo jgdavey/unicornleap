@@ -4,7 +4,7 @@ import Testing
 
 /// A blank PNG of `pixels` that claims to be `points` in size (i.e. a DPI other
 /// than 72 when they differ).
-private func png(pixels: NSSize, points: NSSize? = nil) throws -> PNGImage {
+func png(pixels: NSSize, points: NSSize? = nil) throws -> PNGImage {
   let rep = try #require(NSBitmapImageRep(
     bitmapDataPlanes: nil, pixelsWide: Int(pixels.width), pixelsHigh: Int(pixels.height),
     bitsPerSample: 8, samplesPerPixel: 4, hasAlpha: true, isPlanar: false,
@@ -110,5 +110,42 @@ private func points(of path: CGPath) -> [(CGPathElementType, [CGPoint])] {
     #expect(unicorn.layer.bounds == CGRect(origin: .zero, size: unicornSize))
     #expect(unicorn.layer.position == CGPoint(x: -200, y: -100))
     #expect(unicorn.layer.contents as! CGImage === image.cgImage)
+  }
+}
+
+@Suite struct LeapTests {
+  let screen = NSRect(x: 0, y: 0, width: 1440, height: 900)
+
+  private func leap(seconds: Float = 2) throws -> Leap {
+    let unicorn = try png(pixels: NSSize(width: 200, height: 100))
+    let sparkle = try png(pixels: NSSize(width: 16, height: 16))
+    return Leap(seconds: seconds, eccentricity: 1, screenFrame: screen,
+                images: LeapImages(unicorn: unicorn, sparkle: sparkle))
+  }
+
+  @Test func stopEmittingStopsNewSparkles() throws {
+    let sparkle = try leap().sparkleImage
+    #expect(sparkle.emitter.birthRate == 1)
+    sparkle.stopEmitting()
+    #expect(sparkle.emitter.birthRate == 0)
+  }
+
+  // Sparkles fade to transparent (alphaSpeed -1, so after a second) before
+  // they die, even on the shortest leaps.
+  @Test(arguments: [0.1, 2, 10] as [Float])
+  func sparklesFadeOutWithinASecond(seconds: Float) throws {
+    let sparkle = try leap(seconds: seconds).sparkleImage
+    let cell = try #require(sparkle.emitter.emitterCells?.first)
+    #expect(sparkle.fadeOutSeconds == 1)
+    #expect(Double(cell.lifetime + cell.lifetimeRange) > sparkle.fadeOutSeconds)
+  }
+
+  @Test func removeTakesTheLeapOffTheWindow() throws {
+    let leap = try leap()
+    let root = CALayer()
+    leap.animate(in: root, animationDelay: 0)
+    #expect(root.sublayers?.count == 2)
+    leap.remove()
+    #expect(root.sublayers?.isEmpty ?? true)
   }
 }

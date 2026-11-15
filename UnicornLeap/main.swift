@@ -65,15 +65,20 @@ func leapManyUnicorns(_ command: Command) {
   let startTime = CACurrentMediaTime()
   let offsetFactor = Double(command.seconds / 8.0)
 
+  // Each leap cleans up after it lands; the run ends when the last one has.
+  var leapsInFlight = command.leapCount
   for i in (0..<command.leapCount) {
-    CATransaction.begin()
-    CATransaction.setCompletionBlock({
-      if (i + 1 == command.leapCount) {
-        CFRunLoopStop(CFRunLoopGetCurrent())
-      }
-    })
     let leap = Leap(seconds: command.seconds, eccentricity: command.eccentricityForNextLeap(),
                     screenFrame: screenFrame, images: images)
+    CATransaction.begin()
+    CATransaction.setCompletionBlock({
+      leap.land {
+        leapsInFlight -= 1
+        if leapsInFlight == 0 {
+          CFRunLoopStop(CFRunLoopGetCurrent())
+        }
+      }
+    })
     leap.animate(in: layer, animationDelay: startTime + Double(i) * offsetFactor)
     CATransaction.commit()
   }

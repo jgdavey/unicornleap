@@ -6,6 +6,14 @@ recorded in the git history and the `v*` tags.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Changed
+
+- Each unicorn's sparkle trail stops when it lands and its layers are removed
+  once the last sparkles fade, instead of sparkling off screen until the run
+  ends. The last unicorn's sparkles now fade out rather than being cut off.
+
 ## [3.2.0] - 2026-11-15
 
 ### Added
