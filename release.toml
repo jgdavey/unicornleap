@@ -1,0 +1,29 @@
+# Describes the release tarball for packslip (https://packslip.dev), which
+# signs a manifest of it (packslip.sigstore.json) so that
+# `mise use packslip:github.com/jgdavey/unicornleap` can install it.
+# The release workflow passes the tarball itself and fills in project,
+# version, URLs and source from the tag.
+#
+# The platform comes from the file name: "macos" reads as darwin, and with no
+# architecture in the name the build is recorded as universal.
+
+bin = ["unicornleap"]
+
+# The x86_64 slice targets 10.15; every arm64 Mac runs 11 or later.
+requires = { os_min = "10.15" }
+
+# Paths inside the tarball, exactly as `tar -tzf` lists them.
+[[resource]]
+kind = "completion"
+shell = "zsh"
+archive = "completions/_unicornleap"
+
+[[resource]]
+kind = "completion"
+shell = "bash"
+archive = "completions/unicornleap.bash"
+
+[[resource]]
+kind = "completion"
+shell = "fish"
+archive = "completions/unicornleap.fish"

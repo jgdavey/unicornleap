@@ -36,6 +36,10 @@ jobs:
   build:
     needs: create-release
     runs-on: macos-latest
+    permissions:
+      contents: write     # upload assets to the draft release
+      id-token: write     # packslip signs with this job's OIDC identity
+      attestations: write # packslip attests the tarball's build provenance
     steps:
       - uses: actions/checkout@v6
       - name: Check version matches tag
@@ -57,7 +61,9 @@ jobs:
           name="unicornleap-${version}-macos-universal"
           mkdir -p staging
           cp -R build/unicornleap build/completions README.md staging/
-          tar czf "${name}.tar.gz" -C staging .
+          # Name the entries rather than "." so their paths have no "./"
+          # prefix: release.toml names them exactly.
+          tar czf "${name}.tar.gz" -C staging unicornleap completions README.md
           shasum -a 256 "${name}.tar.gz" > "${name}.tar.gz.sha256"
           echo "archive=${name}.tar.gz" >> "$GITHUB_OUTPUT"
       - name: Upload assets to draft release
@@ -66,6 +72,13 @@ jobs:
             "${{ steps.package.outputs.archive }}" \
             "${{ steps.package.outputs.archive }}.sha256" \
             --clobber
+      # Signs a manifest of the tarball and uploads it to the draft release
+      # as packslip.sigstore.json, for mise's packslip backend.
+      - name: Publish packslip
+        uses: jdx/packslip@e0340e0c1d10c90a434de2b90f3a1ba345923564 # v1.11.4
+        with:
+          artifacts: ${{ steps.package.outputs.archive }}
+          manifest: release.toml
 
   publish:
     needs: build

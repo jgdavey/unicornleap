@@ -16,6 +16,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   the release tarball includes them in `completions/`, and
   `unicornleap --generate-completion-script <shell>` prints them. `-u` and
   `-k` complete PNG files.
+- Releases include a signed [packslip](https://packslip.dev) manifest
+  (`packslip.sigstore.json`), so
+  `mise use packslip:github.com/jgdavey/unicornleap` can install them.
 
 ### Changed
 

@@ -11,15 +11,21 @@ build downloads one dependency, swift-argument-parser.
 
 ### With mise
 
+The easiest way to install is with mise, via the packslip backend:
+
+```
+mise use -g packslip:github.com/jgdavey/unicornleap
+```
+
 [mise](https://mise.jdx.dev)'s GitHub backend can install the prebuilt release
-binary directly:
+binary directly, but doesn't automatically pick up shell completions:
 
 ```
 mise use -g github:jgdavey/unicornleap
 ```
 
 To install a specific version (including prereleases), add it after `@`, e.g.
-`mise use -g github:jgdavey/unicornleap@3.0.0-pre`.
+`mise use -g github:jgdavey/unicornleap@3.1.0`.
 
 ### From a release
 
