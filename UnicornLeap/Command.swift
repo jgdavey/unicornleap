@@ -27,7 +27,20 @@ class Command {
   }
 
   var isNotValid: Bool {
-    return !invalidFlags.isEmpty || seconds == nil || number == nil || eccentricity == nil || unicornFile == nil || sparkleFile == nil
+    return !errors.isEmpty
+  }
+
+  var errors: [String] {
+    var errors = [String]()
+    if !invalidFlags.isEmpty {
+      errors.append("invalid options: \(invalidFlags.joined(separator: ", "))")
+    }
+    if seconds == nil { errors.append("the seconds flag requires a positive number") }
+    if number == nil { errors.append("the number flag requires a positive integer") }
+    if eccentricity == nil { errors.append("the eccentricity flag requires a number") }
+    if unicornFile == nil { errors.append("the unicorn flag requires a filename") }
+    if sparkleFile == nil { errors.append("the sparkle flag requires a filename") }
+    return errors.map { "unicornleap - \($0)" }
   }
 
   var invalidFlags: [String] {
@@ -41,20 +54,21 @@ class Command {
       "-e", "--eccentricity",
       "-H", "--herd"
     ]
-    let flags = Set(arguments.filter({ $0[$0.startIndex] == "-" }))
+    // Negative numbers ("-1", "-0.5") are values, not flags.
+    let flags = Set(arguments.filter({ $0.hasPrefix("-") && $0.asFloat == nil }))
     return Array(flags.subtracting(validFlags))
   }
 
   var seconds: Float? = 2.0
   fileprivate func parseSeconds() -> Float? {
     guard let index = flagIndex(["-s", "--seconds"]) else { return seconds }
-    return nextArgument(index)?.asFloat
+    return nextArgument(index)?.asFloat.flatMap { $0 > 0 ? $0 : nil }
   }
 
   var number: Int? = 1
   fileprivate func parseNumber() -> Int? {
     guard let index = flagIndex(["-n", "--number"]) else { return number }
-    return nextArgument(index)?.asInt
+    return nextArgument(index)?.asInt.flatMap { $0 > 0 ? $0 : nil }
   }
 
   var passedInNumber: Bool = false

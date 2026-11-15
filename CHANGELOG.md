@@ -8,6 +8,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- An empty argument (`unicornleap ""`) no longer crashes.
+- `-n 0` no longer hangs forever; `-n` and `-s` must be positive.
+- Missing values for `-e`, `-u` and `-k` now print an error message.
+- Negative numbers are accepted as values (e.g. `-e -0.5`) instead of being
+  reported as invalid options.
+
 ## [3.0.0] - 2026-11-14
 
 ### Added

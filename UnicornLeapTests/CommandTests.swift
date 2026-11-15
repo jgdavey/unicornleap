@@ -179,4 +179,53 @@ class CommandTests: XCTestCase {
     XCTAssertFalse(command.isNotValid)
     XCTAssertEqual(command.sparkleFile, "poof.png")
   }
+
+  func testEmptyArgumentIsNotAFlag() {
+    let command = Command([""])
+    XCTAssertEqual(command.invalidFlags, [])
+  }
+
+  func testNegativeNumberValuesAreNotFlags() {
+    let command = Command(["-e", "-0.5"])
+    XCTAssertEqual(command.invalidFlags, [])
+    XCTAssertFalse(command.isNotValid)
+    XCTAssertEqual(command.eccentricity, -0.5)
+  }
+
+  func testNumberMustBePositive() {
+    for value in ["0", "-1"] {
+      let command = Command(["-n", value])
+      XCTAssertTrue(command.isNotValid, "for value: '\(value)'")
+      XCTAssertNil(command.number, "for value: '\(value)'")
+    }
+  }
+
+  func testSecondsMustBePositive() {
+    for value in ["0", "-1"] {
+      let command = Command(["-s", value])
+      XCTAssertTrue(command.isNotValid, "for value: '\(value)'")
+      XCTAssertNil(command.seconds, "for value: '\(value)'")
+    }
+  }
+
+  func testNoErrorsForValidCommand() {
+    XCTAssertEqual(Command(["-s", "3", "-n", "2"]).errors, [])
+  }
+
+  func testErrorsNameEachFlagMissingAValue() {
+    let cases = [
+      "-s": "seconds", "-n": "number", "-e": "eccentricity",
+      "-u": "unicorn", "-k": "sparkle"
+    ]
+    for (flag, name) in cases {
+      let errors = Command([flag]).errors
+      XCTAssertEqual(errors.count, 1, "for flag: '\(flag)'")
+      XCTAssertTrue(errors.first?.contains("the \(name) flag") ?? false, "for flag: '\(flag)': \(errors)")
+    }
+  }
+
+  func testErrorsListInvalidFlags() {
+    let errors = Command(["-i"]).errors
+    XCTAssertEqual(errors, ["unicornleap - invalid options: -i"])
+  }
 }

@@ -17,22 +17,7 @@ func printUsage(_ exitCode: Int32) {
 }
 
 func printCommandErrors(_ command: Command) {
-  var errors = [String]()
-
-  if !command.invalidFlags.isEmpty {
-    let invalidOptions = command.invalidFlags.joined(separator: ", ")
-    errors.append("unicornleap - invalid options: \(invalidOptions)")
-  }
-
-  if command.seconds == nil {
-    errors.append("unicornleap - the seconds flag requires an argument")
-  }
-
-  if command.number == nil {
-    errors.append("unicornleap - the number flag requires an argument")
-  }
-
-  print("\(errors.joined(separator: "\n"))\n")
+  print("\(command.errors.joined(separator: "\n"))\n")
 }
 
 func printImageError(_ filename: String) {
