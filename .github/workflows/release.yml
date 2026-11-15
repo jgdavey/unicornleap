@@ -44,9 +44,8 @@ jobs:
         run: |
           version="${GITHUB_REF_NAME#v}"
           name="unicornleap-${version}-macos-universal"
-          mkdir -p staging/images
+          mkdir -p staging
           cp build/unicornleap unicornleap.1 README.md staging/
-          cp images/*.png staging/images/
           tar czf "${name}.tar.gz" -C staging .
           shasum -a 256 "${name}.tar.gz" > "${name}.tar.gz.sha256"
           echo "archive=${name}.tar.gz" >> "$GITHUB_OUTPUT"

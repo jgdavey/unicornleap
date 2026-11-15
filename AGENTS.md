@@ -14,7 +14,7 @@ make universal    # x86_64 (10.11+) + arm64 (11+) universal binary, as shipped i
 make xcode        # build via xcodebuild instead
 make test         # run XCTest suite via xcodebuild (requires full Xcode)
 make images       # copy images/*.png to ~/.unicornleap/ (default image location)
-make install      # images + copy binary and man page under $PREFIX (default /usr/local)
+make install      # copy binary and man page under $PREFIX (default /usr/local)
 make clean
 ```
 
@@ -42,4 +42,4 @@ Only `Command.swift` is covered. The `UnicornLeapTests` target compiles `Command
 
 ## Releases
 
-Pushing a `vX.Y.Z` tag runs `.github/workflows/release.yml`: it creates a draft GitHub release using that version's `CHANGELOG.md` section (via `scripts/changelog-notes`, which fails the release if there's no section), runs the tests, builds with `make universal`, uploads `unicornleap-X.Y.Z-macos-universal.tar.gz` (binary, man page, README, images) plus a `.sha256`, then publishes the release. To cut one, rename `## [Unreleased]` in `CHANGELOG.md` to `## [X.Y.Z] - YYYY-MM-DD`, commit, then tag and push the tag. `.github/workflows/ci.yml` builds and tests every branch push and PR.
+Pushing a `vX.Y.Z` tag runs `.github/workflows/release.yml`: it creates a draft GitHub release using that version's `CHANGELOG.md` section (via `scripts/changelog-notes`, which fails the release if there's no section), runs the tests, builds with `make universal`, uploads `unicornleap-X.Y.Z-macos-universal.tar.gz` (binary, man page, README) plus a `.sha256`, then publishes the release. To cut one, rename `## [Unreleased]` in `CHANGELOG.md` to `## [X.Y.Z] - YYYY-MM-DD`, commit, then tag and push the tag. `.github/workflows/ci.yml` builds and tests every branch push and PR.
