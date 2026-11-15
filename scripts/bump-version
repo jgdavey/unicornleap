@@ -1,0 +1,41 @@
+#!/usr/bin/env bash
+# Cut a release locally: set UnicornLeap/Version.swift, rename CHANGELOG.md's
+# [Unreleased] section to the version and today's date, run the tests, commit
+# "Version X.Y.Z" and tag vX.Y.Z. Pushing is left to you.
+#
+# Usage: bump-version <X.Y.Z>   (e.g. 3.1.0, or 3.1.0-rc.1 for a prerelease)
+set -euo pipefail
+
+cd "$(dirname "$0")/.."
+
+die() { echo "bump-version: $*" >&2; exit 1; }
+
+[ $# -eq 1 ] || die "usage: bump-version <X.Y.Z>"
+version="${1#v}"
+tag="v$version"
+
+[[ "$version" =~ ^[0-9]+\.[0-9]+\.[0-9]+([.-][0-9A-Za-z.-]+)?$ ]] ||
+  die "'$version' doesn't look like X.Y.Z"
+[ -z "$(git status --porcelain)" ] || die "working tree isn't clean"
+! git rev-parse -q --verify "refs/tags/$tag" >/dev/null || die "tag $tag already exists"
+scripts/changelog-notes Unreleased >/dev/null 2>&1 ||
+  die "CHANGELOG.md has no [Unreleased] section, or it's empty"
+
+printf '// Bump this when cutting a release (a test checks it against CHANGELOG.md).\nlet version = "%s"\n' \
+  "$version" > UnicornLeap/Version.swift
+
+awk -v heading="## [$version] - $(date +%Y-%m-%d)" '
+  !done && $0 == "## [Unreleased]" { print heading; done = 1; next }
+  { print }
+' CHANGELOG.md > CHANGELOG.md.tmp && mv CHANGELOG.md.tmp CHANGELOG.md
+
+if ! swift test >/dev/null 2>&1; then
+  git checkout -- UnicornLeap/Version.swift CHANGELOG.md
+  die "tests failed; changes reverted (run 'make test' to see why)"
+fi
+
+git commit -q -m "Version $version" -- UnicornLeap/Version.swift CHANGELOG.md
+git tag "$tag"
+
+echo "Committed 'Version $version' and tagged $tag. To release:"
+echo "  git push origin $(git branch --show-current) $tag"
