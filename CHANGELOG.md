@@ -6,6 +6,23 @@ recorded in the git history and the `v*` tags.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Added
+
+- Long options take their value after `=` too (`--seconds=3`), and flags
+  can be grouped (`-Hv`).
+
+### Changed
+
+- Options are parsed with swift-argument-parser. `-h` output has a new
+  layout, error messages start with `Error:`, and an option given more than
+  once uses its last value instead of its first. Errors still exit with
+  status 1.
+- Building from source needs a Swift 6 toolchain (Xcode 16 or later, or the
+  matching Command Line Tools), and the first build downloads
+  swift-argument-parser.
+
 ## [3.1.1] - 2026-11-14
 
 ### Changed

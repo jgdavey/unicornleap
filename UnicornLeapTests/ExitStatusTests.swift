@@ -23,7 +23,8 @@ private func run(_ arguments: [String]) throws -> (status: Int32, stdout: String
   @Test func helpGoesToStdout() throws {
     let result = try run(["-h"])
     #expect(result.status == 0)
-    #expect(result.stdout.contains("Usage: unicornleap"))
+    #expect(result.stdout.contains("USAGE: unicornleap"))
+    #expect(result.stdout.contains("-s, --seconds <n>"))
     #expect(result.stderr.isEmpty)
   }
 
@@ -38,8 +39,21 @@ private func run(_ arguments: [String]) throws -> (status: Int32, stdout: String
     let result = try run(["-x"])
     #expect(result.status == 1)
     #expect(result.stdout.isEmpty)
-    #expect(result.stderr.contains("unicornleap - invalid options: -x"))
+    #expect(result.stderr.contains("Error: Unknown option '-x'"))
     #expect(result.stderr.contains("Usage: unicornleap"))
+  }
+
+  @Test func validationErrorsGoToStderr() throws {
+    let result = try run(["-s", "0"])
+    #expect(result.status == 1)
+    #expect(result.stdout.isEmpty)
+    #expect(result.stderr.contains("Error: the seconds flag requires a positive number"))
+  }
+
+  @Test func versionWinsOverInvalidValues() throws {
+    let result = try run(["-V", "-s", "0"])
+    #expect(result.status == 0)
+    #expect(result.stdout.hasPrefix("unicornleap "))
   }
 
   @Test func missingImageGoesToStderr() throws {

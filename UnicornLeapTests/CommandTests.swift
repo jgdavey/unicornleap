@@ -2,120 +2,108 @@ import Foundation
 import Testing
 @testable import unicornleap
 
-@Suite struct CommandTests {
-  @Test func defaults() {
-    let command = Command([])
-
-    #expect(!command.needsHelp)
-    #expect(!command.isNotValid)
-    #expect(!command.verboseOutput)
-    #expect(command.seconds == 2.0)
-    #expect(command.number == 1)
-    #expect(command.eccentricity == 1.0)
-    #expect(command.unicornFile?.hasSuffix("unicorn.png") == true)
-    #expect(command.sparkleFile?.hasSuffix("sparkle.png") == true)
+/// The error message parsing `arguments` fails with, or nil if it succeeds.
+private func errorMessage(_ arguments: [String]) -> String? {
+  do {
+    _ = try Command.parse(arguments)
+    return nil
+  } catch {
+    return Command.message(for: error)
   }
+}
 
-  @Test(arguments: ["-h", "--help"])
-  func needsHelp(flag: String) {
-    let command = Command([flag])
-    #expect(!command.isNotValid)
-    #expect(command.needsHelp)
+@Suite struct CommandTests {
+  @Test func defaults() throws {
+    let command = try Command.parse([])
+
+    #expect(!command.verbose)
+    #expect(!command.herd)
+    #expect(!command.version)
+    #expect(command.seconds == 2.0)
+    #expect(command.leapCount == 1)
+    #expect(command.eccentricity == 1.0)
+    #expect(command.unicornFile == Command.defaultUnicornFile)
+    #expect(command.sparkleFile == Command.defaultSparkleFile)
+    #expect(command.unicornFile.hasSuffix("/.unicornleap/unicorn.png"))
+    #expect(command.sparkleFile.hasSuffix("/.unicornleap/sparkle.png"))
   }
 
   @Test(arguments: ["-v", "--verbose"])
-  func wantsVerboseOutput(flag: String) {
-    let command = Command([flag])
-    #expect(!command.isNotValid)
-    #expect(command.verboseOutput)
+  func wantsVerboseOutput(flag: String) throws {
+    #expect(try Command.parse([flag]).verbose)
   }
 
-  @Test func verboseLinesShowPlainValues() {
-    let command = Command(["-v", "-s", "3.5", "-n", "4", "-e", "2", "-u", "u.png", "-k", "k.png"])
+  @Test(arguments: ["-H", "--herd"])
+  func wantsHerdMode(flag: String) throws {
+    #expect(try Command.parse([flag]).herd)
+  }
+
+  @Test(arguments: ["-V", "--version"])
+  func wantsVersion(flag: String) throws {
+    #expect(try Command.parse([flag]).version)
+  }
+
+  // -V wins over anything else, as it did with the old parser.
+  @Test func versionSkipsValidation() throws {
+    #expect(try Command.parse(["-V", "-s", "0"]).version)
+  }
+
+  @Test func groupedShortFlags() throws {
+    let command = try Command.parse(["-Hv"])
+    #expect(command.herd)
+    #expect(command.verbose)
+  }
+
+  @Test func helpIsAvailable() {
+    let help = Command.helpMessage()
+    for flag in ["-s, --seconds", "-n, --number", "-H, --herd", "-e, --eccentricity",
+                 "-u, --unicorn", "-k, --sparkle", "-v, --verbose", "-V, --version", "-h, --help"] {
+      #expect(help.contains(flag), "\(flag) is missing from the help")
+    }
+  }
+
+  // MARK: verbose output
+
+  @Test func verboseLinesShowPlainValues() throws {
+    let command = try Command.parse(["-v", "-s", "3.5", "-n", "4", "-e", "2", "-u", "u.png", "-k", "k.png"])
     #expect(command.verboseLines == [
       "Seconds: 3.5", "Number: 4", "Eccentricity: 2.0", "Unicorn: u.png", "Sparkle: k.png",
     ])
   }
 
-  @Test func verboseLinesInHerdMode() {
-    let command = Command(["-v", "-H", "-u", "u.png", "-k", "k.png"])
+  @Test func verboseLinesInHerdMode() throws {
+    let command = try Command.parse(["-v", "-H", "-u", "u.png", "-k", "k.png"])
     #expect(command.verboseLines == [
       "Seconds: 2.0", "Number: 30", "Eccentricity: random (0.0..<3.0)",
       "Unicorn: u.png", "Sparkle: k.png", "Herd: on",
     ])
   }
 
-  @Test func verboseLinesNameTheBuiltInImages() {
+  @Test func verboseLinesNameTheBuiltInImages() throws {
     // The default paths fall back to the embedded images when missing.
-    let command = Command([])
+    let command = try Command.parse([])
     let unicornExists = FileManager.default.fileExists(atPath: Command.defaultUnicornFile)
     let line = command.verboseLines.first { $0.hasPrefix("Unicorn: ") }
     #expect(line == (unicornExists ? "Unicorn: \(Command.defaultUnicornFile)" : "Unicorn: built-in"))
   }
 
-  @Test func herdNumberDefaultsToThirty() {
-    #expect(Command(["-H"]).leapCount == 30)
-    #expect(Command(["-H", "-n", "3"]).leapCount == 3)
-    #expect(Command([]).leapCount == 1)
-    #expect(Command(["-n", "4"]).leapCount == 4)
-  }
+  // MARK: herd
 
-  // MARK: options
-
-  @Test func optionsHoldTheParsedValues() throws {
-    let options = try #require(Command(["-s", "3", "-n", "2", "-e", "1.5", "-u", "a.png", "-k", "b.png"]).options)
-    #expect(options.seconds == 3)
-    #expect(options.count == 2)
-    #expect(options.eccentricity == 1.5)
-    #expect(options.unicornFile == "a.png")
-    #expect(options.sparkleFile == "b.png")
-    #expect(!options.herd)
-  }
-
-  @Test func optionsAreNilWhenInvalid() {
-    #expect(Command(["-s", "0"]).options == nil)
-    #expect(Command(["-x"]).options == nil)
-  }
-
-  @Test func herdOptionsUseTheHerdNumber() throws {
-    let options = try #require(Command(["-H"]).options)
-    #expect(options.herd)
-    #expect(options.count == Command.defaultHerdNumber)
+  @Test func herdNumberDefaultsToThirty() throws {
+    #expect(try Command.parse(["-H"]).leapCount == 30)
+    #expect(try Command.parse(["-H", "-n", "3"]).leapCount == 3)
+    #expect(try Command.parse([]).leapCount == 1)
+    #expect(try Command.parse(["-n", "4"]).leapCount == 4)
   }
 
   @Test func eccentricityForNextLeap() throws {
-    let normal = try #require(Command(["-e", "2.5"]).options)
+    let normal = try Command.parse(["-e", "2.5"])
     #expect((0..<20).allSatisfy { _ in normal.eccentricityForNextLeap() == 2.5 })
 
-    let herd = try #require(Command(["-H"]).options)
+    let herd = try Command.parse(["-H"])
     let samples = (0..<200).map { _ in herd.eccentricityForNextLeap() }
     #expect(samples.allSatisfy { Command.herdEccentricityRange.contains($0) })
     #expect(Set(samples).count > 1)
-  }
-
-  @Test(arguments: ["-H", "--herd"])
-  func wantsHerdMode(flag: String) {
-    let command = Command([flag])
-    #expect(!command.isNotValid)
-    #expect(command.herd)
-  }
-
-  @Test(arguments: ["-V", "--version"])
-  func wantsVersion(flag: String) {
-    let command = Command([flag])
-    #expect(!command.isNotValid)
-    #expect(command.wantsVersion)
-  }
-
-  @Test func doesNotWantVersionByDefault() {
-    #expect(!Command([]).wantsVersion)
-  }
-
-  @Test(arguments: ["-i", "--invalid"])
-  func hasInvalidFlags(flag: String) {
-    let command = Command([flag])
-    #expect(command.isNotValid)
-    #expect(command.invalidFlags == [flag])
   }
 
   // Herd heights must not depend on -n: with the old `random(0..<n) / 10`,
@@ -129,190 +117,110 @@ import Testing
 
   // MARK: seconds
 
-  @Test(arguments: ["-s", "--seconds"])
-  func providingSeconds(flag: String) {
-    let command = Command([flag, "5"])
-    #expect(!command.isNotValid)
-    #expect(command.seconds == 5.0)
+  @Test(arguments: [["-s", "5"], ["--seconds", "5"], ["--seconds=5"]])
+  func providingSeconds(arguments: [String]) throws {
+    #expect(try Command.parse(arguments).seconds == 5.0)
   }
 
   @Test(arguments: ["-s", "--seconds"])
   func providingSecondsWithoutAValue(flag: String) {
-    let command = Command([flag])
-    #expect(command.isNotValid)
-    #expect(command.seconds == nil)
+    #expect(errorMessage([flag])?.contains("Missing value") == true)
   }
 
   @Test(arguments: ["-s", "--seconds"])
   func providingSecondsWithBadValue(flag: String) {
-    let command = Command([flag, "four"])
-    #expect(command.isNotValid)
-    #expect(command.seconds == nil)
+    #expect(errorMessage([flag, "four"])?.contains("four") == true)
   }
 
-  @Test func providingShortAndLongSeconds() {
-    let command = Command(["-s", "5", "--seconds", "6"])
-    #expect(!command.isNotValid)
-    #expect(command.seconds == 5)
-  }
-
-  @Test(arguments: ["0", "-1"])
-  func secondsMustBePositive(value: String) {
-    let command = Command(["-s", value])
-    #expect(command.isNotValid)
-    #expect(command.seconds == nil)
+  // The last occurrence wins, as is usual for command-line tools.
+  @Test func providingShortAndLongSeconds() throws {
+    #expect(try Command.parse(["-s", "5", "--seconds", "6"]).seconds == 6)
   }
 
   // An infinite duration would never finish, so the run loop would never stop.
-  @Test(arguments: ["inf", "infinity", "nan", "1e40"])
-  func secondsMustBeFinite(value: String) {
-    let command = Command(["-s", value])
-    #expect(command.isNotValid)
-    #expect(command.seconds == nil)
+  @Test(arguments: ["0", "inf", "infinity", "nan", "1e40"])
+  func secondsMustBePositiveAndFinite(value: String) {
+    #expect(errorMessage(["-s", value]) == "the seconds flag requires a positive number")
+  }
+
+  @Test func negativeSecondsAreRejected() {
+    #expect(errorMessage(["-s", "-1"]) != nil)
   }
 
   // MARK: eccentricity
 
-  @Test(arguments: ["-e", "--eccentricity"])
-  func providingEccentricity(flag: String) {
-    let command = Command([flag, "5"])
-    #expect(!command.isNotValid)
-    #expect(command.eccentricity == 5.0)
+  @Test(arguments: [["-e", "5"], ["--eccentricity", "5"], ["--eccentricity=5"]])
+  func providingEccentricity(arguments: [String]) throws {
+    #expect(try Command.parse(arguments).eccentricity == 5.0)
   }
 
   @Test(arguments: ["-e", "--eccentricity"])
   func providingEccentricityWithoutAValue(flag: String) {
-    let command = Command([flag])
-    #expect(command.isNotValid)
-    #expect(command.eccentricity == nil)
+    #expect(errorMessage([flag])?.contains("Missing value") == true)
   }
 
   @Test(arguments: ["-e", "--eccentricity"])
   func providingEccentricityWithBadValue(flag: String) {
-    let command = Command([flag, "four"])
-    #expect(command.isNotValid)
-    #expect(command.eccentricity == nil)
+    #expect(errorMessage([flag, "four"])?.contains("four") == true)
   }
 
   @Test(arguments: ["inf", "-inf", "nan", "1e40"])
   func eccentricityMustBeFinite(value: String) {
-    let command = Command(["-e", value])
-    #expect(command.isNotValid)
-    #expect(command.eccentricity == nil)
+    #expect(errorMessage(["-e", value]) == "the eccentricity flag requires a finite number")
   }
 
-  @Test func providingShortAndLongEccentricity() {
-    let command = Command(["-e", "5", "--eccentricity", "6"])
-    #expect(!command.isNotValid)
-    #expect(command.eccentricity == 5)
-  }
-
-  @Test func negativeNumberValuesAreNotFlags() {
-    let command = Command(["-e", "-0.5"])
-    #expect(command.invalidFlags == [])
-    #expect(!command.isNotValid)
-    #expect(command.eccentricity == -0.5)
+  @Test(arguments: [["-e", "-0.5"], ["--eccentricity", "-0.5"], ["-e", "-1", "-v"]])
+  func negativeEccentricityIsAValueNotAFlag(arguments: [String]) throws {
+    #expect(try Command.parse(arguments).eccentricity == Float(arguments[1]))
   }
 
   // MARK: number
 
-  @Test(arguments: ["-n", "--number"])
-  func providingNumber(flag: String) {
-    let command = Command([flag, "5"])
-    #expect(!command.isNotValid)
-    #expect(command.number == 5)
+  @Test(arguments: [["-n", "5"], ["--number", "5"], ["--number=5"]])
+  func providingNumber(arguments: [String]) throws {
+    #expect(try Command.parse(arguments).leapCount == 5)
   }
 
   @Test(arguments: ["-n", "--number"])
   func providingNumberWithoutAValue(flag: String) {
-    let command = Command([flag])
-    #expect(command.isNotValid)
-    #expect(command.number == nil)
+    #expect(errorMessage([flag])?.contains("Missing value") == true)
   }
 
-  @Test(arguments: ["-n", "--number"])
-  func providingNumberWithBadValue(flag: String) {
-    let command = Command([flag, "four"])
-    #expect(command.isNotValid)
-    #expect(command.number == nil)
+  @Test(arguments: ["four", "2.5"])
+  func providingNumberWithBadValue(value: String) {
+    #expect(errorMessage(["-n", value])?.contains(value) == true)
   }
 
-  @Test func providingShortAndLongNumber() {
-    let command = Command(["-n", "5", "--number", "6"])
-    #expect(!command.isNotValid)
-    #expect(command.number == 5)
-  }
-
-  @Test(arguments: ["0", "-1"])
-  func numberMustBePositive(value: String) {
-    let command = Command(["-n", value])
-    #expect(command.isNotValid)
-    #expect(command.number == nil)
+  @Test func numberMustBePositive() {
+    #expect(errorMessage(["-n", "0"]) == "the number flag requires a positive integer")
+    #expect(errorMessage(["-n", "-1"]) != nil)
   }
 
   // MARK: image files
 
-  @Test(arguments: ["-u", "--unicorn"])
-  func providingUnicornFile(flag: String) {
-    let command = Command([flag, "hippo.png"])
-    #expect(!command.isNotValid)
-    #expect(command.unicornFile == "hippo.png")
+  @Test(arguments: [["-u", "hippo.png"], ["--unicorn", "hippo.png"], ["--unicorn=hippo.png"]])
+  func providingUnicornFile(arguments: [String]) throws {
+    #expect(try Command.parse(arguments).unicornFile == "hippo.png")
   }
 
-  @Test(arguments: ["-u", "--unicorn"])
-  func providingUnicornFileWithoutAValue(flag: String) {
-    let command = Command([flag])
-    #expect(command.isNotValid)
-    #expect(command.unicornFile == nil)
+  @Test(arguments: [["-k", "poof.png"], ["--sparkle", "poof.png"], ["--sparkle=poof.png"]])
+  func providingSparkleFile(arguments: [String]) throws {
+    #expect(try Command.parse(arguments).sparkleFile == "poof.png")
   }
 
-  @Test func providingShortAndLongUnicornFile() {
-    let command = Command(["-u", "hippo.png", "--unicorn", "bat.png"])
-    #expect(!command.isNotValid)
-    #expect(command.unicornFile == "hippo.png")
-  }
-
-  @Test(arguments: ["-k", "--sparkle"])
-  func providingSparkleFile(flag: String) {
-    let command = Command([flag, "poof.png"])
-    #expect(!command.isNotValid)
-    #expect(command.sparkleFile == "poof.png")
-  }
-
-  @Test(arguments: ["-k", "--sparkle"])
-  func providingSparkleFileWithoutAValue(flag: String) {
-    let command = Command([flag])
-    #expect(command.isNotValid)
-    #expect(command.sparkleFile == nil)
-  }
-
-  @Test func providingShortAndLongSparkleFile() {
-    let command = Command(["-k", "poof.png", "--sparkle", "blood.png"])
-    #expect(!command.isNotValid)
-    #expect(command.sparkleFile == "poof.png")
+  @Test(arguments: ["-u", "--unicorn", "-k", "--sparkle"])
+  func providingImageFileWithoutAValue(flag: String) {
+    #expect(errorMessage([flag])?.contains("Missing value") == true)
   }
 
   // MARK: errors
 
-  @Test func emptyArgumentIsNotAFlag() {
-    #expect(Command([""]).invalidFlags == [])
+  @Test(arguments: ["-i", "--invalid"])
+  func rejectsUnknownFlags(flag: String) {
+    #expect(errorMessage([flag]) == "Unknown option '\(flag)'")
   }
 
-  @Test func noErrorsForValidCommand() {
-    #expect(Command(["-s", "3", "-n", "2"]).errors == [])
-  }
-
-  @Test(arguments: [
-    ("-s", "seconds"), ("-n", "number"), ("-e", "eccentricity"),
-    ("-u", "unicorn"), ("-k", "sparkle"),
-  ])
-  func errorsNameEachFlagMissingAValue(flag: String, name: String) {
-    let errors = Command([flag]).errors
-    #expect(errors.count == 1)
-    #expect(errors.first?.contains("the \(name) flag") == true)
-  }
-
-  @Test func errorsListInvalidFlags() {
-    #expect(Command(["-i"]).errors == ["unicornleap - invalid options: -i"])
+  @Test func rejectsStrayArguments() {
+    #expect(errorMessage(["unicorn"]) != nil)
   }
 }

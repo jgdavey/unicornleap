@@ -33,10 +33,14 @@ Defaults to
 Display i unicorns.
 .br
 Defaults to
-.Ar 1
+.Ar 1 ,
+or
+.Ar 30
+with
+.Fl H .
 .It Fl H , \-herd
 Enables herd mode. A herd of unicorns will appear!
-.It Fl e , \-eccentricity Ar i
+.It Fl e , \-eccentricity Ar x
 Leap the unicorns with a higher peak.
 .br
 Defaults to
@@ -59,6 +63,13 @@ Print verbose messages
 Print the version and exit.
 .El                      \" Ends the list
 .Pp
+A value can follow its option as the next argument
+.Pq Fl s Ar 3
+or, for a long option, after an equals sign
+.Pq Fl \-seconds Ns = Ns Ar 3 .
+Flags without values can be grouped
+.Pq Fl Hv .
+If an option is given more than once, the last value is used.
 .Sh FILES                \" File used or created by the topic of the man page
 .Bl -tag -width "~/.unicornleap/unicorn.png" -compact
 .It Pa ~/.unicornleap/unicorn.png

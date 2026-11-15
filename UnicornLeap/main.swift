@@ -7,33 +7,20 @@ struct StandardError: TextOutputStream {
 }
 var standardError = StandardError()
 
-// Usage goes to stdout when asked for (-h), and to stderr after an error.
-func printUsage(_ exitCode: Int32) {
-  var usage = ""
-  print(
-    "Usage: unicornleap [options]\n",
-    "  -h  --help             Display usage information.\n",
-    "  -s  --seconds n        Animate for n seconds. (default: 2.0)\n",
-    "  -n  --number i         Display i unicorns. (default: 1)\n",
-    "  -H  --herd             Enables herd-mode.\n",
-    "  -e  --eccentricity x   Leap the unicorns with a higher peak. (default: 1.0)\n",
-    "  -u  --unicorn file     Filename for unicorn image.\n",
-    "  -k  --sparkle file     Filename for sparkle image.\n",
-    "  -v  --verbose          Print verbose messages.\n",
-    "  -V  --version          Print the version and exit.",
-    to: &usage
-  )
-
-  if exitCode == 0 {
-    print(usage, terminator: "")
-  } else {
-    print(usage, terminator: "", to: &standardError)
+// Parses the arguments, or exits: help goes to stdout with status 0, and an
+// error (with the usage line) goes to stderr with status 1.
+func parseCommand() -> Command {
+  do {
+    return try Command.parse()
+  } catch {
+    let message = Command.fullMessage(for: error)
+    if Command.exitCode(for: error) == .success {
+      print(message)
+      exit(0)
+    }
+    print(message, to: &standardError)
+    exit(1)
   }
-  exit(exitCode)
-}
-
-func printCommandErrors(_ command: Command) {
-  print("\(command.errors.joined(separator: "\n"))\n", to: &standardError)
 }
 
 func printImageError(_ filename: String) -> Never {
@@ -43,11 +30,11 @@ func printImageError(_ filename: String) -> Never {
 
 // Loads and decodes both images, or exits if either isn't a valid PNG, before
 // anything appears on screen.
-func loadImages(_ options: LeapOptions) -> LeapImages {
-  guard let unicorn = PNGImage.load(path: options.unicornFile, defaultPath: Command.defaultUnicornFile, embeddedSection: "__unicorn_png")
-    else { printImageError(options.unicornFile) }
-  guard let sparkle = PNGImage.load(path: options.sparkleFile, defaultPath: Command.defaultSparkleFile, embeddedSection: "__sparkle_png")
-    else { printImageError(options.sparkleFile) }
+func loadImages(_ command: Command) -> LeapImages {
+  guard let unicorn = PNGImage.load(path: command.unicornFile, defaultPath: Command.defaultUnicornFile, embeddedSection: "__unicorn_png")
+    else { printImageError(command.unicornFile) }
+  guard let sparkle = PNGImage.load(path: command.sparkleFile, defaultPath: Command.defaultSparkleFile, embeddedSection: "__sparkle_png")
+    else { printImageError(command.sparkleFile) }
   return LeapImages(unicorn: unicorn, sparkle: sparkle)
 }
 
@@ -63,8 +50,8 @@ func mainScreenFrame() -> NSRect {
   return screen.frame
 }
 
-func leapManyUnicorns(_ options: LeapOptions) {
-  let images = loadImages(options)
+func leapManyUnicorns(_ command: Command) {
+  let images = loadImages(command)
   let screenFrame = mainScreenFrame()
 
   // One window for every unicorn: each leap adds its own layers to it.
@@ -76,16 +63,16 @@ func leapManyUnicorns(_ options: LeapOptions) {
   guard let layer = floatingWindow.view.layer else { return }
 
   let startTime = CACurrentMediaTime()
-  let offsetFactor = Double(options.seconds / 8.0)
+  let offsetFactor = Double(command.seconds / 8.0)
 
-  for i in (0..<options.count) {
+  for i in (0..<command.leapCount) {
     CATransaction.begin()
     CATransaction.setCompletionBlock({
-      if (i + 1 == options.count) {
+      if (i + 1 == command.leapCount) {
         CFRunLoopStop(CFRunLoopGetCurrent())
       }
     })
-    let leap = Leap(seconds: options.seconds, eccentricity: options.eccentricityForNextLeap(),
+    let leap = Leap(seconds: command.seconds, eccentricity: command.eccentricityForNextLeap(),
                     screenFrame: screenFrame, images: images)
     leap.animate(in: layer, animationDelay: startTime + Double(i) * offsetFactor)
     CATransaction.commit()
@@ -94,18 +81,13 @@ func leapManyUnicorns(_ options: LeapOptions) {
   CFRunLoopRun()
 }
 
-let command = Command(CommandLine.arguments)
+let command = parseCommand()
 
-if command.needsHelp {
-  printUsage(0)
-} else if command.wantsVersion {
+if command.version {
   print("unicornleap \(version)")
-} else if let options = command.options {
-  if command.verboseOutput {
+} else {
+  if command.verbose {
     print(command.verboseLines.joined(separator: "\n"))
   }
-  leapManyUnicorns(options)
-} else {
-  printCommandErrors(command)
-  printUsage(1)
+  leapManyUnicorns(command)
 }
