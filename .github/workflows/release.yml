@@ -1,0 +1,65 @@
+name: Release
+
+on:
+  push:
+    tags: ['v[0-9]+.*']
+
+permissions:
+  contents: write
+
+env:
+  GH_TOKEN: ${{ github.token }}
+  GH_REPO: ${{ github.repository }}
+
+jobs:
+  create-release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      # Fails the release if CHANGELOG.md has no section for this tag.
+      - name: Extract changelog section
+        run: scripts/changelog-notes "$GITHUB_REF_NAME" > notes.md
+      - name: Create draft release (once)
+        run: |
+          if gh release view "$GITHUB_REF_NAME" >/dev/null 2>&1; then
+            echo "release $GITHUB_REF_NAME already exists; leaving it as-is"
+          else
+            gh release create "$GITHUB_REF_NAME" \
+              --draft --generate-notes --notes-file notes.md --title "$GITHUB_REF_NAME"
+          fi
+
+  build:
+    needs: create-release
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v6
+      - name: Test
+        run: make test
+      - name: Build universal binary
+        run: |
+          make universal
+          lipo -info build/unicornleap
+      - name: Package
+        id: package
+        run: |
+          version="${GITHUB_REF_NAME#v}"
+          name="unicornleap-${version}-macos-universal"
+          mkdir -p staging/images
+          cp build/unicornleap unicornleap.1 README.md staging/
+          cp images/*.png staging/images/
+          tar czf "${name}.tar.gz" -C staging .
+          shasum -a 256 "${name}.tar.gz" > "${name}.tar.gz.sha256"
+          echo "archive=${name}.tar.gz" >> "$GITHUB_OUTPUT"
+      - name: Upload assets to draft release
+        run: |
+          gh release upload "$GITHUB_REF_NAME" \
+            "${{ steps.package.outputs.archive }}" \
+            "${{ steps.package.outputs.archive }}.sha256" \
+            --clobber
+
+  publish:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Mark release published
+        run: gh release edit "$GITHUB_REF_NAME" --draft=false

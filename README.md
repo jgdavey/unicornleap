@@ -8,7 +8,24 @@ Versions in the main branch require OS X 10.11 or greater, and need at least XCo
 
 ## Installation
 
-The preferred installation uses make:
+### From a release
+
+Grab the universal (Intel + Apple Silicon) tarball from the
+[GitHub releases](https://github.com/jgdavey/unicornleap/releases), put the
+binary on your `PATH`, and copy the default images into `~/.unicornleap`:
+
+```
+mkdir unicornleap && cd unicornleap
+curl -L https://github.com/jgdavey/unicornleap/releases/download/v<version>/unicornleap-<version>-macos-universal.tar.gz | tar xz
+mv unicornleap ~/.local/bin/
+mkdir -p ~/.unicornleap && cp images/*.png ~/.unicornleap/
+```
+
+The tarball also includes the man page, `unicornleap.1`.
+
+### From source
+
+The preferred source installation uses make:
 
 ```
 make

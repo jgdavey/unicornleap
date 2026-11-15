@@ -1,0 +1,25 @@
+name: CI
+
+on:
+  push:
+    branches: ['**']
+    tags-ignore: ['**']
+  pull_request:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v6
+      - run: make universal
+      - run: lipo -info build/unicornleap
+
+  test:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v6
+      - run: make test
