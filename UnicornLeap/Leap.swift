@@ -22,8 +22,11 @@ class Leap {
 
     floatingWindow.view.wantsLayer = true
 
-    guard let unicornImage = UnicornImage(filename: command.unicornFile!, eccentricity: command.eccentricity!) else { printImageError(command.unicornFile!); return }
-    guard let sparkleImage = SparkleImage(filename: command.sparkleFile!) else { printImageError(command.sparkleFile!); return }
+    let unicornData = LeapImage.loadData(path: command.unicornFile!, defaultPath: Command.defaultUnicornFile, embeddedSection: "__unicorn_png")
+    let sparkleData = LeapImage.loadData(path: command.sparkleFile!, defaultPath: Command.defaultSparkleFile, embeddedSection: "__sparkle_png")
+
+    guard let unicornImage = unicornData.flatMap({ UnicornImage(data: $0, eccentricity: command.eccentricity!) }) else { printImageError(command.unicornFile!); return }
+    guard let sparkleImage = sparkleData.flatMap({ SparkleImage(data: $0) }) else { printImageError(command.sparkleFile!); return }
 
     sparkleImage.configureEmitter(unicornImage.size, seconds: command.seconds!)
 

@@ -14,6 +14,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   releases, built by GitHub Actions.
 - `make universal` builds the same universal binary locally.
 - `make` builds with `swiftc` directly; Xcode is no longer required to build.
+- The default unicorn and sparkle images are embedded in the binary, so
+  `~/.unicornleap/` no longer needs to exist. PNGs placed there still override
+  the built-in images.
 
 ### Changed
 
@@ -21,3 +24,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Updated for Swift 5.
 - Herd mode respects the `-n` flag.
 - The unicorn's offset scales with the `-s` speed flag.
+
+### Fixed
+
+- The man page listed the sparkle flag as `-s` instead of `-k`.
+- The "valid PNG not found" error now shows the actual path that was tried.

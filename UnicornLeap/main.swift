@@ -36,7 +36,7 @@ func printCommandErrors(_ command: Command) {
 }
 
 func printImageError(_ filename: String) {
-  print("unicornleap - valid PNG not found: ~/.unicornleap/\(filename)")
+  print("unicornleap - valid PNG not found: \(filename)")
   exit(127)
 }
 

@@ -6,10 +6,10 @@ class UnicornImage: LeapImage {
   let path = CGMutablePath()
   let layer = CALayer()
 
-  init?(filename: String, eccentricity: Float) {
-    super.init(filename: filename)
+  init?(data: Data, eccentricity: Float) {
+    super.init(data: data)
 
-    guard let size = NSImage(contentsOfFile: filename)?.size else { return nil }
+    guard let size = NSImage(data: data)?.size else { return nil }
     self.size = size
     self.eccentricity = eccentricity
 

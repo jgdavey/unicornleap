@@ -3,7 +3,11 @@ image_folder=$(HOME)/.$(program_name)
 build_folder=build
 PREFIX ?= /usr/local
 
-swiftc = xcrun swiftc -swift-version 5 -O
+# Embed the default images in the binary's __TEXT segment (see LeapImage.swift).
+embed_images = -Xlinker -sectcreate -Xlinker __TEXT -Xlinker __unicorn_png -Xlinker images/unicorn.png \
+	-Xlinker -sectcreate -Xlinker __TEXT -Xlinker __sparkle_png -Xlinker images/sparkle.png
+
+swiftc = xcrun swiftc -swift-version 5 -O $(embed_images)
 
 .PHONY: all universal xcode test clean images install
 
@@ -31,7 +35,7 @@ images:
 	mkdir -p $(image_folder)
 	cp images/*.png $(image_folder)
 
-install: images
+install:
 	cp $(build_folder)/$(program_name) $(PREFIX)/bin/$(program_name)
 	cp $(program_name).1 $(PREFIX)/share/man/man1/
 

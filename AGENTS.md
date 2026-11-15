@@ -25,14 +25,14 @@ xcodebuild -workspace unicornleap.xcodeproj/project.xcworkspace/ -scheme Unicorn
   -only-testing:UnicornLeapTests/CommandTests/testDefaults
 ```
 
-Running the built binary requires the default images in `~/.unicornleap/` (run `make images`) or explicit `-u`/`-k` paths.
+The default images are embedded in the binary at link time (`-sectcreate __TEXT __unicorn_png|__sparkle_png`, in both the Makefile and the Xcode target's `OTHER_LDFLAGS`), so the built binary runs with no setup. `~/.unicornleap/unicorn.png` / `sparkle.png` override them if present (`make images` copies the defaults there).
 
 ## Architecture
 
 - `main.swift` — top-level script: parses `CommandLine.arguments` into a global `command`, dispatches help / error / herd / normal mode. `leapManyUnicorns` starts one `CATransaction` per unicorn, staggering each by `seconds / 8`, and drives everything with `CFRunLoopRun()`; the completion block of the last transaction calls `CFRunLoopStop` to exit. Herd mode defaults to 30 unicorns and randomizes `command.eccentricity` before each leap (via `setupFunc`), which is why `Command` properties are mutable.
 - `Command.swift` — hand-rolled argument parser. Each option has a default and a `parseX()` that returns `nil` when the flag is present but its value is missing/unparseable; `isNotValid` is true if any parsed value is `nil` or an unknown `-` flag is present. When a flag appears in both short and long form, the first occurrence wins. Adding a flag means updating `validFlags`, adding a property + parser, wiring it in `init`, and updating usage text and the man page.
 - `Leap.swift` — per-unicorn setup: creates a transparent, click-through, full-screen `FloatingWindow`, loads the unicorn and sparkle images, and attaches their layers/animations.
-- `LeapImage.swift` — base class: loads a PNG into a `CGImage` and adds a `CAKeyframeAnimation` along a path for a configurable key path.
+- `LeapImage.swift` — base class: loads PNG data into a `CGImage` (`loadData` reads the file, falling back to the embedded section via `getsectiondata` only when the path is the default) and adds a `CAKeyframeAnimation` along a path for a configurable key path.
   - `UnicornImage` builds the Bézier leap path (off-screen bottom-left to off-screen bottom-right, peak height scaled by `eccentricity`) and animates `position` of a `CALayer`.
   - `SparkleImage` configures a `CAEmitterLayer` and animates its `emitterPosition` along the unicorn's path.
 

@@ -45,12 +45,14 @@ Defaults to
 Filename for unicorn image.
 .br
 Defaults to
-.Ar ~/.unicornleap/unicorn.png
-.It Fl s , \-sparkle Ar filename
+.Ar ~/.unicornleap/unicorn.png ,
+or the built-in unicorn if that file doesn't exist.
+.It Fl k , \-sparkle Ar filename
 Filename for sparkle image.
 .br
 Defaults to
-.Ar ~/.unicornleap/sparkle.png
+.Ar ~/.unicornleap/sparkle.png ,
+or the built-in sparkle if that file doesn't exist.
 .It Fl v , \-verbose
 Print verbose messages
 .El                      \" Ends the list
@@ -58,7 +60,10 @@ Print verbose messages
 .Sh FILES                \" File used or created by the topic of the man page
 .Bl -tag -width "~/.unicornleap/unicorn.png" -compact
 .It Pa ~/.unicornleap/unicorn.png
-The magic image. This must exist and be a valid PNG.
+The magic image.
+Optional; if present, it must be a valid PNG and replaces the built-in unicorn.
 .It Pa ~/.unicornleap/sparkle.png
-The image for the sparkle effect. This must exist and be a valid PNG.
+The image for the sparkle effect.
+Optional; if present, it must be a valid PNG
+and replaces the built-in sparkle.
 .El                      \" Ends the list

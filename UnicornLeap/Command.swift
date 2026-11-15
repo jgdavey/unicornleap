@@ -64,14 +64,16 @@ class Command {
   }
 
   static let defaultImageDir: String = "\(NSHomeDirectory())/.unicornleap/"
+  static let defaultUnicornFile: String = "\(defaultImageDir)unicorn.png"
+  static let defaultSparkleFile: String = "\(defaultImageDir)sparkle.png"
 
-  var unicornFile: String? = "\(defaultImageDir)unicorn.png"
+  var unicornFile: String? = defaultUnicornFile
   fileprivate func parseUnicornFile() -> String? {
     guard let index = flagIndex(["-u", "--unicorn"]) else { return unicornFile }
     return nextArgument(index)
   }
 
-  var sparkleFile: String? = "\(defaultImageDir)sparkle.png"
+  var sparkleFile: String? = defaultSparkleFile
   fileprivate func parseSparkleFile() -> String? {
     guard let index = flagIndex(["-k", "--sparkle"]) else { return sparkleFile }
     return nextArgument(index)

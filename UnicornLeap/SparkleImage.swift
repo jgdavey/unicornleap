@@ -3,8 +3,8 @@ import Cocoa
 class SparkleImage: LeapImage {
   let emitter = CAEmitterLayer()
 
-  override init?(filename: String) {
-    super.init(filename: filename)
+  override init?(data: Data) {
+    super.init(data: data)
     animationKeyPath = "emitterPosition"
   }
 

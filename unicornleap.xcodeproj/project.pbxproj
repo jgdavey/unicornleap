@@ -362,6 +362,16 @@
 			buildSettings = {
 				CODE_SIGN_IDENTITY = "-";
 				MACOSX_DEPLOYMENT_TARGET = 10.11;
+				OTHER_LDFLAGS = (
+					"-sectcreate",
+					__TEXT,
+					__unicorn_png,
+					"$(SRCROOT)/images/unicorn.png",
+					"-sectcreate",
+					__TEXT,
+					__sparkle_png,
+					"$(SRCROOT)/images/sparkle.png",
+				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
 			};
@@ -372,6 +382,16 @@
 			buildSettings = {
 				CODE_SIGN_IDENTITY = "-";
 				MACOSX_DEPLOYMENT_TARGET = 10.11;
+				OTHER_LDFLAGS = (
+					"-sectcreate",
+					__TEXT,
+					__unicorn_png,
+					"$(SRCROOT)/images/unicorn.png",
+					"-sectcreate",
+					__TEXT,
+					__sparkle_png,
+					"$(SRCROOT)/images/sparkle.png",
+				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
 			};
