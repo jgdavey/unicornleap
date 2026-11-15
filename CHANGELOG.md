@@ -14,6 +14,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   instead of only on regular desktop Spaces.
 - `-s` and `-e` reject values that aren't finite numbers (`inf`, `nan`,
   `1e40`). They used to be accepted and silently showed no unicorn.
+- `make install` rebuilds when a source file or default image has changed,
+  instead of installing whatever binary was already in `build/`.
 
 ## [3.1.0] - 2026-11-14
 

@@ -10,11 +10,18 @@ embed_images = -Xlinker -sectcreate -Xlinker __TEXT -Xlinker __unicorn_png -Xlin
 
 swiftc = xcrun swiftc -swift-version 5 -O $(embed_images)
 
+sources = $(wildcard UnicornLeap/*.swift)
+binary = $(build_folder)/$(program_name)
+
 .PHONY: all universal test clean images install
 
-all:
+all: $(binary)
+
+# Rebuilt when a source file or an embedded image changes, so `make install`
+# never installs a stale binary.
+$(binary): $(sources) images/unicorn.png images/sparkle.png
 	mkdir -p $(build_folder)
-	$(swiftc) -o $(build_folder)/$(program_name) UnicornLeap/*.swift
+	$(swiftc) -o $@ $(sources)
 
 # Universal (x86_64 + arm64) binary, as shipped in GitHub releases.
 # arm64 macOS starts at 11.0, so that slice can't target 10.15.
@@ -33,10 +40,7 @@ images:
 	mkdir -p $(image_folder)
 	cp images/*.png $(image_folder)
 
-$(build_folder)/$(program_name):
-	$(MAKE) all
-
-install: $(build_folder)/$(program_name)
+install: $(binary)
 	install -d $(DESTDIR)$(PREFIX)/bin $(DESTDIR)$(PREFIX)/share/man/man1
 	install -m 755 $(build_folder)/$(program_name) $(DESTDIR)$(PREFIX)/bin/$(program_name)
 	install -m 644 $(program_name).1 $(DESTDIR)$(PREFIX)/share/man/man1/
