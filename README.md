@@ -34,8 +34,6 @@ curl -L https://github.com/jgdavey/unicornleap/releases/download/v<version>/unic
 mv unicornleap ~/.local/bin/
 ```
 
-The tarball also includes the man page, `unicornleap.1`.
-
 ### From source
 
 The preferred source installation uses make:

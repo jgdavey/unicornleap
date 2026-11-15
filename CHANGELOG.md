@@ -23,6 +23,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   matching Command Line Tools), and the first build downloads
   swift-argument-parser.
 
+### Removed
+
+- The man page. `unicornleap -h` documents every option; `make install` and
+  the release tarball no longer include `unicornleap.1`.
+
 ## [3.1.1] - 2026-11-14
 
 ### Changed

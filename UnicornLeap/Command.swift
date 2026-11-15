@@ -2,8 +2,8 @@ import ArgumentParser
 import Foundation
 
 // The command-line interface. Each option is declared once here; the help
-// text, parsing and errors all come from these declarations. Keep the man page
-// (unicornleap.1) in step when an option changes.
+// text (`-h`, the only documentation of the options), parsing and errors all
+// come from these declarations.
 struct Command: ParsableCommand {
   static let configuration = CommandConfiguration(
     commandName: "unicornleap",

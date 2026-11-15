@@ -42,9 +42,8 @@ images:
 	cp images/*.png $(image_folder)
 
 install: $(binary)
-	install -d $(DESTDIR)$(PREFIX)/bin $(DESTDIR)$(PREFIX)/share/man/man1
+	install -d $(DESTDIR)$(PREFIX)/bin
 	install -m 755 $(build_folder)/$(program_name) $(DESTDIR)$(PREFIX)/bin/$(program_name)
-	install -m 644 $(program_name).1 $(DESTDIR)$(PREFIX)/share/man/man1/
 
 clean:
 	rm -rf $(build_folder) .build
