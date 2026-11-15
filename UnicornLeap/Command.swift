@@ -103,6 +103,12 @@ class Command {
     return nextArgument(index)
   }
 
+  // Herd mode picks each unicorn's eccentricity from this range.
+  static let herdEccentricityRange: Range<Float> = 0..<3
+  static func randomHerdEccentricity() -> Float {
+    return Float.random(in: herdEccentricityRange)
+  }
+
   var eccentricity: Float? = 1.0
   fileprivate func parseEccentricity() -> Float? {
     guard let index = flagIndex(["-e", "--eccentricity"]) else { return eccentricity }

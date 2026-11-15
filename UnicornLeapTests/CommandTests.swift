@@ -59,6 +59,15 @@ import Testing
     #expect(command.invalidFlags == [flag])
   }
 
+  // Herd heights must not depend on -n: with the old `random(0..<n) / 10`,
+  // `-H -n 1` always leapt flat (eccentricity 0).
+  @Test func herdEccentricityCoversTheFullRange() {
+    let samples = (0..<500).map { _ in Command.randomHerdEccentricity() }
+    #expect(samples.allSatisfy { Command.herdEccentricityRange.contains($0) })
+    #expect(samples.max()! > 2)
+    #expect(samples.min()! < 1)
+  }
+
   // MARK: seconds
 
   @Test(arguments: ["-s", "--seconds"])

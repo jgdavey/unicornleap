@@ -26,6 +26,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- Herd mode's leap heights no longer depend on `-n`; `-H -n 1` used to leap
+  flat along the bottom of the screen.
 - `-v` prints plain values (`Seconds: 2.0`) instead of `Seconds: Optional(2.0)`.
 - An empty argument (`unicornleap ""`) no longer crashes.
 - `-n 0` no longer hangs forever; `-n` and `-s` must be positive.

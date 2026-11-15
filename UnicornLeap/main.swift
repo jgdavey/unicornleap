@@ -70,7 +70,7 @@ func leapThoseUnicorns() {
 
 func herdThoseUnicorns() {
   let n = command.passedInNumber ? command.number! : 30
-  let setupFunc = { command.eccentricity = Float(arc4random_uniform(UInt32(n))) / 10.0 }
+  let setupFunc = { command.eccentricity = Command.randomHerdEccentricity() }
   leapManyUnicorns(n, setupFunc: setupFunc)
 }
 
