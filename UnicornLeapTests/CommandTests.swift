@@ -1,3 +1,4 @@
+import Foundation
 import Testing
 @testable import unicornleap
 
@@ -30,8 +31,33 @@ import Testing
   }
 
   @Test func verboseLinesShowPlainValues() {
-    let command = Command(["-v", "-s", "3.5", "-n", "4"])
-    #expect(command.verboseLines == ["Seconds: 3.5", "Number: 4"])
+    let command = Command(["-v", "-s", "3.5", "-n", "4", "-e", "2", "-u", "u.png", "-k", "k.png"])
+    #expect(command.verboseLines == [
+      "Seconds: 3.5", "Number: 4", "Eccentricity: 2.0", "Unicorn: u.png", "Sparkle: k.png",
+    ])
+  }
+
+  @Test func verboseLinesInHerdMode() {
+    let command = Command(["-v", "-H", "-u", "u.png", "-k", "k.png"])
+    #expect(command.verboseLines == [
+      "Seconds: 2.0", "Number: 30", "Eccentricity: random (0.0..<3.0)",
+      "Unicorn: u.png", "Sparkle: k.png", "Herd: on",
+    ])
+  }
+
+  @Test func verboseLinesNameTheBuiltInImages() {
+    // The default paths fall back to the embedded images when missing.
+    let command = Command([])
+    let unicornExists = FileManager.default.fileExists(atPath: Command.defaultUnicornFile)
+    let line = command.verboseLines.first { $0.hasPrefix("Unicorn: ") }
+    #expect(line == (unicornExists ? "Unicorn: \(Command.defaultUnicornFile)" : "Unicorn: built-in"))
+  }
+
+  @Test func herdNumberDefaultsToThirty() {
+    #expect(Command(["-H"]).leapCount == 30)
+    #expect(Command(["-H", "-n", "3"]).leapCount == 3)
+    #expect(Command([]).leapCount == 1)
+    #expect(Command(["-n", "4"]).leapCount == 4)
   }
 
   @Test(arguments: ["-H", "--herd"])

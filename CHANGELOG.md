@@ -8,6 +8,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- `-v` also prints the eccentricity, the unicorn and sparkle images (or
+  `built-in` for the embedded defaults), and whether herd mode is on.
+
 ### Fixed
 
 - Unicorns now leap over full-screen apps and on whichever Space is active,
@@ -16,6 +21,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   `1e40`). They used to be accepted and silently showed no unicorn.
 - `make install` rebuilds when a source file or default image has changed,
   instead of installing whatever binary was already in `build/`.
+- `-v` works in herd mode; it used to print nothing with `-H`.
 
 ## [3.1.0] - 2026-11-14
 

@@ -28,7 +28,23 @@ class Command {
 
   var verboseLines: [String] {
     func show<T>(_ value: T?) -> String { value.map { "\($0)" } ?? "invalid" }
-    return ["Seconds: \(show(seconds))", "Number: \(show(number))"]
+    // A default path that doesn't exist falls back to the embedded image.
+    func showImage(_ path: String?, defaultPath: String) -> String {
+      if path == defaultPath && !FileManager.default.fileExists(atPath: defaultPath) {
+        return "built-in"
+      }
+      return show(path)
+    }
+    let range = Command.herdEccentricityRange
+    var lines = [
+      "Seconds: \(show(seconds))",
+      "Number: \(show(leapCount))",
+      "Eccentricity: \(herd ? "random (\(range.lowerBound)..<\(range.upperBound))" : show(eccentricity))",
+      "Unicorn: \(showImage(unicornFile, defaultPath: Command.defaultUnicornFile))",
+      "Sparkle: \(showImage(sparkleFile, defaultPath: Command.defaultSparkleFile))",
+    ]
+    if herd { lines.append("Herd: on") }
+    return lines
   }
 
   var herd: Bool {
@@ -85,6 +101,14 @@ class Command {
   fileprivate func parsePassedInNumber() -> Bool {
     guard flagIndex(["-n", "--number"]) != nil else { return false }
     return true
+  }
+
+  // Herd mode leaps this many unicorns unless -n says otherwise.
+  static let defaultHerdNumber = 30
+
+  // How many unicorns to leap, after applying the herd-mode default.
+  var leapCount: Int? {
+    return herd && !passedInNumber ? Command.defaultHerdNumber : number
   }
 
   static let defaultImageDir: String = "\(NSHomeDirectory())/.unicornleap/"

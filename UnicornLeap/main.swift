@@ -65,13 +65,12 @@ func leapManyUnicorns(_ n: Int, setupFunc: () -> () = {}) {
 }
 
 func leapThoseUnicorns() {
-  leapManyUnicorns(command.number!)
+  leapManyUnicorns(command.leapCount!)
 }
 
 func herdThoseUnicorns() {
-  let n = command.passedInNumber ? command.number! : 30
   let setupFunc = { command.eccentricity = Command.randomHerdEccentricity() }
-  leapManyUnicorns(n, setupFunc: setupFunc)
+  leapManyUnicorns(command.leapCount!, setupFunc: setupFunc)
 }
 
 let command = Command(CommandLine.arguments)
@@ -83,11 +82,13 @@ if command.needsHelp {
 } else if command.isNotValid {
   printCommandErrors(command)
   printUsage(1)
-} else if command.herd {
-  herdThoseUnicorns()
 } else {
   if command.verboseOutput {
     printVerboseOutput()
   }
-  leapThoseUnicorns()
+  if command.herd {
+    herdThoseUnicorns()
+  } else {
+    leapThoseUnicorns()
+  }
 }
