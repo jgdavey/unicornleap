@@ -1,37 +1,34 @@
 import Cocoa
 
+// The decoded unicorn and sparkle images, loaded once and shared by every leap.
+struct LeapImages {
+  let unicorn: PNGImage
+  let sparkle: PNGImage
+}
+
 class Leap {
   let command: Command
   let screenFrame: NSRect
+  let images: LeapImages
 
-  class func animateImage(_ command: Command, screenFrame: NSRect, animationDelay: Double) {
-    Leap(command, screenFrame: screenFrame).animateImage(animationDelay)
+  class func animateImage(_ command: Command, in layer: CALayer, screenFrame: NSRect, images: LeapImages, animationDelay: Double) {
+    Leap(command, screenFrame: screenFrame, images: images).animateImage(in: layer, animationDelay: animationDelay)
   }
 
-  init(_ command: Command, screenFrame: NSRect) {
+  init(_ command: Command, screenFrame: NSRect, images: LeapImages) {
     self.command = command
     self.screenFrame = screenFrame
+    self.images = images
   }
 
-  func animateImage(_ animationDelay: Double) {
-    let floatingWindow = FloatingWindow(rect: screenFrame)
-
-    // Borderless windows can't become key, and this process is never the
-    // active app, so order the window front without activating.
-    floatingWindow.window.orderFrontRegardless()
-
-    floatingWindow.view.wantsLayer = true
-
-    let unicornData = LeapImage.loadData(path: command.unicornFile!, defaultPath: Command.defaultUnicornFile, embeddedSection: "__unicorn_png")
-    let sparkleData = LeapImage.loadData(path: command.sparkleFile!, defaultPath: Command.defaultSparkleFile, embeddedSection: "__sparkle_png")
-
-    guard let unicornImage = unicornData.flatMap({ UnicornImage(data: $0, eccentricity: command.eccentricity!, screenFrame: screenFrame) }) else { printImageError(command.unicornFile!); return }
-    guard let sparkleImage = sparkleData.flatMap({ SparkleImage(data: $0) }) else { printImageError(command.sparkleFile!); return }
+  func animateImage(in layer: CALayer, animationDelay: Double) {
+    let unicornImage = UnicornImage(image: images.unicorn, eccentricity: command.eccentricity!, screenFrame: screenFrame)
+    let sparkleImage = SparkleImage(image: images.sparkle)
 
     sparkleImage.configureEmitter(unicornImage.size, seconds: command.seconds!)
 
-    floatingWindow.view.layer?.addSublayer(unicornImage.layer)
-    floatingWindow.view.layer?.addSublayer(sparkleImage.emitter)
+    layer.addSublayer(unicornImage.layer)
+    layer.addSublayer(sparkleImage.emitter)
 
     unicornImage.addAnimation(Double(command.seconds!), animationDelay: animationDelay)
     sparkleImage.addAnimation(Double(command.seconds!), path: unicornImage.path, animationDelay: animationDelay)

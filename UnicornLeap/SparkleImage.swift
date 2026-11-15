@@ -3,8 +3,8 @@ import Cocoa
 class SparkleImage: LeapImage {
   let emitter = CAEmitterLayer()
 
-  override init?(data: Data) {
-    super.init(data: data)
+  override init(image: PNGImage) {
+    super.init(image: image)
     animationKeyPath = "emitterPosition"
   }
 
@@ -19,7 +19,7 @@ class SparkleImage: LeapImage {
     emitter.emitterSize = CGSize(width: imageSize.width / 1.5, height: imageSize.height / 1.5)
 
     let sparkle = CAEmitterCell()
-    sparkle.contents = image
+    sparkle.contents = image.cgImage
     sparkle.birthRate = 20.0 / seconds + 15.0
     sparkle.lifetime = seconds * 0.5 + Float(base)
     sparkle.lifetimeRange = 1.5

@@ -12,6 +12,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - `-v` also prints the eccentricity, the unicorn and sparkle images (or
   `built-in` for the embedded defaults), and whether herd mode is on.
+- Herd mode reads and decodes the images once and draws every unicorn in a
+  single window, instead of opening a full-screen window and decoding both
+  PNGs for each of its 30 unicorns.
 
 ### Fixed
 
@@ -24,6 +27,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `-v` works in herd mode; it used to print nothing with `-H`.
 - With no screen available (e.g. no access to the display), prints an error
   and exits with status 1 instead of crashing.
+- A missing or invalid image is reported before connecting to the display,
+  instead of after the first unicorn's window has opened.
 
 ## [3.1.0] - 2026-11-14
 

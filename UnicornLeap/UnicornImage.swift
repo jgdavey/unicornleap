@@ -1,17 +1,15 @@
 import Cocoa
 
 class UnicornImage: LeapImage {
-  var size: NSSize!
-  var eccentricity: Float!
+  let size: NSSize
+  let eccentricity: Float
   let path = CGMutablePath()
   let layer = CALayer()
 
-  init?(data: Data, eccentricity: Float, screenFrame: NSRect) {
-    super.init(data: data)
-
-    guard let size = NSImage(data: data)?.size else { return nil }
-    self.size = size
+  init(image: PNGImage, eccentricity: Float, screenFrame: NSRect) {
+    size = image.size
     self.eccentricity = eccentricity
+    super.init(image: image)
 
     configurePath(screenFrame)
     configureLayer()
@@ -33,7 +31,7 @@ class UnicornImage: LeapImage {
   }
 
   fileprivate func configureLayer() {
-    layer.contents = image
+    layer.contents = image.cgImage
     layer.bounds = CGRect(x: 0, y: 0, width: size.width, height: size.height)
     layer.position = CGPoint(x: -size.width, y: -size.height)
   }

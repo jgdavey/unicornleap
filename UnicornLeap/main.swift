@@ -36,9 +36,19 @@ func printCommandErrors(_ command: Command) {
   print("\(command.errors.joined(separator: "\n"))\n", to: &standardError)
 }
 
-func printImageError(_ filename: String) {
+func printImageError(_ filename: String) -> Never {
   print("unicornleap - valid PNG not found: \(filename)", to: &standardError)
   exit(1)
+}
+
+// Loads and decodes both images, or exits if either isn't a valid PNG, before
+// anything appears on screen.
+func loadImages() -> LeapImages {
+  guard let unicorn = PNGImage.load(path: command.unicornFile!, defaultPath: Command.defaultUnicornFile, embeddedSection: "__unicorn_png")
+    else { printImageError(command.unicornFile!) }
+  guard let sparkle = PNGImage.load(path: command.sparkleFile!, defaultPath: Command.defaultSparkleFile, embeddedSection: "__sparkle_png")
+    else { printImageError(command.sparkleFile!) }
+  return LeapImages(unicorn: unicorn, sparkle: sparkle)
 }
 
 func printVerboseOutput() {
@@ -58,7 +68,17 @@ func mainScreenFrame() -> NSRect {
 }
 
 func leapManyUnicorns(_ n: Int, setupFunc: () -> () = {}) {
+  let images = loadImages()
   let screenFrame = mainScreenFrame()
+
+  // One window for every unicorn: each leap adds its own layers to it.
+  let floatingWindow = FloatingWindow(rect: screenFrame)
+  floatingWindow.view.wantsLayer = true
+  // Borderless windows can't become key, and this process is never the
+  // active app, so order the window front without activating.
+  floatingWindow.window.orderFrontRegardless()
+  guard let layer = floatingWindow.view.layer else { return }
+
   let startTime = CACurrentMediaTime()
   let offsetFactor = Double(command.seconds! / 8.0)
 
@@ -70,7 +90,7 @@ func leapManyUnicorns(_ n: Int, setupFunc: () -> () = {}) {
       }
     })
     setupFunc()
-    Leap.animateImage(command, screenFrame: screenFrame, animationDelay: startTime + Double(i) * offsetFactor)
+    Leap.animateImage(command, in: layer, screenFrame: screenFrame, images: images, animationDelay: startTime + Double(i) * offsetFactor)
     CATransaction.commit()
   }
 
