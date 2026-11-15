@@ -12,6 +12,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Unicorns now leap over full-screen apps and on whichever Space is active,
   instead of only on regular desktop Spaces.
+- `-s` and `-e` reject values that aren't finite numbers (`inf`, `nan`,
+  `1e40`). They used to be accepted and silently showed no unicorn.
 
 ## [3.1.0] - 2026-11-14
 

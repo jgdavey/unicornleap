@@ -104,6 +104,14 @@ import Testing
     #expect(command.seconds == nil)
   }
 
+  // An infinite duration would never finish, so the run loop would never stop.
+  @Test(arguments: ["inf", "infinity", "nan", "1e40"])
+  func secondsMustBeFinite(value: String) {
+    let command = Command(["-s", value])
+    #expect(command.isNotValid)
+    #expect(command.seconds == nil)
+  }
+
   // MARK: eccentricity
 
   @Test(arguments: ["-e", "--eccentricity"])
@@ -123,6 +131,13 @@ import Testing
   @Test(arguments: ["-e", "--eccentricity"])
   func providingEccentricityWithBadValue(flag: String) {
     let command = Command([flag, "four"])
+    #expect(command.isNotValid)
+    #expect(command.eccentricity == nil)
+  }
+
+  @Test(arguments: ["inf", "-inf", "nan", "1e40"])
+  func eccentricityMustBeFinite(value: String) {
+    let command = Command(["-e", value])
     #expect(command.isNotValid)
     #expect(command.eccentricity == nil)
   }

@@ -131,7 +131,9 @@ private extension String {
     return Int(self)
   }
 
+  // Only finite values: "inf", "nan" and overflowing input like "1e40" parse
+  // as Float but would make a leap that never ends or a path with no shape.
   var asFloat: Float? {
-    return Float(self)
+    return Float(self).flatMap { $0.isFinite ? $0 : nil }
   }
 }
