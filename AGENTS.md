@@ -4,13 +4,13 @@ This file provides guidance to AI coding agents working with code in this reposi
 
 ## Overview
 
-`unicornleap` is a macOS command-line tool (Swift 5, macOS 10.11+) that animates a unicorn image leaping across the screen with a sparkle particle trail, using CoreAnimation. The man page is `unicornleap.1`; keep it in sync with the usage text in `main.swift` when flags change.
+`unicornleap` is a macOS command-line tool (Swift 5, macOS 10.15+) that animates a unicorn image leaping across the screen with a sparkle particle trail, using CoreAnimation. The man page is `unicornleap.1`; keep it in sync with the usage text in `main.swift` when flags change.
 
 ## Commands
 
 ```sh
 make              # build with swiftc directly -> build/unicornleap
-make universal    # x86_64 (10.11+) + arm64 (11+) universal binary, as shipped in releases
+make universal    # x86_64 (10.15+) + arm64 (11+) universal binary, as shipped in releases
 make test         # swift test (Swift Testing; Command Line Tools are enough, no Xcode)
 make images       # copy images/*.png to ~/.unicornleap/ (default image location)
 make install      # build if needed, install binary and man page under $(DESTDIR)$(PREFIX) (default /usr/local)
@@ -24,7 +24,7 @@ Run a single test:
 swift test --filter CommandTests/defaults
 ```
 
-Neither Xcode nor an Xcode project is needed; `Package.swift` defines the SwiftPM package (open it in Xcode if you want the IDE). The Makefile is what builds the shipped binary; SwiftPM is for `swift test` / `swift run`. The package's platform is macOS 10.15 because Swift Testing requires it, while the Makefile builds target 10.11 (x86_64).
+Neither Xcode nor an Xcode project is needed; `Package.swift` defines the SwiftPM package (open it in Xcode if you want the IDE). The Makefile is what builds the shipped binary; SwiftPM is for `swift test` / `swift run`. Keep the x86_64 target in `make universal` in step with `platforms` in `Package.swift` (macOS 10.15, the minimum for Swift Testing).
 
 The default images are embedded in the binary at link time (`-sectcreate __TEXT __unicorn_png|__sparkle_png`, in both the Makefile and `Package.swift`'s `linkerSettings`), so the built binary runs with no setup. `~/.unicornleap/unicorn.png` / `sparkle.png` override them if present (`make images` copies the defaults there).
 

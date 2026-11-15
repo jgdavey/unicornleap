@@ -2,7 +2,7 @@
 
 A reimplementation of KevinLiddle/unicornleap using CoreAnimation, now in Swift!
 
-Runs on macOS 10.11 or later (Intel) / macOS 11 or later (Apple Silicon).
+Runs on macOS 10.15 or later (Intel) / macOS 11 or later (Apple Silicon).
 Building from source needs only the Xcode Command Line Tools
 (`xcode-select --install`), not the full Xcode.
 

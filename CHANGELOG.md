@@ -14,6 +14,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   `swift test`, which works with only the Command Line Tools installed.
 - `make install` builds first if needed, creates the target directories, and
   honors `DESTDIR`.
+- Requires macOS 10.15 or later on Intel (was 10.11). Apple Silicon still
+  requires macOS 11.
 
 ### Fixed
 

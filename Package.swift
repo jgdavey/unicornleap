@@ -5,7 +5,6 @@ import PackageDescription
 // the Makefile); this package is for `swift build`, `swift run` and `swift test`.
 let package = Package(
   name: "unicornleap",
-  // Swift Testing needs 10.15; the shipped binary still targets 10.11 (Makefile).
   platforms: [.macOS(.v10_15)],
   targets: [
     .executableTarget(
