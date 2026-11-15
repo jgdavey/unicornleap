@@ -36,6 +36,17 @@ import Testing
     #expect(command.herd)
   }
 
+  @Test(arguments: ["-V", "--version"])
+  func wantsVersion(flag: String) {
+    let command = Command([flag])
+    #expect(!command.isNotValid)
+    #expect(command.wantsVersion)
+  }
+
+  @Test func doesNotWantVersionByDefault() {
+    #expect(!Command([]).wantsVersion)
+  }
+
   @Test(arguments: ["-i", "--invalid"])
   func hasInvalidFlags(flag: String) {
     let command = Command([flag])

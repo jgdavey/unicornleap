@@ -22,6 +22,10 @@ class Command {
     return arguments.contains("-v") || arguments.contains("--verbose")
   }
 
+  var wantsVersion: Bool {
+    return arguments.contains("-V") || arguments.contains("--version")
+  }
+
   var herd: Bool {
     return arguments.contains("-H") || arguments.contains("--herd")
   }
@@ -52,7 +56,8 @@ class Command {
       "-k", "--sparkle",
       "-v", "--verbose",
       "-e", "--eccentricity",
-      "-H", "--herd"
+      "-H", "--herd",
+      "-V", "--version"
     ]
     // Negative numbers ("-1", "-0.5") are values, not flags.
     let flags = Set(arguments.filter({ $0.hasPrefix("-") && $0.asFloat == nil }))

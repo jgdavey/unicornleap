@@ -38,6 +38,12 @@ jobs:
     runs-on: macos-latest
     steps:
       - uses: actions/checkout@v6
+      - name: Check version matches tag
+        run: |
+          grep -qx "let version = \"${GITHUB_REF_NAME#v}\"" UnicornLeap/Version.swift || {
+            echo "UnicornLeap/Version.swift doesn't match tag $GITHUB_REF_NAME" >&2
+            exit 1
+          }
       - name: Test
         run: make test
       - name: Build universal binary

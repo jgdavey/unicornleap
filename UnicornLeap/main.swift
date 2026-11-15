@@ -10,7 +10,8 @@ func printUsage(_ exitCode: Int32) {
     "  -e  --eccentricity x   Leap the unicorns with a higher peak. (default: 1.0)\n",
     "  -u  --unicorn file     Filename for unicorn image.\n",
     "  -k  --sparkle file     Filename for sparkle image.\n",
-    "  -v  --verbose          Print verbose messages."
+    "  -v  --verbose          Print verbose messages.\n",
+    "  -V  --version          Print the version and exit."
   )
 
   exit(exitCode)
@@ -63,6 +64,8 @@ let command = Command(CommandLine.arguments)
 
 if command.needsHelp {
   printUsage(0)
+} else if command.wantsVersion {
+  print("unicornleap \(version)")
 } else if command.isNotValid {
   printCommandErrors(command)
   printUsage(1)

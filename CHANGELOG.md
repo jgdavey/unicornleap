@@ -8,6 +8,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- `-V` / `--version` prints the version.
+
 ### Changed
 
 - The Xcode project is replaced by a SwiftPM `Package.swift`. `make test` runs
